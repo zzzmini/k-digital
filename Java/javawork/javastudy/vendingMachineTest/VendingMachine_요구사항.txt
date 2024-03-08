@@ -1,0 +1,12 @@
+package : vendingMachineTest
+class name : VendingMachine -- main()
+            ColaVendingMachine vColaMachine = new ----
+            vColaMachine.name = "콜라"      vCyerMachine = "사이다"  700     
+        - totalMoney === 총 판매금액 : 
+
+class : ColaVendingMachine   ----- -  CyderVendigMachine
+- name = 콜라                                name = 사이다
+- currentMoney : 1000
+- productPrice   500
+- insertMoney() - 1000
+- serveCola()   잔액 부족,    콜라 1개를 드립니다.
