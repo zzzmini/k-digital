@@ -1,0 +1,156 @@
+* : 와이드카드 문자(wild card character) 
+-- select 구문 내에서 없거나 모든 자료를 의미함
+ex> 김*, dir v*.*
+-- ? - -  자리를 차지하고 있는 한문자  김?
+
+
+- select 구문의 조건절에서 사용하는 와일드카드        
+% => *
+ _ => ?
+
+- select * from professor;
+
+
+select * from 테이블명
+where 필드 >= 100
+order by 기준필드 asc / desc  (Ascending / Descending)
+-------------------------------
+group by
+having 
+
+
+1. id가 3 이상인 자료의 이름과 전화번호를 출력하시고,
+   이름에 대해서 내림차순으로 정렬합니다.
+   select * from professor 
+	where id >= 1 and id <= 3
+	order by name desc
+    
+select * from professor where id between 1 and 3;
+
+
+2. belong 이 IDE 인 자료의 아이디, 이름, 소속을 출력하세요.
+    select id, name, belong from student
+  	where belong = 'IDE'
+3. belong 이 'IDE' 또는 'ESE' 또는 'CSE' 인 자료의 
+           아이디, 이름, 소속을 출력하세요.
+    select id, name, belong from student
+	where belong = 'ide' or belong = 'ese' or belong = 'cse';
+   
+    select id, name, belong from student
+	where belong in ('ide', 'ese', 'cse')
+	order by belong asc;
+
+4. student 테이블에서 id가 2010으로 시작하는 자료들의 id와 이름
+    select id, name from student
+    where id like '2010%';
+    select id, name from student
+    where id like '%102';
+
+5. student 테이블에서 name이 세자인 자료
+  select * from student where name like '___';
+
+6. 학생테이블에서 소속(belong)이 IDE가 아닌 자료들을 찾아보세요.
+    >=, <=, =, !=(<>), not 
+   select * from student where belong != 'ide';
+   select * from student where not belong = 'ide';
+
+7. 학생테이블에서 id가 2009가 포함되지 않은 자료...
+   select * from student where not id like '2009%';
+   select * from student where  id not like '2009%';
+
+8. 학생테이블에서 belong이 IDE 또는 CSE 또는 MSE 인 자료 중
+   id에 2011을 포함하는 자료를 p_id에 대해 내림차순으로 정렬해 주세용
+   (출력은 id, 이름, 소속, 전화번호, 교수_ID 로 column이름이 나타나도록
+    합니다.)
+select id, name '이름', belong '소속', tel '전화번호', p_id '교수_ID' 
+from student
+where belong in ('ide', 'cse', 'mse') and id like '2011%'
+order by p_id desc;
+
+
+테이블의 완전 삭제 : drop table 테이블명;
+DB 완전삭제 : drop database db명;
+(쿼리 update, delete 는 정신을 바짝 차리고 사용합시다.)
+---   테이블의 내용만 삭제
+     delete from 테이블명 where 조건;
+
+9. 학생테이블에서 이름 '전진'을 삭제합니다.
+   delete from student where name='전진';
+
+10. 자료 입력    20090302   전진   IDE  01012321313  3
+   insert into student values(20090302, '전진', 'IDE', 
+                    '01012321313', 3);
+   
+11. 학생테이블 중 전화번호에 131 을 포함하고 있는 자료를
+   삭제하세요.
+     delete from student where tel like '%131%';    
+
+--  update 구문
+    update 테이블명 set 필드명 = 바꿀값 where 조건
+12. 학생테이블의 id가 20080104 인 학생의 이름을 '오나미'로 바꾸세요
+
+    update student set name='오나미' where id=20080104;    
+
+13. 학생테이블의 이름이 '부우'인 친구의 belong을 MSE,
+               전화번호를 010-7777-7777로 바꿉니다.
+
+     update student set
+ 	belong = 'MSE',
+	tel = '010-7777-7777'
+	where name = '부우';
+     
+테이블 스키마 변경 ---   Alter 구문
+
+alter table 테이블명
+rename to 바꿀테이블명;
+
+14. professor 테이블명을 teacher 로 변경합니다.
+alter table professor 
+rename(drop column, 
+           add column, 
+           change column, 
+           modify column) to teacher;
+
+15. teacher 테이블에 star 라는 필드를 맨 마지막에 추가를 합니다.
+alter table teacher
+add column star int not null after phone;
+
+16. 변경(change, modify) --- 칼럼의 이름을 변경 가능(change)
+alter table teacher
+modify column star bigint default 10000;
+
+--- workbench GUI 사용하면 편해요...
+
+17. 필드의 삭제 (drop column)
+alter table teacher
+drop column star;
+
+
+통계함수의 사용
+18. student 테이블의 소속인원수를 소속(belong)의 내림차순으로 출력
+    ESE   5
+    CSE  2
+     select belong, count(*) from student
+           group by belong
+           order by belong desc;
+19. student 테이블의 소속인원수를 인원수의 내림차순으로 출력하되, 같은 값은 belong 의 오름차순으로 출력
+    select name, belong, count(*) as belong_count from student
+    group by belong
+    order by belong_count desc, belong asc;
+    
+20. 19번의 결과 중에 belong_count 가 3이상인 자료만 출력
+    select belong, count(*) as belong_count from student
+    group by belong
+    having belong_count >= 3
+    order by belong_count desc, belong asc;
+
+21. 학생테이블에서 belong이 IDE, MSE, ESE인 자료의 각 
+   p_id의 평균을 구하고, 평균이 2 이하인 자료만 belong에 대해서
+   내림차순 정렬하시오.(출력 belong, avg)
+   select belong, avg(p_id) as avg from student
+   where belong in ('ide', 'mse', 'ese')
+   group by belong
+   having avg <= 2
+   order by belong desc;
+
+
