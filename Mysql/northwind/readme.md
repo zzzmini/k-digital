@@ -1,6 +1,6 @@
 # NorthWind DataBase Schema and Data
 
- ## Norwind Database Table 설계서와 ERD입니다.
+ ## Northwind Database Table 설계서와 ERD입니다.
 
  # Show Tables
 * customer
