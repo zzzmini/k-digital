@@ -5,7 +5,7 @@ CREATE DATABASE  IF NOT EXISTS northwind;
 USE northwind;
 
 /* Drop existing tables  */
-DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS region;
 DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS supplier;
@@ -47,7 +47,7 @@ INSERT INTO category(id, category_name) VALUES
 (10,'스낵류');
 
 /* Create the tables */
-CREATE TABLE customer(
+CREATE TABLE customers(
 id int primary key auto_increment,
 customer_name varchar(20),
 name varchar(5),
@@ -60,7 +60,7 @@ region varchar(10),
 zip_code varchar(10)
 );
 /* Inserting data  */
-INSERT INTO customer(id, customer_name, name, position, office_tel, fax, address, city, region, zip_code) VALUES
+INSERT INTO customers(id, customer_name, name, position, office_tel, fax, address, city, region, zip_code) VALUES
 (1,'신영상사㈜','한석규','영업 사원','(051)575-5776','(051)575-5876','가장동 78-3','상주시','경상북도','742-170'),
 (2,'원창㈜','황영순','대표 이사','(02)681-6889','(02)681-6869','서초구 방배동 883-11','서울특별시','','137-060'),
 (3,'동광통상㈜','조자룡','대표 이사','(02)989-9889','(02)989-9489','강서구 내발산동 318','서울특별시','','157-280'),
