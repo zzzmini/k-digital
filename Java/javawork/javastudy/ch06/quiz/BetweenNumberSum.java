@@ -15,6 +15,7 @@ public class BetweenNumberSum {
 //            yesOrNo = sc.next();
 //        } while (yesOrNo.equals("Y"));
         while (true){
+            sum = 0;
             System.out.println("첫 번째 수를 입력하세요 : ");
             intNum1 = sc.nextInt();
             System.out.println("두 번째 수를 입력하세요 : ");
