@@ -1,0 +1,39 @@
+packagename : oopEating
+main class name : OOPEatingMain
+
+과일(Fruit) 클래스(name, taste), 동작 : eat()
+ |- Apple : 신맛
+ |- Orange : 시큼한 맛
+ |- Mango : 달콤한 맛
+ 
+육류(Meat) 클래스(name, brand), 동작 : eat()
+ |- Chicken : 하림 닭고기
+ |- Pork : 한돈 돼지고기
+ |- Beaf : 한우 소고기
+
+- 육식주의자(MeatEater)   - name, MeatEater() 생성자로...
+ |- Man1
+ |- Man2
+
+- 채식주의자(Vegetarian)   - name, vegetableEat() 메서드로...
+ |- Woman1
+ |- Woman2
+
+- 출력
+ 육식주의자가 한돈 돼지고기를 먹어요
+ 채식주의자가 시큼한 맛의 오렌지를 먹어요.
+
+
+
+
+
+※ Eater 클래스를 생성한 후 whatEat() 메서드를 생성해 오버라이딩을 구현하시오.
+
+main(){
+        //Overloading 으로 추가 구현
+        Eater eater = new Eater();
+        eater.whatEat(new Mango());
+        eater.whatEat(new Chicken());
+}
+
+
