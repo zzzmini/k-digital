@@ -1,0 +1,83 @@
+package baseballGame;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Baseball {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Random random = new Random();
+        String[] quiz = new String[3];
+        String answer;
+        int flag = 0;
+
+
+        do {
+            int count = 0;
+            int strike = 0;
+            int ball = 0;
+
+            while (flag == 0) {
+                flag = 1;
+                //문제 생성
+                for (int i = 0; i < quiz.length; i++) {
+                    quiz[i] = Integer.toString(random.nextInt(9) + 1);
+                }
+                //문제 중복 확인
+                for (int i = 0; i < quiz.length; i++) {
+                    for (int j = 1; j < quiz.length; j++) {
+                        if (i != j) {
+                            if (quiz[i].equals(quiz[j])) {
+                                flag = 0;
+                            }
+                        }
+                    }
+                }
+            }
+//            동작 체크용 답안
+//            for (int i = 0; i < quiz.length; i++) {
+//                System.out.printf(quiz[i]);
+//            }
+//            System.out.println("");
+            while (count < 10) {
+
+                count++;
+                System.out.println(count + "번째. 서로 다른 세 자리 정수를 입력해 주세요. > ");
+                String[] str = sc.next().split("");
+
+                //열과 숫자가 같으면 strike++
+                for (int i = 0; i < quiz.length; i++) {
+                    if (quiz[i].equals(str[i])) {
+                        strike++;
+                    }
+                    //열은 다르지만 숫자가 같으면 ball++
+                    for (int j = 0; j < quiz.length; j++) {
+                        if (i != j) {
+                            if (quiz[i].equals(str[j])) {
+                                ball++;
+                            }
+                        }
+                    }
+                }
+                System.out.println(strike + "strike, " + ball + "ball");
+                if(strike == 3){
+                    System.out.println("정답입니다!!");
+                    break;
+                }
+                if(count == 10 && strike !=3){
+                    System.out.printf("실패했습니다!! 정답은 ");
+                    for(int i = 0; i < quiz.length; i++){
+                        System.out.printf(quiz[i]);
+                    }
+                    System.out.println("입니다.");
+
+                }
+                strike = 0;
+                ball = 0;
+            }
+            System.out.printf("계속하시겠습니까? (Y/N): ");
+            answer = sc.next();
+
+        }while(answer.equals("Y"));
+    }
+}
