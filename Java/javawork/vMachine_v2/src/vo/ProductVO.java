@@ -11,6 +11,10 @@ public class ProductVO {
         this.drinkStock = drinkStock;
     }
 
+    public static ProductVO of(String drinkName, int drinkPrice, int drinkStock){
+        return new ProductVO(drinkName, drinkPrice, drinkStock);
+    }
+
     public String getDrinkName() {
         return drinkName;
     }

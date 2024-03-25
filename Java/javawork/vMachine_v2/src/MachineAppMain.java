@@ -12,9 +12,9 @@ public class MachineAppMain {
 
         Scanner sc = new Scanner(System.in);
 
-        ProductVO product = new ProductVO("콜라", 1000,10);
-        InitClazz.lists.add(product);
-        InitClazz.printMenu();
+//        ProductVO product = new ProductVO("콜라", 1000,10);
+//        InitClazz.lists.add(product);
+//        InitClazz.printMenu();
 
         int ch = 0;
         while (true){
@@ -27,12 +27,10 @@ public class MachineAppMain {
             switch (ch){
                 case 1:
                     // 동전투입
-                    System.out.println("동전투입");
                     userService.insertCoin();
                     break;
                 case 2:
                     // 잔돈반환
-                    System.out.println("잔돈반환");
                     userService.returnCoin();
                     break;
                 case 3:
@@ -51,19 +49,16 @@ public class MachineAppMain {
                         if(ch == 6) break;
                         switch (ch){
                             case 1:
-                                System.out.println("메뉴등록");
                                 managerService.enterMenu();
+                                InitClazz.printMenu();
                                 break;
                             case 2:
-                                System.out.println("메뉴삭제");
                                 managerService.deleteMenu();
                                 break;
                             case 3:
-                                System.out.println("메뉴수정");
                                 managerService.updateMenu();
                                 break;
                             case 4:
-                                System.out.println("재고등록");
                                 managerService.enterStock();
                                 break;
                             case 5:
