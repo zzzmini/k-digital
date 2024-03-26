@@ -7,7 +7,7 @@ public class TelDto {
     @Override
     public String toString() {
         String str;
-        str = String.format("%d \t %s \t %s \t " +
+        str = String.format("%d \t %s \t %d \t " +
                 "%s \t %s \t", id, name, age, address, telNum);
         return str;
     }

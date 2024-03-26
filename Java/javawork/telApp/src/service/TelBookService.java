@@ -64,4 +64,75 @@ public class TelBookService {
         }
         return dtoList;
     }
+
+    // 데이터 삭제하기
+    public int deleteData(int id){
+        int result = 0;
+
+        Connection conn = DBConn.getConnection();
+        PreparedStatement psmt = null;
+        String sql;
+
+        try {
+            sql = "delete from telbook where id=?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, id);
+            result = psmt.executeUpdate();
+            psmt.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    // 아이디 검색
+    public TelDto searchOne(int id){
+        Connection conn = DBConn.getConnection();
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
+        String sql;
+        TelDto dto = null;
+        try {
+            sql = "select * from telbook where id=?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, id);
+            rs = psmt.executeQuery();
+            while (rs.next()){
+                dto = TelDto.allOf(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("age"),
+                        rs.getString("addr"),
+                        rs.getString("tel")
+                        );
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());;
+        }
+        return dto;
+    }
+
+    public int updateData(TelDto dto){
+        int result = 0;
+
+        Connection conn = DBConn.getConnection();
+        PreparedStatement psmt = null;
+        String sql;
+        try {
+            sql = "update telbook set name=?, age=?, addr=?, tel=? " +
+                    "where id=?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setString(1, dto.getName());
+            psmt.setInt(2, dto.getAge());
+            psmt.setString(3,dto.getAddress());
+            psmt.setString(4, dto.getTelNum());
+            psmt.setInt(5, dto.getId());
+            result = psmt.executeUpdate();
+            psmt.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());;
+        }
+
+        return result;
+    }
 }

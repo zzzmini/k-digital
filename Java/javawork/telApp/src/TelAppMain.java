@@ -37,16 +37,16 @@ public class TelAppMain {
 //                    result = service.insertData(dto);
                     break;
                 case 2:
-                    System.out.println("2.수정");
+                    userView.update();
                     break;
                 case 3:
-                    System.out.println("3.삭제");
+                    userView.delete();
                     break;
                 case 4:
                     userView.searchAll();
                     break;
                 case 5:
-                    System.out.println("5.아이디검색");
+                    userView.searchOne();
                     break;
                 case 6:
                     DBConn.close();
