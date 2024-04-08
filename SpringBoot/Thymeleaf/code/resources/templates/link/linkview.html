@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Link Page...</h1>
+    <ul>
+        <a th:href="@{/hello}">basic url</a>
+    </ul>
+    <!-- 쿼리스트링(쿼리파라메터)   -->
+    <ul>
+        <a th:href="@{/requestParam(name=${name}, age=${age})}">query param</a>
+<!--        /hello?name=장원영&age=21  -->
+    </ul>
+    <!-- 경로변수(Path Variable) -->
+    <ul>
+        <a th:href="@{/pathVariable/{name}/{age}(name=${name}, age=${age})}">
+<!--            /hello/장원영/21   -->
+            Path Variable</a>
+    </ul>
+    <!-- 경로변수(Path Variable) & 쿼리스트링(쿼리파라메터)-->
+    <ul>
+        <a th:href="@{/pathAndQuery/{name}(name=${name}, age=${age})}">
+<!--       /hello/장원영?age=21     -->
+            Path Variable + query parameter</a>
+    </ul>
+</body>
+</html>

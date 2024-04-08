@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        <li>
+            <a th:href="@{list}"> /articles </a>
+            <br> ---- GET
+            <br> ---- 전체 게시글 읽기 성공
+            <br> ---- list_all.html
+        </li>
+    </ul>
+    <ul>
+        <li th:with="id=${5}">
+            <a th:href="@{/articles/{id}(id=${id})}"> /articles/{id} </a>
+            <br> ---- GET
+            <br> ---- <span th:text="${id} + '번 게시글 읽어오기 성공'"></span>
+            <br> ---- list_one.html
+        </li>
+    </ul>
+    <ul>
+        <li th:with="name=${'Tom'}, weight=${70}, height=${175}">
+            <a th:href="@{/articles/create(name=${name}, weight=${weight}, height=${height})}">
+                        /articles/create?name=tom&weight=80&height=180 </a>
+            <br> ---- GET
+            <br> ---- <span th:text="${name} + '의 키는 '"></span>
+                <span th:text="${height} + ', 몸무게는 '"></span>
+                <span th:text="${weight} + ' 입니다.'"></span>
+            <br> ---- new.html
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a th:href="@{/articles/update}"> /articles/update </a>
+            <br> ---- GET
+            <br> ---- 업데이트 성공 화면 출력
+            <br> ---- update_ok.html
+        </li>
+    </ul>
+
+    <ul>
+        <li th:with="id=${6}">
+            <a th:href="@{/articles/{id}/update(id=${id})}"> /articles/{id}/update </a>
+            <br> ---- GET
+            <br> ---- <span th:text="${id}"></span>번 게시글 수정 폼 로딩 완료
+            <br> ---- update.html
+        </li>
+    </ul>
+
+    <ul>
+        <li th:with="id=${3}">
+            <a th:href="@{/articles/{id}/delete(id=${id})}"> /articles/{id}/delete </a>
+            <br> ---- GET
+            <br> ---- <span th:text="${id}"></span>번 글 삭제 완료
+            <br> ---- delete_ok.html
+        </li>
+    </ul>
+
+    <ul>
+        <li th:with="id=${3}">
+            <a th:href="@{/articles/{id}/articleComment(id=${id})}">
+                            /articles/{id}/articleComment </a>
+            <br> ---- GET
+            <br> ---- <span th:text="${id}"></span>번 게시글의 모든 댓글보기 성공
+            <br> ---- comment_view.html
+        </li>
+    </ul>
+
+    <ul>
+        <li th:with="id=${15}, articleCommentId=${3}">
+            <a th:href="@{/articles/{id}/articleComments/{articleCommentId}/delete(id=${id}, articleCommentId=${articleCommentId})}">
+                /articles/{id}/articleComments/{article-comment-id}/delete </a>
+            <br> ---- GET
+            <br> ---- <span th:text="${id}"></span>번 게시글의
+                      <span th:text="${articleCommentId}"></span>번째 답글 삭제 완료
+            <br> ---- delete_ok.html
+        </li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>리터럴</h1>
+    <li>"Hello world! = <span th:text="'Hello world!'"></span></li>
+    <li>"Hello world! = <span th:text="'Hello world!!'"></span></li>
+    <li>"Hello world! = <span th:text="${data} + ' Hello world!!'"></span></li>
+    <li>"Hello world! = <span th:text="'Hello ' + ${data} + ' world!!'"></span></li>
+    <li>"Hello world! = <span th:text="|Hello ${data} world!!|"></span></li>
+
+    <h1>산술연산</h1>
+    <li> 10 + 2 = <span th:text="10 + 2"></span></li>
+    <li> 10 % 2 = <span th:text="10 % 2"></span></li>
+
+    <h1>비교연산</h1>
+    <li>1 > 10 = <span th:text="1 > 10"></span></li>
+    <li>1 gt 10 = <span th:text="1 gt 10"></span></li>
+    <li>1 &gt; 10 = <span th:text="1 &gt; 10"></span></li>
+    <li>1 >= 10 = <span th:text="1 >= 10"></span></li>
+    <li>1 >= 10 = <span th:text="1 ge 10"></span></li>
+    <li>1 == 10 = <span th:text="1 == 10"></span></li>
+
+    <h1>삼항연산자</h1>
+    <li> (10 % 2 == 0)? <span th:text="(10 % 2 == 0)?'짝수':'홀수'"></span></li>
+
+    <h1>Elvis 연산자</h1>
+    <li> ${nullData}? <span th:text="${nullData}?:'null 값 입니다.'"></span></li>
+    <li> ${name}? <span th:text="${name}?:'null 값 입니다.'"></span></li>
+
+    <h1>No-Operation</h1>
+    <li> ${nullData}? <span th:text="${nullData}?:_">null 값</span></li>
+    <li> ${name}? <span th:text="${name}?:_"></span></li>
+</body>
+</html>

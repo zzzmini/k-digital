@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Spring EL 표현식</h1>
+    <ul> Object
+        <li>${userJang.userName} = <span th:text="${userJang.userName}"></span></li>
+        <li>${userJang.age} = <span th:text="${userJang.age}"></span></li>
+    </ul>
+
+    <ul>List
+        <li>${userList[1].userName} = <span th:text="${userList[1].userName}"></span></li>
+        <li>${userList[1]['age']} = <span th:text="${userList[1]['age']}"></span></li>
+        <li>${userList[0].getUserName()} = <span th:text="${userList[0].getUserName()}"></span></li>
+    </ul>
+
+    <ul>Map
+        <li>${userMap['jang'].userName} =
+            <span th:text="${userMap['jang'].userName}"></span>
+        </li>
+        <li>${userMap['jang']['userName']]} =
+            <span th:text="${userMap['jang']['userName']}"></span>
+        </li>
+        <li>${userMap['jang'].getUserName()} =
+            <span th:text="${userMap['jang'].getUserName()}"></span>
+        </li>
+    </ul>
+
+    <div th:with="item=${userList[0]}">
+<!-- Users item = new Users("장원영",21);-->
+        <ul>
+            <li> 이름 :
+                <span th:text="${item.userName}"></span>
+            </li>
+            <li> 나이 :
+                <span th:text="${item.age}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <div th:with="item=${userList[1]}">
+        <!-- Users item = new Users("장원영",21);-->
+        <ul>
+            <li> 이름 :
+                <span th:text="${item.userName}"></span>
+            </li>
+            <li> 나이 :
+                <span th:text="${item.age}"></span>
+            </li>
+        </ul>
+    </div>
+    <h2><a href="http://localhost/index.html">돌아가기</a></h2>
+</body>
+</html>

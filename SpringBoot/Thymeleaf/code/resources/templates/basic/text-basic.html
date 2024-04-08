@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <H1>Live Reload!  OK~~~</H1>
+    <H1>text vs utext</H1>
+    <ul>
+        <li>th:text = <span th:text="${data}"></span></li>
+        <li>th:utext = <span th:utext="${data}"></span></li>
+    </ul>
+    <h1><span th:inline="none">[[...]] vs [(...)]</span></h1>
+    <ul>
+        <li><span th:inline="none">[[...]] = </span> [[${data}]]</li>
+        <li><span th:inline="none">[(...)] = </span> [(${data})]</li>
+    </ul>
+
+    <h2><a href="http://localhost/index.html">돌아가기</a></h2>
+</body>
+</html>

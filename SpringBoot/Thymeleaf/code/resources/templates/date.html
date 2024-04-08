@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>LocalDateTime</h1>
+    <ul>
+        <li>defalut = <span th:text="${localTime}"></span></li>
+        <li>yyyy-MM-dd HH:mm:ss =
+            <span th:text="${#temporals.format(localTime, 'yyyy-MM-dd HH:mm:ss')}">
+            </span>
+        </li>
+    </ul>
+
+    <h1>LocalDateTime - Utils</h1>
+    <ul>
+        <li>${#temporals.day(localTime)} =
+            <span th:text="${#temporals.day(localTime)}"></span>일
+        </li>
+        <li>${#temporals.month(localTime)} =
+            <span th:text="${#temporals.month(localTime)}"></span>월
+        </li>
+        <li>${#temporals.monthName(localTime)} =
+            <span th:text="${#temporals.monthName(localTime)}"></span>
+        </li>
+        <li>${#temporals.year(localTime)} =
+            <span th:text="${#temporals.year(localTime)}"></span>년
+        </li>
+        <li>${#temporals.dayOfWeek(localTime)} =
+            <span th:text="${#temporals.dayOfWeek(localTime)}"></span>
+        </li>
+        <li>${#temporals.dayOfWeekName(localTime)} =
+            <span th:text="${#temporals.dayOfWeekName(localTime)}"></span>
+        </li>
+        <li>오늘은 =
+            <span th:text="${#temporals.year(localTime)}"></span>년
+            <span th:text="${#temporals.monthName(localTime)}"></span>
+            <span th:text="${#temporals.day(localTime)}"></span>일
+        </li>
+    </ul>
+    <h2><a href="http://localhost/index.html">돌아가기</a></h2>
+    <h2><a th:href="@{/basic/variable}">variable로 가기</a></h2>
+</body>
+</html>
