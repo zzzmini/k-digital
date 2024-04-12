@@ -26,6 +26,17 @@ public class LinkTestController {
         return "/articles/list_all";
     }
 
+    @GetMapping("/member/{id}")
+    public String memberSelect(Model model,
+                               @PathVariable("id")int id,
+                               @RequestParam("name")String name) {
+        String title = "/articles/member/{" + id + "}";
+        String message = name + "이 선택되었습니다.";
+
+        model.addAttribute("title", title);
+        model.addAttribute("message", message);
+        return "/articles/member-list";
+    }
     @GetMapping("/{id}")
     public String listOne(@PathVariable("id")int id, Model model) {
         String title = "/articles/{" + id + "}";

@@ -67,5 +67,9 @@ public class BasicController {
                 )
         );
         model.addAttribute("users", userList);
+
+        for(Users item : userList){
+
+        }
     }
 }
