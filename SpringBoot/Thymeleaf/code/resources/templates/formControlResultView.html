@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table th:object="${dto}" border="1">
+        <tr>
+            <th>Label</th>
+            <th>선택값</th>
+            <th>결과</th>
+        </tr>
+        <tr>
+            <td>회원아이디</td>
+            <td th:text="*{id}"></td>
+            <td th:text="*{id}"></td>
+        </tr>
+        <tr>
+            <td>비밀번호1</td>
+            <td th:text="*{password1}"></td>
+            <td th:text="${resultPassword}"></td>
+        </tr>
+        <tr>
+            <td>비밀번호2</td>
+            <td th:text="*{password2}"></td>
+            <td th:text="${resultPassword}"></td>
+        </tr>
+        <tr>
+            <td>성별</td>
+            <td th:text="*{gender}"></td>
+            <td th:text="${resultGender}"></td>
+        </tr>
+        <tr>
+            <td>이용약관동의</td>
+            <td>list1</td>
+            <td th:text="${arrAgree[0]}"></td>
+        </tr>
+        <tr>
+            <td>개인정보 수집이용동의(필수)</td>
+            <td>list2</td>
+            <td th:text="${arrAgree[1]}"></td>
+        </tr>
+        <tr>
+            <td>개인정보 수집이용동의(선택)</td>
+            <td>list3</td>
+            <td th:text="${arrAgree[2]}"></td>
+        </tr>
+        <tr>
+            <td>E-mail</td>
+            <td th:text="*{email1}"></td>
+            <td th:text="${resultEmail}"></td>
+        </tr>
+        <tr>
+            <td>E-mail</td>
+            <td th:text="*{email2}"></td>
+            <td th:text="${resultEmail}"></td>
+        </tr>
+        <tr>
+            <td>휴대폰</td>
+            <td th:text="*{phone}"></td>
+            <td th:text="*{phone}"></td>
+        </tr>
+    </table>
+</body>
+</html>
