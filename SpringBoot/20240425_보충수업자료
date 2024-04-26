@@ -1,0 +1,180 @@
+package entity;
+
+public class Exam {
+    int id;
+    private int kor;
+    private int eng;
+
+    @Override
+    public String toString() {
+        return "Exam{" +
+                "id=" + id +
+                ", kor=" + kor +
+                ", eng=" + eng +
+                '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getKor() {
+        return kor;
+    }
+
+    public void setKor(int kor) {
+        this.kor = kor;
+    }
+
+    public int getEng() {
+        return eng;
+    }
+
+    public void setEng(int eng) {
+        this.eng = eng;
+    }
+
+}
+
+package entity;
+
+import entity.Exam;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Member {
+    private int id;
+    private String name;
+    List<Exam> exam = new ArrayList<>();
+
+    public List<Exam> getExam() {
+        return exam;
+    }
+
+    public void setExam(List<Exam> exam) {
+        this.exam = exam;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", exam=" + exam +
+                '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+}
+
+package service;
+
+import entity.Exam;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExamService {
+    public List<Exam> createExam() {
+        List<Exam> examList = new ArrayList<>();
+        for (int i=1; i<=5; i++) {
+            Exam exam = new Exam();
+            exam.setId(1);
+            exam.setKor(10* i);
+            exam.setEng(15* i);
+            examList.add(exam);
+        }
+        return examList;
+    }
+
+}
+
+package service;
+
+import entity.Exam;
+import entity.Member;
+
+import java.util.List;
+
+public class MemberService {
+    public Member createMember() {
+        Member member = new Member();
+        member.setId(1);
+        member.setName("장원영");
+        return member;
+    }
+
+    public Member setExamInMember(Member member, List<Exam> exam) {
+        member.setExam(exam);
+        return member;
+    }
+}
+
+
+package service;
+
+import entity.Exam;
+import entity.Member;
+
+import java.util.List;
+
+public class PrintService {
+    public void examPrint(Member member) {
+        for (int i=0; i <= member.getExam().size() - 1; i++) {
+            System.out.println(i + "번째 시험결과 : " + member.getExam().get(i));
+        }
+    }
+
+}
+
+import entity.Exam;
+import entity.Member;
+import service.ExamService;
+import service.MemberService;
+import service.PrintService;
+
+import java.util.List;
+
+public class MainTest {
+    public static void main(String[] args) {
+        MemberService memberService = new MemberService();
+        ExamService examService = new ExamService();
+        PrintService printService = new PrintService();
+
+        // 장원영 만들기
+        Member member = memberService.createMember();
+
+        // 장원영 시험성적 5개 갖고오기
+        List<Exam> examList = examService.createExam();
+
+        // 장원영이한테 5개 시험결과 붙이기
+        Member newMember = memberService.setExamInMember(member, examList);
+        // 장원영한테 시험결과가 5개가 붙어있어요
+        System.out.println(newMember.toString());
+        printService.examPrint(newMember);
+    }
+}
+
+
+
