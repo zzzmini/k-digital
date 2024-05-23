@@ -1,0 +1,15 @@
+div {
+  width: 200px;
+  height: 200px;
+  display: none;
+}
+
+div#a {
+  background-color: red;
+}
+div#b {
+  background-color: gold;
+}
+div#c {
+  background-color: hotpink;
+}

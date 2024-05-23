@@ -1,0 +1,738 @@
+######################################################
+1장. JQuery 기초
+######################################################
+------------------------------------------------------
+1.html
+------------------------------------------------------
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function(){
+      $("h1").click(function(){
+        $(this).hide();
+      })
+    });
+  </script>
+</head>
+<body>
+  <h1>홈페이지 만들기</h1>
+  <h1>제이쿼리 테스트</h1>
+  <h1>안녕하세요</h1>
+</body>
+</html>
+
+▶ <script> 위치에 따른 실행 가능과 불가능
+▶ $(document).ready 는 문서가 모두 로드된 이후에 실행 됨.
+
+▶ 제이쿼리 구문
+$(선택자).action()
+---------------------------------------------------------
+$(this).hide()  -- 현재 선택된 선택자
+$("p").hide()  -- p 태그의 모든 요소를 감춘다.
+$(".abc").hide()  -- abc 클래스
+$("#abc".hide)   -- id가 abc 인것.
+
+<p>Hello</p>
+<p>Hi~~~</p>   -- 두개 모두 해당함.
+<p class="abc"></p>
+<p id="abc"></p>
+
+▶ 실행 시키려면
+<script>
+  $(this).hide()  -- 현재 선택된 선택자
+  $("p").hide()  -- p 태그의 모든 요소를 감춘다.
+  $(".abc").hide()  -- abc 클래스
+  $("#abc".hide)   -- id가 abc 인것.
+</script>
+
+<script>
+    $(document).ready(function(){
+      $("h1").click(function(){
+        $(this).hide();
+      })
+    });
+</script>
+
+▶ 위 스크립트를 약식으로 표현하기
+<script>
+    $(function(){
+      $("h1").click(function(){
+        $(this).hide();
+      })
+    });
+</script>
+------------------------------------------------------
+1.js
+------------------------------------------------------
+$(function(){
+      $("h1").click(function(){
+        $(this).hide();
+      })
+});
+
+▶ 위 내용을 1.js로 옮기고 1.html에 include 시키기
+
+<script src="1.js"></script>
+
+▶ jquery 밑에 script 를 반드시 써야한다.
+
+######################################################
+2장. JQuery 선택자
+######################################################
+------------------------------------------------------
+2.html
+------------------------------------------------------
+<script src="2.js"></script>
+</head>
+<body>
+  <h1>홈페이지 만들기</h1>
+  <p class="intro">제이쿼리 테스트</p>
+  <p>안녕하세요 <span class="intro">장원영</span>입니다.</p>
+  <button class="intro">클릭해 주세요 1</button>
+  <button>클릭해 주세요 2</button>
+</body>
+
+
+
+1. wild card 선택자
+
+-- 화면 전체 처리하기
+------------------------------------------------------
+2.js
+------------------------------------------------------
+$(document).ready(function(){
+  $("button").click(function(){
+    // $("body").css("background-color","red");
+    $("*").css("background-color","red");
+  });
+});
+
+2. this 선택자
+
+$(document).ready(function(){
+  $("button").click(function(){
+    // $("body").css("background-color","red");
+    $(this).css("background-color","yellow");
+  });
+});
+
+3. 복합 선택자
+
+  <p class="intro">제이쿼리 테스트</p>
+  <p>안녕하세요</p>
+  <button class="intro">클릭해 주세요 1</button>
+
+$(document).ready(function(){
+  $("button").click(function(){
+    $("p.intro").css("background-color", "green");
+  });
+});
+
+▶ p 와 .intro 를 띄어서 입력하면 p 태그의 후손선택자를 뜻함.
+- $("p .intro").css("background-color", "yellow");
+
+4. : 선택자
+p.first  or p.last
+$("p.first).css("background-color", "green");
+
+▶ 얘는 주로 ul / li 태그에 주로 쓰임.
+<h1>내가 좋아하는 음식들</h1>
+  <ul>
+    <li>계란말이</li>
+    <li>김치찌개</li>
+    <li>칼국수</li>
+  </ul>
+
+  <h1>내가 좋아하는 커피</h1>
+  <ul>
+    <li>아메리카노</li>
+    <li>카푸치로</li>
+    <li>카라멜 마끼아또</li>
+  </ul>
+  <button id="btn_1">눌러주세요</button>
+
+▶ li 태그 하위 : 다음에 
+-- first / last
+-- first-child / last-child
+   등이 올 수 있다.
+
+$(document).ready(function(){
+  $("button").click(function(){
+    $("p:last").css("background-color", "green");
+  });
+  
+  $("#btn_1").click(function(){
+    $("ul li:first-child").css("background-color", "gold");
+  });
+});
+
+5. 속성을 선택자로 사용하기
+▶ 속성의 사용은 [ ] 를 이용한다.
+
+  <a href="www.daum.net" name="daum" title="타이틀"></a>
+
+-- a 태그의 속성은 href, name, title 이다.
+
+▶ href 속성을 갖고 있는 곳에 노란색으로 색칠하기
+  <a href="">가고 싶은 곳 1</a>
+  <a href="">가고 싶은 곳 2</a>
+  <button id="btn_2">선택</button>
+
+  $("#btn_2").click(function(){
+    $("[href]").css("background-color", "gold");
+  });
+
+▶ 특정 속성의 값을 비교하여 노란색으로 색칠하기
+ex> a 태그 이면서 href 속성이 www.daum.net 이면 노락색 칠하기
+
+<a href="www.daum.net">카카오</a>
+<a href="www.naver.com">네이버</a>
+
+▶ " = " 연산자
+$("#btn_2").click(function(){
+    $("a[href='www.daum.net']").css("background-color", "gold");
+});
+▶ " != " 연산자
+$("#btn_2").click(function(){
+    $("a[href != 'www.daum.net']").css("background-color", "gold");
+});
+
+6. 테이블에 지그재그 색 입히기
+ - even / odd
+
+ <table border="1">
+    <tr>
+      <th>브랜드</th>
+      <th>회사명</th>
+    </tr>
+    <tr>
+      <td>NHN</td>
+      <td>네이버</td>
+    </tr>
+    <tr>
+      <td>Kakao</td>
+      <td>다음</td>
+    </tr>
+    <tr>
+      <td>Amazon</td>
+      <td>미국</td>
+    </tr>
+    <tr>
+      <td>Micosoft</td>
+      <td>미국</td>
+    </tr>
+  </table>
+  <button id="btn_3">선택</button>
+
+
+  $("#btn_3").click(function(){
+    $("tr:odd").css("background-color", "gold");
+  })
+
+
+######################################################
+3장. 이벤트
+######################################################
+
+- mouse : click, dblclick, mouseenter, mouseleave
+- keyboard : keypress, keydown, keyup
+- form : submit, change, focus, blur
+- window : load, resize, scroll, unload
+
+------------------------------------------------------
+3.html
+------------------------------------------------------
+
+<script src="3.js"></script>
+</head>
+<body>
+  <p class="enter">첫번째 문단</p>
+  <p class="enter">두번째 문단</p>
+  <button id="btn_1">버튼</button>
+</body>
+
+------------------------------------------------------
+3.js
+------------------------------------------------------
+
+1. click 이벤트
+
+▶ 버튼 누르면 p 태그 내용들 사라지게 하기
+
+$(function(){
+  $("#btn_1").click(function(){
+    $("p").hide();
+  });
+});
+
+
+2. 더클클릭 이벤트
+
+  $("#btn_1").dblclick(function(){
+    $("p").hide();
+  });
+
+3. mouseenter 이벤트 : p 태그 안으로 마우스가 진입하면 색을 바꾸자.
+
+▶ jQuery Code Snippets 설치하고 쿼리 쉽게 입력하기
+-  jqmouseen...  입력하고 엔터치면 자동생성 됨.
+
+  $("p").mouseenter(function () { 
+    $(this).css("background-color", "gold");
+  }); 
+
+4. mouseleave 이벤트 : p 태그 밖으로 마우스가 떠나면 색을 흰색으로 바꾸자.
+
+  $("p").mouseleave(function () { 
+    $(this).css("background-color", "white");
+  });
+
+5. mousedown / mouseup 이벤트 : 클릭하고 뗄때 발생하는 이벤트
+
+  <p class="mouse">MouseDown이벤트 테스트</p>
+  <p class="mouse">MouseUp이벤트 테스트</p>
+
+  $("p.mouse").mousedown(function () { 
+    $(this).css("background-color", "pink");
+  });
+
+  $("p.mouse").mouseup(function () { 
+    $(this).css("background-color", "gray");
+  });
+
+
+6. mouseenter와 mouseover 이벤트 차이
+
+------------------------------------------------------
+4.html
+------------------------------------------------------
+
+<script src="4.js"></script>
+  <link rel="stylesheet" href="4.css">
+</head>
+<body>
+  <div class="outer">
+    <div class="inner">
+
+    </div>
+  </div>
+</body>
+
+------------------------------------------------------
+4.css
+------------------------------------------------------
+.outer {
+  width: 300px;
+  height: 300px;
+  background-color: gold;
+}
+
+.inner {
+  width: 200px;
+  height: 200px;
+  background-color: gray;
+}
+
+------------------------------------------------------
+4.js
+------------------------------------------------------
+
+$(function(){
+  $(".outer").mouseover(function () { 
+    console.log("Outer MouseOver Event....")
+  });
+  $(".outer").mouseenter(function () { 
+    console.log("Outer MounseEnter Event .....")
+  });
+});
+
+- mouseenter와 mouseover는 동시에 발생되지만 특정 div에 가려질 때는
+  mouseover만 발생한다. 즉. 겹쳐진 영역에 inner가 존재하기 때문에 
+  over 이벤트만 발생하게 된다.
+
+  F12 눌러서 console 확인하면서 실습.
+
+▶ 이를 이벤트 버블이라하고 마우스의 경우 mouseover 인 경우 발생한다.  
+
+  자식을 감싸고 있는 부모이벤트에게 전이된다.
+
+  $(".inner").mouseover(function () { 
+    console.log("inner MouseOver Event....")
+  });
+  $(".inner").mouseenter(function () { 
+    console.log("inner MounseEnter Event .....")
+  });
+
+  결과를 보면 순서대로 inner의 mouseenter와 MouseOver가 
+  동시에 일어나고 MouseOver는 부모이벤트에게 버블되어 Outer의
+  mouseover 이벤트가 발생하게 된다.
+
+
+7. mouseenter와 mouseover 이벤트 차이
+
+------------------------------------------------------
+5.html / 5.css --> 4.html / 4.css 파일과 동일
+------------------------------------------------------
+
+------------------------------------------------------
+5.js
+------------------------------------------------------
+$(function(){
+  $(".outer").mouseover(function () { 
+    console.log("Outer MouseOver Event....")
+  });
+  $(".outer").hover(function () { 
+    console.log("Outer Hover Event .....")
+  });
+});
+
+
+▶ hover 메서드는 mouseenter와 mouseleave가 교차되어 발생된다.
+
+<a href="www.daum.net" class="daum">다음</a>
+
+.daum:hover{
+  background-color: red;
+}
+
+일반적으로 css hover에서도 두가지 이벤트가 발생한다.
+
+8. foucs와 blur 이벤트 차이
+
+▶ 폼에서 input 상자의 경우 선택이 되면 focus 이벤트가,
+ 폼 선택에서 해제가 되면 blur 이벤트가 발생된다.
+
+ 예> 포커스를 받으면 핑크색, 떠나면 노랑색
+
+------------------------------------------------------
+6.html
+------------------------------------------------------
+<script src="6.js"></script>
+</head>
+<body>
+  <form action="" name="form"> 
+    <input type="text" name="subject">
+    <input type="text" name="content">
+  </form>
+------------------------------------------------------
+6.js
+------------------------------------------------------
+$(function(){
+  $("input").focus(function () { 
+    $(this).css("background-color", "pink");
+  });
+  $("input").blur(function () { 
+    $(this).css("background-color", "yellow");
+  });
+})
+
+
+▶ 타입이 password 인 경우에만 적용해 봅시다.
+  <input type="text" name="subject">
+  <input type="password" name="password">
+
+
+$(function(){
+  $("[type = 'password']").focus(function () { 
+    $(this).css("background-color", "pink");
+  });
+  $("[type]").blur(function () { 
+    $(this).css("background-color", "");
+  });
+})
+
+
+######################################################
+4장. on 메서드
+######################################################
+
+예> h1 태그 클릭 시 -> 노랑색, 떠날 때 -> 녹색
+
+------------------------------------------------------
+7.html
+------------------------------------------------------
+<script src="6.js"></script>
+</head>
+<body>
+  <form action="" name="form"> 
+    <input type="text" name="subject">
+    <input type="text" name="content">
+  </form>
+------------------------------------------------------
+6.js
+------------------------------------------------------
+
+$(function(){
+  $("h1").mouseenter(function (e) { 
+    e.preventDefault();
+    //submit만 하고, 새로고침 되지 않는 상태 
+    //(= 이름이 고대로 적어진 상태)로 만들기 위해 
+    //preventDefault를 사용!
+    $(this).css("background-color", "yellow");
+  });
+  $("h1").mouseleave(function () { 
+    $(this).css("background-color", "green");
+  });
+})
+
+
+▶ 여러가지 이벤트를 하나로 묶을 때 사용
+
+- 기본문법 
+$(selector).on({
+  events, function () {},
+  events, function () {},
+  events, function () {}
+});
+
+
+$(function(){
+  $("h1").on({
+    click : function () 
+      { $(this).css("background-color", "red")},
+    mouseenter : function () 
+      { $(this).css("background-color", "yellow")},
+    mouseleave : function() 
+      { $(this).css("background-color", "pink")}
+  })
+});
+
+---- 정리
+$("h1").on({
+    click      : function (){$(this).css("background-color", "red")},
+    mouseenter : function (){$(this).css("background-color", "yellow")},
+    mouseleave : function (){$(this).css("background-color", "pink")}
+})
+
+######################################################
+5장. deplicated 된 이벤트 알아보기
+######################################################
+
+https://jquery.com/ -> API Documentation -> 좌측 deplicated version 정보 보임
+
+-> deplicated 3.3 확인
+
+▶ click, focus, hover, keydown 등 지금까지 확인했던 많은 이벤트들이
+  deplicated 되어 있다. 지원하지 않는 것은 아님....
+  장기적으로 봤을 때 대체할 수 있는 방법은.... 클릭해서 들어가 보면
+  on 을 사용하라고 되어있음.
+
+단, hover는 on -> mouseenter와 mouseleave를 사용
+
+######################################################
+6장. hide()와 show()
+######################################################
+
+------------------------------------------------------
+8.html
+------------------------------------------------------
+
+  <script src="8.js"></script>
+</head>
+<body>
+  <button id="btn_show">다시보기</button>
+  <img src="./rose.jpg" id="rose">
+</body>
+
+
+------------------------------------------------------
+8.js
+------------------------------------------------------
+$(function(){
+  $("#rose").on(
+    {click : function (){$(this).hide()}});
+  $("#btn_show").on(
+    {click : function (){$("img").show()}});
+})
+
+▶ 여러가지 애니메이션 효과 주기
+  hide / show()  --- 인자로 전달하기
+
+  - slow  : hide('slow')
+  - fast  : show('fast')
+  - 3000  -> 3초
+
+▶ 콜백함수 사용해 보기
+
+$(function(){
+  $("#rose").on(
+    {click : function (){$(this).hide('slow')}});
+  $("#btn_show").on(
+    {click : function (){$("img").show('fast', 
+      function(){
+        $("#rose").hide('fast');
+      })}});
+})
+
+######################################################
+7장. fadeIn(), fadeOut(), fadeToggle(), fadeTo()
+######################################################
+
+------------------------------------------------------
+9.html
+------------------------------------------------------
+
+  <link rel="stylesheet" href="./9.css">
+  <script src="9.js"></script>
+</head>
+<body>
+  <div id="a"></div>
+  <div id="b"></div>
+  <div id="c"></div>
+</body>
+
+------------------------------------------------------
+9.css
+------------------------------------------------------
+
+div {
+  width: 200px;
+  height: 200px;
+  display: none;
+}
+
+div#a {
+  background-color: red;
+}
+div#b {
+  background-color: gold;
+}
+div#c {
+  background-color: hotpink;
+}
+
+------------------------------------------------------
+9.js
+------------------------------------------------------
+1) fadeIn 만들기
+
+ⓐ 빨강색 상자 먼저 보이기
+$(function(){
+  $("#a").fadeIn()
+})
+
+ⓑ 버튼 클릭할 때 보이게 하기
+
+  <button id="btn_fadeIn">FadeIn</button>
+
+// $("#a").fadeIn();
+  $("#btn_fade").on({
+    click : function(){$("#a").fadeIn();}
+  })
+
+- fadeIn('slow')
+- fadeIn('fast')
+- fadeIn(1000,  콜백함수)
+
+$(function(){
+  // $("#a").fadeIn();
+  $("#btn_fade").on({
+    click : function(){
+      $("div#a").fadeIn(1000);
+      $("div#b").fadeIn('slow', function(){
+        alert("다 끝났어요");});
+      $("div#c").fadeIn('fast');
+  }})
+})
+
+2) fadeOut 만들기
+
+  <button id="btn_fadeOut">FadeOut</button>
+
+
+$("#btn_fadeOut").on({
+    click : function(){
+      $("div#a").fadeOut(1000);
+      $("div#b").fadeOut('slow', function(){
+        alert("다 끝났어요");});
+      $("div#c").fadeOut('fast');
+}})
+
+3) #a 만 fadeToggle 처리하기
+  <button id="btn_fadeToggle">FadeToggle</button>
+
+  $("#btn_fadeToggle").on({
+    click : function(){
+      $("#a").fadeToggle();
+    }
+  })
+
+  4) fadeTo 처리하기
+  - 빨강 상자만 천천히 50% 흐려지게 만듦
+
+  <button id="btn_fadeTo">FadeTo</button>
+
+
+  $("#btn_fadeTo").on({
+  click : function(){
+    //$("#a").fadeTo('slow', 0.5);
+    $("#a").fadeTo(3000, 0);
+  }
+})
+
+
+######################################################
+8장. slideDown(), slideUp(), slideToggle()
+######################################################
+
+------------------------------------------------------
+10.html
+------------------------------------------------------
+
+  <link rel="stylesheet" href="./10.css">
+  <script src="10.js"></script>
+</head>
+<body>
+  <button id="btn_menu">Menu Open</button>
+  <div class="div_menu">메뉴1<br>메뉴2<br>메뉴3</div>
+</body>
+
+------------------------------------------------------
+10.css
+------------------------------------------------------
+
+div.div_menu{
+  width: 300px;
+  background-color: yellowgreen;
+  display: none;
+}
+
+
+------------------------------------------------------
+10.js
+------------------------------------------------------
+
+$(function(){
+  $("#btn_menu").on({
+    click : function(){
+      $('.div_menu').slideDown('slow');
+    }
+  })
+});
+
+
+--- slideUp 테스트는 css display 속성을 주석처리한 후 ...
+$(function(){
+  $("#btn_menu").on({
+    click : function(){
+      $('.div_menu').slideUp('slow');
+    }
+  })
+});
+
+
+-- 얘는 상관 없음.
+$(function(){
+  $("#btn_menu").on({
+    click : function(){
+      $('.div_menu').slideToggle('slow');
+    }
+  })
+});
+
+▶ slideUp / slideDown --> show() hide()와 비교
