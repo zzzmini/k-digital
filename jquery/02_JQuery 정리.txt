@@ -1,0 +1,570 @@
+######################################################
+9장. animate 메서드
+######################################################
+
+▶ 형식
+$(selector).animate({
+
+}, speed, callback);
+
+------------------------------------------------------
+11.html
+------------------------------------------------------
+
+<body>
+  <div class="ani_box"></div>
+</body>
+
+------------------------------------------------------
+11.css
+------------------------------------------------------
+div.ani_box{
+  width: 100px;
+  height: 100px;
+  background-color: yellowgreen;
+  position: static;  ----> 수정 position: absolute;
+}
+
+▶ 상자를 움직이기 위해서는 css 에서
+  position: static;
+  left: 100px;
+  top:100px;
+
+left와 top 값을 변경해서 처리해야 하는 데 기본값이 
+position: static; 움직이지 않는다.
+
+position: absolute;로 변경해야 한다.
+
+▶ div.ani_box를 포함하는 상위 엘리먼트가 없으므로 부모기준인 body
+기준으로 움직인다.
+
+left, right, tom, bottom 값을 변경시켜서 애니메이션 효과를 줄 수 있다.
+
+right : 100px  --> 0
+bottom : 0 
+left: 100px;
+top:100px;
+
+▶ 박스의 움직이는 이동점의 중심은 좌하단 점이 기준점이다.
+  정 가운데 위치시키려면 calc 함수를 사용해서 박스의 너비에서 반 만큼을 빼서
+  위치시킨다.
+------------------------------------------------------
+11.js
+------------------------------------------------------
+$(function(){
+  $(".btn").on({
+    click : function(){
+      $(".ani_box").animate({left : '100px'},'slow')}
+  })
+})
+
+▶ 'slow' 자리에 'fast' , 3000 (ms) 등을 사용할 수 있다.
+
+▶ 다양한 값을 주어서 움직이도록 설정
+
+$(function(){
+  $(".btn").on({
+    click : function(){
+      $(".ani_box").animate({
+        left : '100px',
+        top : '100px'
+      },'slow')}
+  })
+})
+
+▶ 콜백함수를 이용해서 움직이고 난 후 색상바꾸기
+
+※ 애니메이션은 위치정보, 크기변화, 폰트 크기정보를 바꿀 수 있다.
+   그 외 margin, padding, opacity 도 애니메이션에 반영할 수 있다.
+
+$(function(){
+  $(".btn").on({
+    click : function(){
+      $(".ani_box").animate({
+        left : '100px',
+        top : '100px'
+      },'slow',
+    function(){
+      $(this).css("background-color", "red")
+    })}
+  })
+})
+
+▶ em과 rem 차이
+- CSS는 DOM에 style을 적용해주기 위한 언어
+- 화면을 구성하는 DOM에 적절한 길이를 적용하기 위해 다양한 길이 단위를 사용
+- 대표적으로 사용되는 길이 단위는 px, em, rem 등이 있는데, px의 경우는 그 역할이 굉장히 직관적
+- 상대적 길이 단위 : em과 rem
+
+ⓐ em과 rem은 모두 상대적인 길이 단위
+그 대상은 상위 객체로, 상위 객체에 적용 된 크기에 기준하여 자동으로 사이즈를 재조정 함.
+
+20px: 1em = 1rem = 20px
+20px: 0.5em = 0.5rem = 10px
+20px: 1.5em = 1.5rem = 30px
+
+차이는 상위 객체에 대한 기준 임.
+
+ⓑ em은 해당 길이가 적용 된 객체의 직계 부모의 길이를 기준
+ⓒ rem은 DOM Tree에서 가장 상단에 있는 객체의 길이를 기준 일반적으로 <html> 객체의 길이를 기준으로 환산
+
+▶ 폰트 변경하기
+- html
+  <div class="ani_box">Font</div>
+
+- css에 기본 폰트사이즈 주기
+  font-size: 1rem;
+
+- js에서 2rem으로 변경
+  left : '100px',
+  top : '100px',
+  fontSize : '2rem'
+
+▶ 일반적으로 "font-size" ---> fontSize 이렇게 표현해서 사용함.
+  fontSize : '2rem'
+  'font-size' : '2rem'
+
+
+
+######################################################
+10장. Callback Function과 Chaining Method
+######################################################
+
+1. Callback Function
+▶ 형식
+$(selector).action(arg1, callback);
+
+------------------------------------------------------
+12.html
+------------------------------------------------------
+  <script src="12.js"></script>
+</head>
+<body>
+  <button class="btn">CallBack</button>
+  <p>콜백 함수 테스트 페이지 입니다.</p>
+</body>
+
+------------------------------------------------------
+12.js
+------------------------------------------------------
+▶ 버튼 클릭 시 p 태그 값이 사라짐.
+
+$(function(){
+  $("button").on("click", function () {
+    $("p").hide()
+  });
+})
+
+▶ 콜백함수 적용하기 : p 태그 값이 모두 사라진 후에 alert 띄우기
+ -  msg : 모두 사라졌습니다.
+
+$(function(){
+  $("button").on("click", function () {
+    $("p").hide('slow', function(){
+      alert("모두 사라졌습니다.")
+    })
+  });
+})
+
+▶ 콜백함수 이용해서 다시 나타나게 하기
+
+$(function(){
+  $("button").on("click", function () {
+    $("p").hide('slow', function(){
+      // alert("모두 사라졌습니다.")
+      $("p").show('slow')
+    })
+  });
+})
+------------------------------------------------------
+▶ 콜백 함수 기능을 밖으로 빼면 
+
+$(function(){
+  $("button").on("click", function () {
+    $("p").hide('slow');
+    alert("모두 사라졌습니다.");
+  });
+})
+
+동기화가 되지 않고 alert가 먼저 나타남...
+
+
+2. Chaining Method : 여러가지 메서드를 체인처럼 묶어서 사용
+
+▶ 형식
+$(selector).method_1().method_2().method_3();
+
+
+<div class="chain">Method Chaining 테스트 페이지 입니다.</div>
+
+$(function(){
+  $("button").on("click", function () {
+    $("p").hide('slow');
+    alert("모두 사라졌습니다.");
+  });
+
+  $(".chain").css("color", "red").slideUp(1000).slideDown(1000);
+})
+
+
+##############################################################
+11장. text(), html(), val(), attr()
+##############################################################
+
+▶ 컨텐츠 가져오기 : text(), html(), val(), attr()
+▶ 컨텐츠 넣기 : text(value), html(value), val(value), attr(value)
+
+※ Getter and Setter 과 유사 함.
+
+
+------------------------------------------------------
+13.html
+------------------------------------------------------
+
+▶ 버튼 클릭 시 내용 가져오기
+
+<script src="13.js"></script>
+</head>
+<body>
+  <p id="message">안녕하세요. 아이브 <span style="font-weight: bold;">안유진</span>입니다.
+  </p>
+  <button id="btn_get">가져오기</button>
+
+  $("#btn_get").on("click", function () {
+    alert($("#message").text());
+    alert($("#message").html());
+  });
+
+
+▶ 버튼 클릭 시 내용 input text 내용 가져오기
+  <p>
+  <input type="text" id="name" value="장원영">
+  <button id="getName">이름가져오기</button>
+  <p>
+
+  $("#getName").on("click", function () {
+  //alert($("#name").val());
+  alert(document.querySelector('#name').value);
+  });
+
+
+▶ 버튼 클릭 시 daum url을 input text에 보여주기
+
+  <a href="www.daum.net" id="daum">다음 페이지로 이동</a>
+  <input type="text" id="getDaumUrl">
+  <button id="attr-test">href Attr. 가져오기</button>
+
+  $("#attr-test").on("click", function () {
+    // alert($("#daum").attr("href"));
+    const daumUrl = $("#daum").attr("href")
+    $("#getDaumUrl").val(daumUrl);
+  });
+
+▶ 버튼 클릭 시 text 변경하기
+
+  <p id="setText">안녕하세요! 안유진입니다.</p>
+  <button id="btn_set">바꾸기</button>
+
+  $("#btn_set").on("click", function () {
+  $("#setText").text("장원영입니다. 반가워요~ 다이브");
+  });
+
+▶ 버튼 클릭 시 text 중 이름만 진하게 변경하기
+  <p id="setText">안녕하세요! <span id="idolName">안유진</span>입니다.</p>
+  <button id="btn_set">바꾸기</button>
+  <button id="btn_change_name">이름 바꾸기</button>
+
+  $("#btn_change_name").on("click", function () {
+    $("#idolName").html("<b>장원영</b>");
+  });
+
+
+▶ 버튼 클릭 시 기존 이름 앞뒤 변경하기
+
+  <p id="ive">아이브</p>
+  <button id="btn_ive">셋팅하기</button>
+
+  $("#btn_ive").on("click", function () {
+    $("#ive").text(function(i, orginText){
+        return "안녕하세요 ~ " + orginText + "입니다. (" + i + ")"
+    });
+  });
+
+▶ class로 여럿 존재할 경우 출력해 보기
+  <p class="girl-group">아이브</p>
+  <p class="girl-group">뉴진스</p>
+  <p class="girl-group">아일릿</p>
+  <button id="btn_girl_group">인사하기</button>
+
+
+  $("#btn_girl_group").on("click", function () {
+  $(".girl-group").text(function(i, orginText){
+      return "안녕하세요 ~ " + orginText + "입니다. (" + i + ")"
+  });
+  });
+
+▶ 속성 세팅하기 : 구글로 세팅되어 있는 a 태그의 속성 href의 값을 네이버로...
+
+  <a href="https://google.com" id="site">구글</a>
+  <button id="btn_change">네이버로 바꾸기</button>
+
+  $("#btn_change").on("click", function () {
+    $("#site").attr("href", "https://www.naver.com")
+  });
+
+
+
+##############################################################
+12장. append()  prepend() after() before()
+##############################################################
+
+▶ 내부에 추가하기 : append()  prepend()
+▶ 동등 추가하기 : after() before()
+
+------------------------------------------------------
+14.html
+------------------------------------------------------
+
+  <script src="14.js"></script>
+</head>
+<body>
+  <button id="btn_append">방가</button>
+  <p>안녕하세요 </p>
+</body>
+
+▶ 버튼을 클릭하면 p 태그 뒤에 글 추가하기
+
+$(function(){
+  $("#btn_append").on("click", function () {
+    $("p").append("  Hi~~~~");
+  });
+})
+
+
+▶ ul 리스트 추가하기
+  <ul>
+    <li>첫번째 아이템</li>
+    <li>두번째 아이템</li>
+    <li>세번째 아이템</li>
+  </ul>
+
+$("#btn_item_append").on("click", function () {
+$("ul").append("<li>네번째 아이템</li>");
+})
+
+▶ chain 이용해서 앞뒤로 붙이기
+$("p").prepend("  Hi~~~~").append(" Bye!");
+
+▶ ol 리스트 맨 앞에 추가하기
+
+  <ol>
+    <li>첫번째 아이템</li>
+    <li>두번째 아이템</li>
+    <li>세번째 아이템</li>
+  </ol>
+
+  $("#btn_item_append").on("click", function () {
+  $("ol").prepend("<li>영번째 아이템</li>");
+  })
+
+
+▶ after / befor 테스트하기
+
+  <button id="img_add">이미지앞뒤로 추가</button>
+  <img src="rose.jpg">
+
+
+  $("#img_add").on("click", function () {
+    const leftImage = $("<img></img>").attr("src","left.jpg");
+    //const img = document.createElement('img'); 와 같음
+    const righttImage = $("<img></img>").attr("src","right.jpg");
+    $("img").before(leftImage)
+            .after(righttImage);
+  })
+
+##############################################################
+13장. remove()   empty()
+##############################################################
+▶ 자기자신 + 하부 전부 지우기 : remove()
+▶ 아랫것들만 지우기 : empty()
+
+
+  <button id="delete">Delete</button>
+  <div class="del">
+    <p>지워질거야!</p>
+    <p>지워질거야</p>
+    <p>지워질거야</p>
+    <p>지워질거야</p>
+    <p>지워질거야</p>
+  </div>
+
+  $("#delete").on("click", function () {
+    // $(".del").remove()
+    $(".del").empty()
+  })
+
+▶ 필터 이용해서 지우기
+------------------------------------------------------
+14.css
+------------------------------------------------------
+
+.red {
+  background-color: red;
+}
+
+  <div class="del">
+    <p>지워질거야!</p>
+    <p class="red">지워질거야</p>
+    <p>지워질거야</p>
+    <p>지워질거야</p>
+    <p>지워질거야</p>
+  </div>
+
+▶ p 태그 중 .red 인 아이를 지움(필터기능)
+
+$("#delete").on("click", function () {
+  // $(".del").remove()
+  $("p").remove('.red');
+})
+
+##############################################################
+14장. Ajax?
+##############################################################
+
+▶ $(selector).load(url, data, callback);
+
+ⓐ selector 에게 값을 가져온다.(GET)
+ⓑ 전송할 data는 json 타입(POST)  -- live server는 GET 방식만 지원
+ⓒ 다 실행 한 후 callback 수행
+
+
+- 전체 페이지를 다시 로드하지 않고 서버와 데이터를 교환하고
+  웹 페이지의 일부를 업데이트하는 기술.
+
+- 현재 컴의 같은 위치 폴더에 있는 outer.txt 파일을 가져와 출력
+
+------------------------------------------------------
+ajax.html
+------------------------------------------------------
+  <script src="ajax.js"></script>
+</head>
+<body>
+  <button>클릭!</button>
+  <div id="display">======================================</div>
+</body>
+
+------------------------------------------------------
+outer.txt
+------------------------------------------------------
+반갑습니다. 
+방금 ajax 통신을 통해 가져온 내용입니다.
+
+
+------------------------------------------------------
+ajax.js
+------------------------------------------------------
+$(function(){
+  $("button").on("click", function () {
+    // $("#display").text("안녕하세요")
+    $("#display").load('./outer.txt');
+  });
+})
+
+▶ load 메서드는 내 컴에 있는 파일과 통신할 수 있는 메서드 이다.
+
+▶ F12 누르고 네트워크를 확인하면 Response 를 확인할 수 있다.
+
+
+------------------------------------------------------
+outer.html
+------------------------------------------------------
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="first">id=first에서 읽어온 내용</div>
+  <div id="second">id=second에서 읽어온 내용</div>
+  <div class="third">class=third에서 읽어온 내용</div>
+</body>
+</html>
+
+
+$(function(){
+  $("button").on("click", function () {
+    // $("#display").text("안녕하세요")
+    $("#display").load('./outer.html #first');
+    $("#display").load('./outer.html #second');
+    $("#display").load('./outer.html .third');
+  });
+})
+
+##########################################################
+▶ 기타 옵션
+
+    $("#display").load('./outer.html', 
+    {"name" : "장원영",
+    "age" : 20});
+
+- json 타입의 POST body 데이터로 vs code의 live load는 Get 방식만
+지원하므로 405 Method Not Allowed 가 발생
+- F12 오류 난 곳의 Payload를 살펴보면 데이터가 탑재되어 있음.
+
+▶ 기타 콜백함수 옵션
+function(responstText, statusText, xhr){
+  alert(statusText)
+}
+
+$(function(){
+  $("button").on("click", function () {
+    $("#display").load('./outer.html', 
+    function(responstText, statusText, xhr){
+      if(statusText == 'error'){
+        alert("파일을 찾을 수 없습니다.");
+      }
+      console.log(xhr.statusText)
+    });
+  });
+})
+
+##########################################################
+▶ $.get()
+▶ $.post()
+
+------------------------------------------------------
+getAndPost.js
+------------------------------------------------------
+
+$(function(){
+  $("button").on("click",function(){
+    // $.get('outer.html', function(data, status){
+    //     alert(data);
+    //     console.log(status);
+    // })
+    $.post('./outer.html', {name:"장원영", age : 20},
+      function(data, status){
+        alert(statusbar)
+      }
+    )
+  })
+})
+
+##########################################################
+▶ $.noConflict();
+
+타 스크립트나 프로그램에서 $를 사용하면서 jQuery와 충돌나는 부분
+발생 가능성이 있음.
+
+<script>
+  //let abc = $.noConflict();
+  $.noConflict();
+  jQuery
+  jQuery(function(){
+    jQuery('button').on('click',function(){
+      jQuery('display').text('JQuery 동작하쥬?')
+    })
+  })
+</script>
