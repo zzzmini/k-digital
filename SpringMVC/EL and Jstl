@@ -1,0 +1,318 @@
+▶ 준비
+-- jsp package 추가
+--- CarDto Class 추가
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CarDto {
+	private String number;
+	private String model;
+	private int engine;
+}
+
+--- CarController 추가
+
+@Controller
+public class CarController {
+	@GetMapping("/car/step1")
+	public String car_test1() {
+		return "/jsp-test/step1";
+	}
+}
+
+
+1. session 및 model 에서 Attribute 받아오기
+▶ 모든 jsp 파일은 src/main/webapp/WEB-INF/views/jsp-test 폴더 하위에 위치시킨다.
+
+
+#############################################################
+/step1.jsp
+-------------------------------------------------------------
+
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="kr.co.zzz.jsp.CarDto"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EL 연습</title>
+</head>
+<body>
+
+<%
+	CarDto car1 = new CarDto("가1234", "소나타", 2000);
+ 	request.setAttribute("dto", car1);
+%>
+<h3>EL(Expression Language) 기본</h3>
+
+<!-- 변수 출력 -->
+<strong>1. CarDto instance에서 변수 model 출력</strong><br>
+${dto.model}
+<hr>
+
+<!-- 리스트로 변수 출력 -->
+<%
+	ArrayList<CarDto> list = new ArrayList<>();
+	list.add(new CarDto("나2345", "테슬라", 4500));
+	session.setAttribute("carList", list);
+%>
+<strong>2. CarDto instance에서 List로 변수 출력</strong><br>
+${sessionScope.carList[0].model}
+<hr>
+
+<!-- 해쉬맵으로 변수 출력 -->
+<%
+	HashMap<String, CarDto> map = new HashMap<String, CarDto>();
+	map.put("car1", new CarDto("다3333", "모닝", 1000));
+	//컨트롤러에서 할당했다고 가정
+	session.setAttribute("carMap", map);
+%>
+<strong>3. 세션영역의 HashMap 요소에 접근</strong><br>
+${sessionScope.carMap.car1.model}
+
+</body>
+</html>
+
+#############################################################
+
+2. jstl 이용하기
+
+1) JSTL if : 조건문 
+
+▶ JstlController Controller 생성
+
+@Controller
+public class JstlController {
+	
+	@GetMapping("/jstl/step1")
+	public String car_test1() {
+		return "/jsp-test/step1-if";
+	}
+}
+
+▶ jsp-test/step1-if.jsp  
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- JSTL 선언부 -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTL if</title>
+</head>
+<body>
+<!-- JSTP if 조건 -->
+<c:if test="true">
+	true이므로 실행한다.
+</c:if>
+<hr>
+
+<!-- query string 방식 -->
+<a href="/jstl/step1?age=10&nick=펭수">step1을 다시 호출</a><br><br>
+나이: ${param.age} <br>
+닉네임: ${param.nick}
+<br><br>
+
+<c:if test="${param.age > 5 && param.nick == '펭수'}">
+	나이가 5세를 초과합니다. 닉네임은 펭수입니다.
+</c:if>
+
+</body>
+</html>
+
+
+2) JSTL if 다중조건 (choose, when, otherwise)
+
+▶ /step2-choose.jsp
+-- when : else if 역할 
+-- otherwise : else 역할
+
+▶ PersonDto 생성
+
+@Data
+@AllArgsConstructor
+public class PersonDto {
+	private String name;
+	private int age;
+}
+
+
+▶ 컨트롤러
+
+@GetMapping("/jstl/step2")
+public String step2(Model model) {
+    PersonDto dto = new PersonDto("손흥민", 30);
+    model.addAttribute("dto", dto);
+    return "/jsp-test/step2-choose";
+}
+
+▶ step2-choose.jsp 파일 만들기
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- JSTL 선언부 -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTL if 다중조건 (choose, when, otherwise)</title>
+</head>
+<body>
+	EL로 name과 age를 출력<br>
+	이름: ${dto.name}<br>
+	나이: ${dto.age}<br>
+	
+	<hr>
+	JSTL 다중조건 choose, when, otherwise<br>
+	<c:choose>
+		<c:when test="${dto.name == '아이유'}">
+			아이유님이 맞습니다.<br>
+			나이는 ${dto.age}세 입니다.
+		</c:when>
+		<c:when test="${dto.name == '손흥민'}">
+			손흥민님이 맞습니다.<br>
+			나이는 ${dto.age}세 입니다.
+		</c:when>
+		<c:otherwise>
+			아이유 아님
+		</c:otherwise>
+	</c:choose>
+</body>
+</html>
+
+
+3) JSTL for Each (for loop - 반복문)
+
+▶ 컨트롤러
+
+    @GetMapping("/jstl/step3")
+	public String step3(Model model) {
+		PersonDto idol1 = new PersonDto("안유진", 21);
+		PersonDto idol2 = new PersonDto("장원영", 20);
+		List<PersonDto> dtos = new ArrayList<>();
+		dtos.add(idol1);
+		dtos.add(idol2);
+		
+		model.addAttribute("dtos", dtos);
+		return "/jsp-test/step3-forEach";
+	}
+
+▶ step3-forEach.jsp 파일 만들기
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" session="false"%>
+<!-- JSTL 선언부 -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>forEach(JSTL for loop)</title>
+</head>
+<body>
+<%
+	String friends[] ={"밀크", "두유", "방울"};
+	request.setAttribute("fa", friends);
+%>
+	JSTL forEach : JSTL for loop (반복문) <br>
+	items : 대상 배열 또는 컬렉션<br>
+	var : 요소를 저장할 변수<br>
+	varStatus : 내부적으로 지원되는 값(인덱스... 등)<br>
+	<p>
+	<hr>
+	<table border="1">
+		<tr>
+			<th>count</th>
+			<th>index</th>
+			<th>name</th>
+			<th>age</th>
+		
+		<c:forEach items="${dtos}" var="dto" varStatus="order">
+			<tr>
+				<td>${order.count}</td>
+				<td>${order.index}</td>
+				<td>${dto.name}</td>
+				<td>${dto.age}</td>
+			</tr>
+		</c:forEach>
+	</table>
+	<p>
+	<hr>
+	<h2>For-Each로 반복횟수 정하기</h2>
+	<c:forEach begin="1" end="5" var="num">
+		${num}<br>
+	</c:forEach>
+</body>
+</html>
+
+4) import 하기
+
+▶ header.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Header</title>
+</head>
+<body>
+	---------- <br>
+	  HEADER  <br>
+	---------- <br>
+</body>
+</html>
+
+▶ footer.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Footer</title>
+</head>
+<body>
+	---------- <br>
+	  FOOTER  <br>
+	---------- <br>
+</body>
+</html>
+
+▶ main-test.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTL import</title>
+</head>
+<body>
+	<c:import url="header.jsp"></c:import>
+	<br><br><br>이 부분은 step11 화면입니다. <br><br><br>
+	<c:import url="footer.jsp"></c:import>
+</body>
+</html>
+
+5) 함수 사용하기
+-- 준비함수를 사용하려고 하면 jsp 페이지 상단에 jstl fn 선언이 필요하다. 
+-- 아래 내용을 페이지 상단에 삽입하자.
+
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+
+함수는 검색해서 사용합니다. jstl 함수.... 이렇게
