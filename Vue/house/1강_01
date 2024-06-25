@@ -1,0 +1,742 @@
+1강. 부동산 매물 사이트 만들기
+#1. npm install -g @vue/cli
+#2. 에디터 부가기능
+- Vetur
+- HTML CSS Support
+- Vue 3 Snippets
+- Vue - Official
+※ Vue 설치가 제대로 안되면 yarn 1.xx 설치 후 재시도 
+-> 인스톨러로 설치 후 재시작
+
+> yarn global add @vue/cli
+-- 안정적이고 빠르다.
+
+#3. 프로젝트 생성
+ⓐ Vue 프로젝트 생성을 위한 폴더 경로 설정
+ⓑ Vue 설치 : npm install vue
+ⓒ Vue CLI설치 커맨드 : npm install -g @vue/cli
+ⓓ Vue 프로젝트 생성 커맨드 : vue create 프로젝트명(개인 설정) 
+ ⓓ-1 커맨드 : cd house / npm run serve (폴더 이동 후 Vue 서버 실행 test) 
+ⓔ Vue Router 설치 커맨드 : vue add router
+ⓕ (선택) Vuetify 설치 커맨드 : vue add vuetify (버전 선택 유의!!)
+
+#4. 오픈폴더에서 만든 프로젝트 이름 보이면 성공
+-- app.vue 에서 작업 시작
+<template> : HTML
+<script> : JS
+<style> : CSS
+
+#5. 새 터미널 열고
+> npm run serve --- 실시간 미리보기
+> 좌측 npm scripts - 재생 -- ctrl + click
+
+#6. 부가설명
+- node.js 는 npm 이용하기 위해 설치
+- @vue/cli 는 vue 프로젝트를 빠르게 생성해 주는 라이브러리
+- app.vue -> index.html 로 변환 처리 함.
+- node.modules : 라이브러리 모음
+- src 폴더가 실 개발 위치
+
+#7. 부동산매물관리 사이트 둘러보기
+ⓐ 미리보기 만들기
+> npm run serve --- 실시간 미리보기
+
+ⓑ app.vue 작업하기
+<template>
+    <img alt="Vue logo" src="./assets/logo.png">
+    <div>
+        <h4>xx원룸</h4>
+        <p>xx 만원</p>
+    </div>
+    <div>
+        <h4>xx원룸</h4>
+        <p>xx 만원</p>
+    </div>
+</template>
+
+#8. 데이터바인딩 {{}}
+
+<div>
+    <h4>{{ products[0] }}</h4>
+    <p>{{ price1 }} 만원</p>
+  </div>
+  <div>
+    <h4>{{ products[1] }}</h4>
+    <p>{{ price2 }} 만원</p>
+  </div>
+  <div>
+    <h4>{{ products[2] }}</h4>
+    <p>{{ price3 }} 만원</p>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'App',
+  data(){
+    return{
+      price1 : 50,
+      price2 : 60,
+      price3 : 70,
+      products : ['역삼동원룸', '천호동원룸', '마포구원룸'],
+    }
+  },
+
+
+#9. 반복문
+  <div class="menu">
+    <a>Home</a>
+    <a>Products</a>
+    <a>About</a>
+  </div>
+
+>>>> 얘 간단히 반복문으로 처리하기
+ⓐ 반복문자열 자체가 index 인 경우
+    <div class="menu">
+        <a v-for="menu in menus" :key="menu">{{ menu }}</a>
+    </div>
+
+ⓑ 반복문자열이 index가 아닌경우 i를 인덱스로 활용
+    <div class="menu">
+        <a v-for="(menu,i) in menus" :key="i">{{ menu }}{{ i }}</a>
+    </div>
+
+
+
+  data(){
+    return{
+      products : ['역삼동원룸', '천호동원룸', '마포구원룸'],
+      menus : ['Home', 'Shop', 'About'],
+    }
+  },
+
+  -- 아래에 스타일 달고
+  .menu {
+  background: darkslateblue;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.menu a {
+  color : white;
+  padding: 10px;
+}
+
+문제> 지역과 금액을 v-for로 돌리기
+
+ⓐ 간단히 돌리기
+<div v-for="i in 3" :key="i">
+    <h4>{{ products[k] }}</h4>
+    <p>{{ prices[k] }} 만원</p>
+</div>
+
+
+ⓑ 다이나믹하게 돌리기
+  <div v-for="(i, k) in products" :key="k">
+    <h4>{{ i }}</h4>
+    <p>{{ prices[k] }} 만원</p>
+  </div>
+
+data(){
+    return{
+        prices : [50, 55, 70],
+        products : ['역삼동원룸', '천호동원룸', '마포구원룸'],
+        menus : ['Home', 'Shop', 'About'],
+    }
+}
+
+#10. Event Listener
+<div>
+    <h4>{{ products[0] }}</h4>
+    <p>{{ prices[0] }} 만원</p>
+    <button>허위매물신고</button><span>신고수 : 0</span>
+</div>
+
+▷ 기능 : 버튼을 누르면 신고수가 1씩 증가한다.
+
+ⓐ 간단히 사용하는 방법
+<button v-on:click="신고수++">허위매물신고</button>
+=====================================================
+동일한 코드 : <button @click="신고수++">허위매물신고</button>
+=====================================================
+<span>신고수 : {{ 신고수 }}</span>
+
+data(){
+    return{
+        ......
+      신고수 : 0,
+    }
+},
+
+ⓑ 자바스크립트로 사용하는 방법
+
+<button v-on:click="increase">허위매물신고</button>
+
+<script>
+
+export default {
+  name: 'App',
+  data(){
+    return{
+      ....
+    }
+  },
+
+  methods: {
+    increase(){
+      this.신고수 += 1;
+    }
+  },
+    ....
+}
+</script>
+
+ⓒ 모든 경우에 이벤트 버튼 붙이기
+<div>
+    <h4>{{ products[0] }}</h4>
+    <p>{{ prices[0] }} 만원</p>
+    <button v-on:click="신고수[0]++">허위매물신고</button>
+    <span>신고수 : {{ 신고수[0] }}</span>
+  </div>
+  <div>
+    <h4>{{ products[1] }}</h4>
+    <p>{{ prices[1] }} 만원</p>
+    <button v-on:click="신고수[1]++">허위매물신고</button>
+    <span>신고수 : {{ 신고수[1] }}</span>
+  </div>
+  <div>
+    <h4>{{ products[2] }}</h4>
+    <p>{{ prices[2] }} 만원</p>
+    <button v-on:click="신고수[2]++">허위매물신고</button>
+    <span>신고수 : {{ 신고수[2] }}</span>
+  </div>
+
+  신고수 : [0, 0 ,0]
+  
+#11. 이미지 넣기
+- 이미지 파일 세개를 src -> assets 에 넣는다.
+- 참고 : <img :src="require(`@/assets/room${i}.jpg`)" 
+<div>
+    <img src="./assets/room0.jpg" alt="room0" class="room-img">
+    <h4>{{ products[0] }}</h4>
+    <p>{{ prices[0] }} 만원</p>
+    <button v-on:click="신고수[0]++">허위매물신고</button>
+    <span>신고수 : {{ 신고수[0] }}</span>
+</div>
+
+.room-img {
+  width: 100%;
+  margin-top: 40px;
+}
+
+#12. Modal Window(모달창) 만들기 - 상세페이지 대용
+
+ⓐ HTML 구성하기
+<!-- 모달페이지 구성 -->
+<div class="black-bg">
+  <div class="white-bg">
+    <h4>상세페이지</h4>
+    <p>상세페이지 내용</p>
+  </div>
+</div>
+
+ⓑ CSS 설정하기
+div {
+  box-sizing: border-box;
+}
+.black-bg{
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,5);
+  position: fixed;
+  padding: 20px;
+}
+.white-bg{
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+ⓒ UI 제작순서 및 v-if 활용하기
+
+====================================================
+v-if 기본문법
+<div v-if="1==1">
+  안녕하세요
+</div>
+<div v-else>
+  안녕하세요 2
+</div>
+====================================================
+첫째, 먼저 모달창 같은 것은 미리 만들어 둔다.
+둘째, UI의 상태를 데이터로 저장해 놓는다.
+셋째, 데이터에 따라 UI가 어덯게 보일지 처리
+
+첫째, 먼저 모달창 같은 것은 미리 만들어 둔다.
+== 위에 만들었음.
+
+둘째, UI의 상태를 데이터로 저장해 놓는다.
+== modalStatus : false,
+
+
+셋째, 데이터에 따라 UI가 어덯게 보일지 처리
+== <h4 v-on:click="modalStatus = true">{{ products[0] }}</h4>
+
+
+문제> 모달창에 닫기 버튼을 만들고 누르면 모달창이 닫히도록 하시오.
+
+<div class="black-bg" v-if="modalStatus == true">
+  <div class="white-bg">
+    <h4>상세페이지</h4>
+    <p>상세페이지 내용</p>
+    <button v-on:click="modalStatus = false">닫기</button>
+  </div>
+</div>
+
+#13. 실제 데이터를 가져와서 HTML에 표시하기
+
+-- 상품설명이 너무 길어서 다른 파일로 작성 후 import하자.
+
+ⓐ src/assets/oneroom.js 생성
+-- 방법 1. 데이터를 변수로 지정하고 export default로 처리
+const data = [{
+    id : 0,
+    title: "Sinrim station 30 meters away",
+    image: require("./room0.jpg"),
+    content: "18년 신축공사한 남향 원룸 ☀️, 공기청정기 제공",
+    price: 340000
+    },
+    {
+    id : 1,
+    title: "Changdong Aurora Bedroom(Queen-size)",
+    image: require("./room1.jpg"),
+    content: "침실만 따로 있는 공용 셰어하우스입니다. 최대 2인 가능",
+    price: 450000
+    },
+    {
+    id : 2,
+    title: "Geumsan Apartment Flat",
+    image: require("./room2.jpg"),
+    content: "금산오거리 역세권 아파트입니다. 애완동물 불가능 ?",
+    price: 780000
+    },
+    {
+    id : 3,
+    title: "Double styled beds Studio Apt",
+    image: require("./room3.jpg"),
+    content: "무암동인근 2인용 원룸입니다. 전세 전환가능",
+    price: 550000
+    },
+    {
+    id : 4,
+    title: "MyeongIl Apartment flat",
+    image: require("./room4.jpg"),
+    content: "탄천동 아파트 월세, 남향, 역 5분거리, 허위매물아님",
+    price: 680000
+    },
+    {
+    id : 5,
+    title: "Banziha One Room",
+    image: require("./room5.jpg"),
+    content: "반지하 원룸입니다. 비올 때 물가끔 새는거 빼면 좋아요",
+    price: 370000
+  }];
+
+  export default data;
+
+-- 방법 2. 데이터 처음에 exprot default 만 처리
+export default [{
+    id : 0,
+    title: "Sinrim station 30 meters away",
+    image: "./room0.jpg",
+    content: "18년 신축공사한 남향 원룸 ☀️, 공기청정기 제공",
+    price: 340000
+    },  ....... 
+
+ⓑ export 한 데이터를 import 하기
+- <script> tag 내부에서 import 한다.
+- 데이터가 필요한 곳에 데이터로 처리하여 사용한다.
+
+data(){
+    return{
+      roomsInfo : data,
+      modalStatus : false,
+      prices : [50, 55, 70],
+      products : ['역삼동원룸', '천호동원룸', '마포구원룸'],
+      menus : ['Home', 'Shop', 'About'],
+      신고수 : [0, 0 ,0],
+  }
+}
+
+ⓒ 현재 페이지에 상품정보 보이게 처리하기.
+- 상품명과 가격만 보이게 처리하기
+
+<div v-for="room in roomsInfo" :key="room.id">
+    <img v-bind:src=room.image class="room-img">
+    <h4 @click="modalStatus = true">{{ room.title }}</h4>
+    <p>{{ room.price }}원</p>
+</div>
+
+===========================================================================
+※ 이미지의 동적바인딩 처리하기
+- Vue.js에선 element의 속성을 동적으로 처리할 때 v-bind라는 Directive를 사용한다.
+- :src 또는 v-bind:src를 써서 binding 해준다. 
+  (콜론은 v-bind: 의 sugar syntax라고 생각하면 된다. 즉, 축약어)
+- 이렇게 하면 경로가 단순스트링이기 때문에 오류가 발생한다.
+- image : require("./room0.jpg") 형태로 만들어 준다.
+===========================================================================
+
+#14. 프러덕트 클릭 시 모달창에 개별 정보 뿌리기
+
+ⓐ 현재 클릭한 프로덕트 번호 저장할 변수 만들기
+  currentProductNo : 0
+
+ⓑ 클릭 이벤트에 현재 클릭된 위치 저장하기
+
+<h4 @click="modalStatus = true; currentProductNo = room.id">
+    {{ room.title }}</h4>
+
+ⓒ 모달에 뿌리기
+
+<!-- 모달페이지 구성 -->
+<div class="black-bg" v-if="modalStatus == true">
+  <div class="white-bg">
+    <h4>{{ roomsInfo[currentProductNo].title }}</h4>
+    <p>{{ roomsInfo[currentProductNo].content }}</p>
+    <p>{{ roomsInfo[currentProductNo].price }}원</p>
+    <button v-on:click="modalStatus = false">닫기</button>
+  </div>		
+</div>
+
+#15. Component
+
+ⓐ 수업용 할인 배너 만들기
+-- 메뉴 밑에다 만듦
+<div class="discount">
+    <h4>지금 결재하면 20% 할인</h4>
+</div>
+
+.discount {
+  background: #eee;
+  padding: 10px;
+  margin:10px;
+  border-radius: 5px;
+}
+
+ⓑ Component 생성 방법
+-- 긴 HTML 페이지를 한글자로 표현 : Component
+-- src/Discount.vue 파일 생성
+-- 파일의 구조는 app.vue와 같다.
+<template>
+  
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>
+
+-- 해당 파일 Discount.vue로 가서
+> 입력하고 엔터치면 vue 기본형식을 갖는 껍데기가 만들어진다.
+(Vue 3 Snippets : 부가기능인 얘가 설치되어 있으면 가능)
+
+-- 아까 작성했던 HTML과 CSS를 옮긴다.
+-- CSS는 어느 파일에 있으나 관계없다.
+-- 외부에서 사용하기 위해 export에 name을 준다.
+<script>
+export default {
+    name: 'Discount_Banner',
+}
+</script>
+
+ⓒ 외부에서 사용할 때는 세단계로 한다.
+ -- <Discount></Discount> 로 또는, <Discount /> 로 사용한다.
+
+ 첫째, vue 파일을 import
+  import Discount_Banner from './Discount.vue';
+
+  51:5  error  The "Discount" component has been registered but not used
+ 
+ 둘째, 등록하고
+  components: {
+    Discount : Discount_Banner,
+  }
+
+  ----> ES6 문법에서는 key와 value가 같을 때는 축약으로 하나만 써도 됨
+
+ 셋째, 사용
+
+ --- 오류 최근에는 두개 단어 이상 조합해서 사용하라고 함.
+ 9:11  error  Component name "Discount" should always be multi-word 
+
+  <div class="menu">
+    <a v-for="menu in menus" :key="menu">{{ menu }}</a>
+  </div>
+
+  <Discount/>
+
+
+※ 컴포넌트는 자주 사용하지 않는 것이 좋다. 베너와 같이 데이터 영역을 사용하는
+경우 나중에 꼬이는 경우가 생긴다.
+
+#15. Props 사용하기 : 부모데이터 자식 컴포넌트에서 사용하기
+
+=====================================================================
+※ Props 문법 정리 ---- 모든 props는 read-only 이다.
+
+- 자식/부모컴포넌트가 있다.
+- 자식에서 부모 데이터에 있는 내용을 참조해서 사용하는 경우에 사용
+1. 데이터 전송(여러개인 경우 : 으로 구분해서 전부 보내야 한다.)
+   <Modal v-bind:데이터이름 = "데이터이름" />
+2. 자식에서 전달받은 데이터를 표시하기
+    props : {
+      onerooms : Array,
+    }
+
+※ props는 read-only이므로 받아온 값을 수정해서는 안된다.
+※ 가급적 데이터는 최상위 부모컴포넌트에 만들어 사용한다.
+
+- 자식한테 문자열 보낼때 : <Discount str="DATA"/>
+- 자식한테 숫자 보낼때 : <Discount :intData="123"/>
+- 자식한테 어레이 보낼때 : <Discount :arrData="[가, 나, 다]"/>
+- 자식한테 Object 보낼때 : 아래 세가지 방법 사용
+  일단 데이터에.
+  objData : {name : 'Kim', age : 20}
+  i> <Discount :objName="objData.name" :objAge="objData.age"/>
+  ii> <Discount v-bind:"objData"/>
+  iii> <Discount :objData="objData"/>
+=====================================================================
+
+▶ 모달창을 Component로 만들기
+
+ⓐ /src/Modal.vue 파일 만들고 props 정의하기
+
+<template>
+  <div class="black-bg" v-if="modalStatus == true">
+    <div class="white-bg">
+      <h4>{{ roomsInfo[currentProductNo].title }}</h4>
+      <p>{{ roomsInfo[currentProductNo].content }}</p>
+      <p>{{ roomsInfo[currentProductNo].price }}원</p>
+      <Discount/>
+      <button>닫기</button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+    name : 'ModalWindow',
+    props : {
+        roomsInfo : Array,
+        currentProductNo : Number,
+        modalStatus : Boolean
+    }
+}
+</script>
+
+ⓑ app.vue에서 정의하고 사용하기(세단계 처리 및 전달해 줄 props 값 설정)
+
+import ModalWindow from './Modal.vue';
+
+  components: {
+    Discount : Discount_Banner,
+    ModalWindow,
+  }
+
+
+<!-- 모달페이지 구성 컴포넌트로 대체-->
+  <ModalWindow v-bind:roomsInfo="roomsInfo" 
+      :currentProductNo="currentProductNo" v-bind:modalStatus="modalStatus"/>  
+
+8:27  error  Unexpected mutation of "modalStatus" prop  vue/no-  (돌연변이 발생 - readonly 값 변경 시도 오류)
+
+
+===================== 일단은 모달의 click 이벤트 제거 후 처리하기 == 완성
+
+문제> ProductCards Component 만들어서 상품 목록 보이기(props, component 문법 이용, 
+     단, 부모값이 바뀌는 read-only 데이터는 빼고 처리하기)
+
+ⓐ /src/Card.vue 파일 만들고 정의하기
+
+<template>
+    <div v-for="room in roomsInfo" :key="room.id">
+        <img v-bind:src=room.image class="room-img">
+        <h4 >{{ room.title }}</h4>
+        <p>{{ room.price }}원</p>
+    </div>
+</template>
+
+<script>
+export default {
+    name : 'ProductCards',
+    props : {
+        roomsInfo : Array,
+        currentProductNo : Number,
+    }
+}
+</script>     
+
+ⓑ app.vue 수정하기
+
+import ProductCards from './Card.vue';
+
+  components: {
+    Discount : Discount_Banner,
+    ModalWindow,
+    ProductCards,
+  }
+
+<!-- Card Component로 바꾸기 -->
+<ProductCards :roomsInfo="roomsInfo" />  
+
+문제> Component로 Card 한장만 만들고 app.vue에서 v-for로 구현하기
+
+ⓐ Card.vue 만들기
+<template>
+    <img v-bind:src=room.image class="room-img">
+    <h4 >{{ room.title }}</h4>
+    <p>{{ room.price }}원</p>
+</template>
+
+<script>
+export default {
+    name : 'RoomCard',
+    props : {
+        room : Object,
+        currentProductNo : Number,
+    }
+}
+</script>
+
+ⓑ app.vue 수정하기
+
+import RoomCard from "./Card.vue";
+
+  components: {
+    Discount : Discount_Banner,
+    ModalWindow,
+    // ProductCards,
+    RoomCard,
+  }
+
+<!-- Card Component로 바꾸기 -->
+<RoomCard v-for="room in roomsInfo" :key="room.id" :room="room"/>  
+
+
+#16. 자식에서 부모데이터(read-only) 바꾸기 --- Custom Event
+
+ⓐ 제목을 눌렀을 때만 동작하도록 만들기
+※ $emit : 얘는 vue가 갖고 있는 특별한 변수로 부모에게 이벤트를 만들어서 전달함.
+
+▷ Card.vue 수정
+
+<template>
+    <img v-bind:src=room.image class="room-img">
+    <h4 @click="$emit('openModal')">{{ room.title }}</h4>
+    <p>{{ room.price }}원</p>
+</template>
+
+▷ app.vue 수정
+
+<!-- Card Component로 바꾸기 -->
+<RoomCard @openModal="modalStatus = true; currentProductNo = room.id" 
+    v-for="room in roomsInfo" :key="room.id" :room="room"/>
+
+ⓑ Card 컴포넌트에서 현재 누른 Product 번호 전송해서 처리하기
+▷ Card.vue 수정
+<template>
+    <img v-bind:src=room.image class="room-img">
+    <h4 @click="$emit('openModal', room.id)">{{ room.title }}</h4>
+    <p>{{ room.price }}원</p>
+</template>
+
+▷ app.vue 수정
+<!-- Card Component로 바꾸기 -->
+  <RoomCard @openModal="modalStatus = true; currentProductNo = $event" 
+      v-for="room in roomsInfo" :key="room.id" :room="room"/>
+
+ⓒ 함수로 만들어서 처리하기
+
+▷ Card.vue 수정
+
+<template>
+    <img v-bind:src=room.image class="room-img">
+    <h4 @click="send">{{ room.title }}</h4>
+    <p>{{ room.price }}원</p>
+</template>
+
+<script>
+export default {
+    name : 'RoomCard',
+    props : {
+        room : Object,
+        currentProductNo : Number,
+    },
+    methods : {
+        send(){
+            this.$emit('openModal', this.room.id)
+        }
+    }
+}
+</script>
+
+
+ⓓ 모달창에 있는 닫기를 누르면 모달창 닫히기 기능 처리하기
+▷ Modal.vue 수정
+
+<template>
+  <div class="black-bg" v-if="modalStatus == true">
+    <div class="white-bg">
+      <img v-bind:src=roomsInfo[currentProductNo].image class="room-img">
+      <h4>{{ roomsInfo[currentProductNo].title }}</h4>
+      <p>{{ roomsInfo[currentProductNo].content }}</p>
+      <p>{{ roomsInfo[currentProductNo].price }}원</p>
+      <Discount/>
+      <button @click="$emit('closeModal')">닫기</button>
+    </div>
+  </div>
+</template>
+
+▷ app.vue 수정
+
+<!-- 모달페이지 구성 컴포넌트로 대체-->
+<ModalWindow @closeModal="modalStatus = false" v-bind:roomsInfo="roomsInfo" 
+    :currentProductNo="currentProductNo" v-bind:modalStatus="modalStatus"/>
+
+
+문제> Discount Banner를 Modal Component에 넣기
+
+<template>
+  <div class="black-bg" v-if="modalStatus == true">
+    <div class="white-bg">
+      <img v-bind:src=roomsInfo[currentProductNo].image class="room-img">
+      <h4>{{ roomsInfo[currentProductNo].title }}</h4>
+      <p>{{ roomsInfo[currentProductNo].content }}</p>
+      <p>{{ roomsInfo[currentProductNo].price }}원</p>
+      <Discount_Banner/>
+      <button @click="$emit('closeModal')">닫기</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import Discount_Banner from './Discount.vue';
+export default {
+    name : 'ModalWindow',
+    props : {
+        roomsInfo : Array,
+        currentProductNo : Number,
+        modalStatus : Boolean
+    },
+    components : {
+      Discount_Banner : Discount_Banner,
+    }
+}
+</script>
