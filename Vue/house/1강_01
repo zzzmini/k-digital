@@ -10,7 +10,7 @@
 
 > yarn global add @vue/cli
 -- 안정적이고 빠르다.
-
+(> npm install -v yarn)
 #3. 프로젝트 생성
 ⓐ Vue 프로젝트 생성을 위한 폴더 경로 설정
 ⓑ Vue 설치 : npm install vue
@@ -84,10 +84,10 @@ export default {
   },
 
 
-#9. 반복문
+#9. 반복문 - 네비메뉴만들기
   <div class="menu">
     <a>Home</a>
-    <a>Products</a>
+    <a>Shop</a>
     <a>About</a>
   </div>
 
@@ -379,14 +379,14 @@ data(){
     <p>{{ room.price }}원</p>
 </div>
 
-===========================================================================
+==========================================================
 ※ 이미지의 동적바인딩 처리하기
 - Vue.js에선 element의 속성을 동적으로 처리할 때 v-bind라는 Directive를 사용한다.
 - :src 또는 v-bind:src를 써서 binding 해준다. 
   (콜론은 v-bind: 의 sugar syntax라고 생각하면 된다. 즉, 축약어)
 - 이렇게 하면 경로가 단순스트링이기 때문에 오류가 발생한다.
 - image : require("./room0.jpg") 형태로 만들어 준다.
-===========================================================================
+==========================================================
 
 #14. 프러덕트 클릭 시 모달창에 개별 정보 뿌리기
 
@@ -488,7 +488,7 @@ export default {
 
 #15. Props 사용하기 : 부모데이터 자식 컴포넌트에서 사용하기
 
-=====================================================================
+==========================================================
 ※ Props 문법 정리 ---- 모든 props는 read-only 이다.
 
 - 자식/부모컴포넌트가 있다.
@@ -512,7 +512,7 @@ export default {
   i> <Discount :objName="objData.name" :objAge="objData.age"/>
   ii> <Discount v-bind:"objData"/>
   iii> <Discount :objData="objData"/>
-=====================================================================
+==========================================================
 
 ▶ 모달창을 Component로 만들기
 
@@ -740,3 +740,317 @@ export default {
     }
 }
 </script>
+
+
+#17. 사용자 입력 받기(v-model)
+
+▷ 처리 요청 내용 : 모달창에 월을 입력하면 아래에 금액 변경해 보이기
+
+ⓐ data 영역 만들고 변수(month) 선언하기
+
+  export default {
+    name : 'ModalWindow',
+    data(){
+      return {
+        month : 1,
+      }
+    },
+
+ⓑ input 요소 넣고 입력한 값 이벤트로 처리하고 게산하기
+
+<template>
+  <div class="black-bg" v-if="modalStatus == true">
+    <div class="white-bg">
+      <img v-bind:src=roomsInfo[currentProductNo].image class="room-img">
+      <h4>{{ roomsInfo[currentProductNo].title }}</h4>
+      <p>{{ roomsInfo[currentProductNo].content }}</p>
+      <input @input="month = $event.target.value">
+      <p> {{ month }}개월 선택함 : {{ roomsInfo[currentProductNo].price * month }}원</p>
+      <Discount_Banner/>
+      <button @click="$emit('closeModal')">닫기</button>
+    </div>
+  </div>
+</template>
+
+▷ v-model 이용해서 간단히 고치기 : 모든 input 류 상자에 동일 적용됨.
+<input type="number" v-model.number="month">
+
+※ 일반 input box 류의 입력결과는 모두 문자열로 처리됨.
+
+#18. 사용자 입력 제한하기(watcher)
+
+ⓐ watcher 는?
+- watcher : 데이터 감시 함수
+- input box에서는 필수적으로 사용 됨.
+- watch object 생성하여 처리
+- 감시할 데이터 이름으로 함수 생성.
+- 변수가 변할 때 마다 watch Method를 확인 함.
+
+ⓑ month에 13보다 큰 수가 들어올 때 alert 띄우기
+
+watch : {
+  month(val){
+    if(val >= 13){
+      alert('13이상 입력하면 안됩니다.');
+      this.month = 1;
+    }
+    if(isNaN(parseFloat(val))){
+      alert('숫자만 입력하세요');
+      this.month = 1;
+    }
+  }
+}
+
+
+#19. UI 애니메이션 사용하기(모달창 열 때 애니매이션 넣기)
+
+ⓐ CSS 이용하기
+
+<!-- 모달페이지 구성 컴포넌트로 대체-->
+<div class="aniStart" :class="{aniEnd : modalStatus}">
+<ModalWindow @closeModal="modalStatus = false" v-bind:roomsInfo="roomsInfo" 
+  :currentProductNo="currentProductNo" v-bind:modalStatus="modalStatus">
+</ModalWindow>
+</div>
+
+.aniStart {
+  opacity: 0;
+  transition: all 1s;
+}
+
+.aniEnd {
+  opacity: 1;
+}
+
+ⓑ vue <transition></transition> 이용하기
+
+<transition name="fade">
+    <ModalWindow @closeModal="modalStatus = false" v-bind:roomsInfo="roomsInfo" 
+      :currentProductNo="currentProductNo" v-bind:modalStatus="modalStatus">
+    </ModalWindow>
+</transition>
+
+== CSS 작업하기
+
+.fade-enter-from{
+  opacity: 0;
+  transform: translateY(-1000px);
+}
+.fade-enter-active{
+  transition: all 1s;
+}
+.fade-enter-to{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-leave-from{
+  opacity: 1;
+}
+.fade-leave-active{
+  transition: all 1s;
+}
+.fade-leave-to{
+  opacity: 0;
+}
+
+※ v-if 또는 v-else 같은 곳에 많이 사용한다.
+
+#20. 상품정렬기능과 데이터 원본의 보존
+
+ⓐ 상품정렬 단추 생성하기
+
+<p></p>
+  <button @click="sortPriceAsc">가격 오름차순 정렬</button>
+  <button @click="sortPriceDesc">가격 내림차순 정렬</button>
+
+ⓑ 정렬하는 함수 만들기
+
+  methods: {
+    // increase(){
+    //   this.신고수 += 1;
+    // },
+    sortPriceAsc(){
+      // 문자 정렬
+      // let array = [3,5,2];
+      // array.sort();
+      // console.log(array);
+
+      // 숫자 정렬
+      // array.sort(function(a, b){
+      //   return a-b;
+      // });
+      // console.log(array);
+
+      this.roomsInfo.sort(function(a,b){
+        return a.price - b.price;
+      });
+    },
+    sortPriceDesc(){
+      // 문자 정렬
+      this.roomsInfo.sort(function(a,b){
+        return b.price - a.price;
+      });
+    }
+  }
+
+ⓒ 원래대로 되돌리기 함수 만들기
+
+<button @click="originData">원래대로</button>
+
+
+  data(){
+    return{
+      origin : [...data],
+      currentProductNo : 0,
+      roomsInfo : data,
+
+
+  originData(){
+      this.roomsInfo = this.origin;
+  }
+
+※ this.roomsInfo = this.origin;는 두개의 배열 값을 공유하라는 의미로 실행을 반복해 보면
+   완벽하게 동작하지 못한다.
+   ---> 복사본을 만들어서 주입해 줘야 한다.
+
+     originData(){
+      this.roomsInfo = [...this.origin];
+  }
+
+
+
+※ vue는 Data Rendering이 잘되어 있어서 정렬만 진행하면 나머지는
+자동으로 처리되어 진다.
+
+문제> Title에 대해서 순방향, 역방향 정렬하기
+
+<button @click="sortTitleAsc">제목 오름차순 정렬</button>
+<button @click="sortTitleDesc">제목 내림차순 정렬</button>
+
+sortTitleAsc(){
+    this.roomsInfo.sort((a,b)=>{
+      if(a.title < b.title) return -1;
+      if(a.title > b.title) return 1;
+      else return 0;
+    })
+  },
+sortTitleDesc(){
+    this.roomsInfo.sort((a,b) => {
+      if(a.title < b.title) return 1;
+      if(a.title > b.title) return -1;
+      return 0;
+    });
+  },
+
+#19. Vue의 라이프사이클?
+
+- 라이브 사이클 : 컴포넌트가 웹페이지에 표시되기까지의 일련의 sortPriceAsc
+
+- create -> mount -> 컴포넌트 생성 -> update -> unmount
+--> 중간중간에 Hook을 통해 원하는 기능을 수행시킬 수 있다.
+
+- 윈도우 이벤트 또는 인터럽트같은 개념...
+==============================================================================
+beforeCreate()
+created()
+beforeMount()
+mounted()
+beforeUpdate()
+updated()
+beforeUnmount()
+unmounted()
+==============================================================================
+
+
+※ Modal.vue를 모두 로드가 끝난 후 
+   <Discount> 를 5초 후에 없어지게 하고 싶다.
+
+<Discount_Banner v-if="showDiscount == true"/>
+
+    components : {
+      Discount_Banner : Discount_Banner,
+    }, 
+    mounted(){
+      setTimeout(()=>{
+        this.showDiscount = false;
+      }, 5000);
+    },
+
+※ 얘는 마치 함수같이 사용한다. 그리고, 함수 내에서 this 키워드를 사용하는 경우
+   arrow function으로 처리해야 오류 발생을 줄일 수 있다.
+
+※ created(HTMl생성 전) or mounted 두 군데 중 한곳에 ajax를 기술하면 서버와 통신할 수 있다.
+
+문제1> Discount.vue 에서 1초 마다 할인률이 1% 씩 감소하도록 처리
+------------------------------------------------------------------------
+    참고> setInterval(()=>{
+    }, 1000);
+------------------------------------------------------------------------
+<template>
+    <div class="discount">
+        <h4>지금 결재하면 {{ amount }}% 할인</h4>
+    </div>
+</template  >
+
+<script>
+export default {
+    name: 'Discount_Banner',
+    data(){
+      return {
+        amount : 30,
+      }
+    },
+    mounted(){
+        setInterval(()=>{
+            this.amount --;
+        }, 1000);
+    },
+}
+</script>
+
+<style>
+    .discount {
+        background: #eee;
+        padding: 10px;
+        margin:10px;
+        border-radius: 5px;
+    }
+</style>
+
+문제2> 모달에서 월 값을 입력할 때 3개월 이상부터라고 alert() 창을 뿌리고 싶다.
+  어떤 값이 입력되고 적용되려면 다시 렌더링이 되어야 하는데 그 때 발생하는 훅,
+  updated() 이다.
+
+ⓐ 일단 data에 month 초기 값 3으로 변경
+
+data(){
+      return {
+        showDiscount : true,
+        month : 3,
+      }
+    },
+
+ⓑ beforeUpdate Hook 걸기
+
+beforeUpdate(){
+      if(this.month <= 2){
+        alert('2개월 이하는 너무 적음... 최소 3개월 부터..')
+        this.month = 3;
+      }
+    },
+
+
+ⓒ watch 도 변경
+watch : {
+      month(val){
+        if(val >= 13){
+          alert('13이상 입력하면 안됩니다.');
+          this.month = 3;
+        }
+        if(isNaN(parseFloat(val))){
+          alert('숫자만 입력하세요');
+          this.month = 3;
+        }
+      }
+    }
