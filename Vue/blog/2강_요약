@@ -1,0 +1,526 @@
+2강. 블로그 만들기
+
+> npm install -g yarn
+
+#1. blog 프로젝트 만들기
+ⓐ vue 폴더 open
+ⓑ terminal 에서
+> vue create blog
+ⓒ blog 폴더 생성 후 프로젝트 기본 틀 만들어짐
+ⓓ 위에 있는데로 실행하기
+ $ cd blog
+ $ npm run serve
+
+ⓔ 필요 없는 hello world 모두 지우기
+
+#2. Bootstrap 설치
+ⓐ Bootstrap 라이브러리 설치하기
+- Bootstrap ver 5.0 이상은 Internet Explorer에서 동작 안함
+- Bootstrap ver 4.6은 Internet Explorer 11 이상에서 동작
+
+ⓑ public/index.html 에 css, js 복사해서 붙여넣기 함.
+- css는 title 아래에
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+- js는 body 끝나기 바로 위에...
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+
+ⓒ npm으로 설치하기(5버전으로 설치하기...)
+※ 먼저 npm run serve 가 실행되어 있다면 중지시키고 해야 함.
+> npm install bootstrap@5
+
+ⓓ main.js 파일을 열어서
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+ⓔ npm run serve
+"The template requires child element (vue/valid-template-root) - template에 자식 요소가 필요합니다."라는 에러가 발생했다.
+
+template에는 반드시 하나 이상의 HTML 태그가 있어야 한다.
+
+-- template 안에 <h1>hi</hi> 만들어 줌.
+
+ⓕ 부트스트랩 확인하기
+<template>
+  <h1>Hi</h1>
+  <button type="button" class="btn btn-primary">Primary</button>
+</template>
+
+-- 잘 보이면 설치가 잘 된 거임.
+
+ⓖ NavBar 만들어 보기
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+ⓗ app.vue 최 하단 마진 삭제
+  margin-top: 60px;
+
+#3. 블로그 글목록 만들어 보기
+ⓐ 기본 틀 생성하기
+<div class="container mt-4">
+  <h5>개발자의 블로그</h5>
+  <p>- Vue로 만들었음 -</p>
+</div>
+
+ⓑ /components/list.vue 만들어서 붙이기
+▷ list.vue
+<template>
+  <div>
+    <h5>블로그 글 제목</h5>
+    <p>블로그 글 날짜</p>
+  </div>
+  <div>
+    <h5>블로그 글 제목</h5>
+    <p>블로그 글 날짜</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name : 'BlogList',
+}
+</script>
+
+▷ App.vue
+import BlogList from './components/list.vue';
+
+components: {
+    BlogList,
+  }
+
+<div class="container mt-4">
+  <h5>개발자의 블로그</h5>
+  <p>- Vue로 만들었음 -</p>
+</div>
+<BlogList/>
+
+ⓒ /assets/data.js 만들어서 import 하기
+▷ data.js
+export default 
+[
+  { 
+    title : '첫 째 프로젝트 : 허위매물 전문 부동산 앱',
+    content : 'Vue를 이용하면 비누같이 매끈한 앱을 만들 수 있습니다',
+    date : 'September 24, 2021',
+    number : 0
+  },{ 
+    title : '둘 째 프로젝트 : 오마카세 배달 앱',
+    content : '음식이 아니라 셰프를 직접 배달해드립니다',
+    date : 'October 20, 2020',
+    number : 1
+  },{ 
+    title : '셋 째 프로젝트 : 현피 앱',
+    content : '거리를 설정하면 가장 가까운 파이터를 소개해드려요! 서로 싸워보세요',
+    date : 'April 24, 2019',
+    number : 2
+  }
+]
+
+▷ App.vue
+import blog from './assets/data.js';
+
+export default {
+  name: 'App',
+  components: {
+    blogData : blog,
+    BlogList,
+  }
+}
+
+ⓓ 위 블로그 데이터를 list.vue에 바인딩 시켜 콤포넌트로 가져와서 처리하기
+
+▷ App.vue
+export default {
+  name: 'App',
+  data(){
+    return {
+      BlogData : blog,
+    }
+  },
+  components: {
+    BlogList,
+  }
+}
+
+<div class="container mt-4">
+  <h5>개발자의 블로그</h5>
+  <p>- Vue로 만들었음 -</p>
+</div>
+<BlogList v-bind:BlogData="BlogData" />
+
+▷ list.vue
+
+<template>
+  <div v-for="content in BlogData" :key="content.id">
+    <h5>{{ content.title }}</h5>
+    <p>{{ content.date }}</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name : 'BlogList',
+    props : {
+      BlogData : Array,
+    }
+}
+
+
+#3. vue-router 설치와 기본 라우팅
+※ 목표 : localhost:8080/list 로 접근 시 블로그 글 목록 보이기
+
+ⓐ 라우터 설치(터미널 열고, 단, 실시간 확인 기능 끄기)
+ⓑ vue-router@3 버전과 호환되는 버전으로 설치
+> npm install vue-router@4
+or
+> yarn add vue-router@4
+> npm run serve
+
+ⓒ router 셋팅
+- main.js에서 셋팅할 텐데.. 라우터 관련 정보는 /src/router.js에서 
+  만든 후 가져다가 사용할 것임.
+
+ⓓ router.js 뼈대 만들기
+import { createWebHistory, createRouter } from "vue-router";
+
+const routes = [ya
+  {
+    path: "/경로",
+    component: import해온 컴포넌트,
+  }
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export default router; 
+
+※ 설명
+- path: "/경로" : 요기로 요청하면,
+- component: import해온 컴포넌트, : 이 컴포넌트 보여 줘...
+
+▷ router.js
+import { createWebHistory, createRouter } from "vue-router";
+import List from './components/list.vue';
+
+const routes = [
+  {
+    path: "/list",
+    component: List,
+  }
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export default router; 
+
+▷ main.js
+import { createApp } from 'vue'
+import App from './App.vue'
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import router from './router.js';
+
+createApp(App).use(router).mount('#app')
+
+main.js는 더 이상 수정 없음.
+
+ⓔ 앞으로는 Blog 글 리스트를 컴포넌트로 처리하지 않고 라우터 뷰에서 처리할 것임.
+ ※ 그러니 BlogList 컴포넌트 처리한 내용은 모두 지우고, <router-view>에서 다 처리함.
+
+▷ App.vue
+
+<router-view v-bind:BlogData="BlogData" ></router-view>
+
+<주석처리한 내용>
+-- // import BlogList from './components/list.vue';
+-- components: {
+--    // BlogList,
+-- }
+
+문제> 상단 
+
+<div class="container mt-4">
+  <h5>개발자의 블로그</h5>
+  <p>- Vue로 만들었음 -</p>
+</div> 
+
+얘를 컴포넌트로 만든다음에 라우터 처리합시다. 이름은 home.vue로...
+
+▷ /components/home.vue
+<template>
+  <div class="container mt-4">
+  <h5>개발자의 블로그</h5>
+  <p>- Vue로 만들었음 -</p>
+</div>
+</template>
+
+<script>
+export default {
+    name : 'HomeComp',
+}
+</script>
+
+
+▷ router.js
+
+import { createWebHistory, createRouter } from "vue-router";
+import List from './components/list.vue';
+import HomeComp from './components/home.vue';
+
+const routes = [
+  {
+    path: "/list",
+    component: List,
+  },
+  {
+    path: "/",
+    component: HomeComp
+  }
+];
+
+ⓕ router-link 만들기
+
+<router-link to="/">홈페이지</router-link> &nbsp;
+<router-link to="/list">리스트페이지</router-link>
+<div class="mt-4">
+  <router-view v-bind:BlogData="BlogData" ></router-view>
+</div>
+
+문제> 글목록을 클릭하면 상세페이지가 보이도록 처리하기
+    -> /detail  로 접속할 때 Detail.vue 보여줘야 함.
+▷ Detail.vue
+
+<template>
+  <h4>상세페이지</h4>
+  <h5>글제목</h5>
+  <p>글 내용~</p>
+</template>
+
+<script>
+export default {
+    name : 'DetailPage',
+}
+</script>
+
+▷ router.js
+import DetailPage from './components/Detail.vue';
+
+const routes = [
+  {
+    path: "/list",
+    component: List,
+  },
+  {
+    path: "/",
+    component: HomeComp
+  },
+  {
+    path: "/detail",
+    component: DetailPage
+  }
+];
+
+#3. 상세페이지 만들기(URL 파라미터)
+
+ⓐ PathVariable을 이용한 라우터 처리하기
+ex> localhost:8080/detail/3  이렇게 만들기
+
+ⓑ router.js 수정하기
+
+{
+    path: "/detail/:id",
+    component: DetailPage
+}
+
+※ :id 로 받아서 처리하기(모든 문자를 의미함.)
+
+ⓒ PathVariable 확인 및 데이터 표시하기
+
+▷ Detail.vue
+-- 부모(List.vue)에게 전달된 props를 그대로 받아 사용.
+
+<template>
+    {{ $route.params.id }}
+  <h4>상세페이지</h4>
+  <h5>{{ BlogData[$route.params.id].title }}</h5>
+  <p>{{ BlogData[$route.params.id].content }}</p>
+</template>
+
+<script>
+export default {
+    name : 'DetailPage',
+    props : {
+      BlogData : Array,
+    },
+}
+
+ⓓ 블로그 글 목록에서 제목을 클릭하면 상세페이지로 이동하기
+
+-- 첫번째 방법
+<template>
+  <div v-for="content in BlogData" :key="content">
+    <h5>
+      <router-link :to="`/detail/${ content.number }`">
+        {{ content.title }}
+      </router-link>
+    </h5>
+    <p>{{ content.date }}</p>
+  </div>
+</template>
+
+-- 두번째 방법
+<h5 @click="$router.push(`/detail/${ content.number }`)">
+        {{ content.title }}
+</h5>
+
+ⓔ 404페이지 만들기
+
+▷ PageNotFound.vue 만들기
+<template>
+  <h1>Page Not Found!</h1>
+  <h2>404 Error!</h2>
+</template>
+
+<script>
+export default {
+    name : "PageNotFound"
+}
+</script>
+
+▷ router.js
+
+import PageNotFound from './components/PageNotFound.vue';
+
+{
+    path: "/:anything(.*)",
+    component: PageNotFound
+}
+
+※ 맨 아래쪽에 위치시키면 위에부터 매칭되다 없으면 여기 걸린다.
+
+#4. Nested routers & push 함수
+
+※ 중첩 라우팅.
+- /localhost:8080/detail/0/comment 등으로 표기해서 현재 상세페이지
+ 하단에 댓글형식으로 보여주고 싶을 때 사용
+
+- 모달 창을 만들어 활용할 수도 있다.
+
+문제> 상세페이지에서 작성일 단추를 만들고 클릭하면 페이지 아래에 글 작성일 페이지를 보이게 하자.
+> url : /localhost:8080/detail/0/date
+
+▷ Detail.vue
+==========================================================
+- $route  : url 정보를 갖고 있는 변수
+- $router : 기능을 갖고 있는 함수
+  > $router.go(-1) : 한개 페이지 이전으로
+==========================================================
+<template>
+  <h4>상세페이지</h4>
+  <h5>{{ BlogData[$route.params.id].title }}</h5>
+  <p>{{ BlogData[$route.params.id].content }}</p>
+  <button @click="$router.push(`/detail/${ BlogData[$route.params.id].number }/date`)" type="button" 
+            class="btn btn-primary">View CreateDate</button>
+  <router-view :id="$route.params.id" :BlogData="BlogData"></router-view>
+</template>
+<script>
+export default {
+    name : 'DetailPage',
+    props : {
+      BlogData : Array,
+    },
+}
+
+▷ router.js
+import CreateDate from './components/CreateDate.vue';
+
+{
+    path: "/detail/:id",
+    component: DetailPage,
+    children: [
+      {
+        path: "date",
+        component: CreateDate,
+      },
+    ]
+  },
+
+▷ CreateDate.vue
+
+<template>
+  <h5 class="mt-4">글 작성일</h5>
+  <h5>{{ BlogData[id].date }}</h5>
+</template>
+
+<script>
+export default {
+  name : 'CreateDate',
+    props : {
+      BlogData : Array,
+      id: Number,
+    },
+}
+</script>
+
+#5. Github Pages로 배포하기
+
+ⓐ Vue 프로젝트에서 터미널을 켠 후
+
+> npm run build
+or
+> yarn build
+
+둘 중 하나를 입력하시면 됩니다.  
+
+- 혹시 개발 도중 심각한 에러가 있다면 build는 되지 않습니다.
+- 그럼 여러분 Vue 프로젝트 폴더 내에 dist 라는 폴더가 하나 생성됩니다. 
+- 여기 안에 작고 소중한 index.html, css파일, js 파일이 전부 담겨있음.
+
+ⓑ 첫번째 방법으로 깃헙에 배포하기
+- 우측 상단 + 버튼을 누르셔서 New Repository 버튼을 누르십시오.
+- Repository Name : 본인아이디.github.io 로 입력해야 호스팅을 받을 수 있다.
+- Repository 생성이 끝나면 build 폴더 내의 파일을 업로드(dist 폴더 안의 내용물)
+
+ⓒ 두번째 방법으로 깃헙에 배포하기
+- repository를 하나 더 만들어봅시다. 아무 이름으로 만들면 되는데 대충 vue라고 만들겠습니다.
+- 뷰 프로젝트 파일 오픈하셔서 vue.config.js라는 파일을 만들어줍니다.
+- 내용은 
+module.exports = {
+    publicPath: '/vue',
+}
+- npm run build 다시 해줍니다.
+- dist 안의 프로젝트 파일을 아까 만든 vue라는 이름의 repository에다가 업로드합니다.
+- repository 설정 -> Pages -> Branch main, / 경로로 github pages 발행
+- 내아이디.github.io/vue 여기로 접속 or
+- 안보이면 내아이디.github.io/vue/index.html로 접속
