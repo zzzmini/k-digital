@@ -1,0 +1,56 @@
+<table class="table m-2">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Content</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row" >1</th>
+            <td >제목111</td>
+            <td >내용 1111</td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="" class="btn btn-primary">Edit</a>
+    <a href="" class="btn btn-danger">Delete</a>
+    <a href="/articles">Go to Article List</a>
+    <br><br>
+    <div class="card m-2">
+        <div class="card-header">
+            <span>Featured</span>
+            <a class="btn btn-sm btn-outline-primary">수정</a>
+            <a class="btn btn-sm btn-outline-primary" id="comment-delete-btn">삭제</a>
+        </div>
+        <div class="card-body">
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        </div>
+    </div>
+
+    <div class="card m-2">
+        <div class="card-header">
+            <span>Featured</span>
+            <a class="btn btn-sm btn-outline-primary">수정</a>
+            <a class="btn btn-sm btn-outline-primary" id="comment-delete-btn">삭제</a>
+        </div>
+        <div class="card-body">
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        </div>
+    </div>
+
+    <form>
+        <!-- 닉네임 입력-->
+        <div class="m-2">
+            <label class="form-label">닉네임</label>
+            <input type="text" class="form-control" id="new-comment-nickname">
+        </div>
+        <!-- 댓글 본문 입력-->
+        <div class="m-2">
+            <label class="form-label">댓글 내용</label>
+            <textarea type="text" class="form-control" rows="3" id="new-comment-body"></textarea>
+        </div>
+        <!-- 전송버튼-->
+        <button type="button" class="btn btn-primary" id="comment-create-btn">댓글 작성</button>
+    </form>
