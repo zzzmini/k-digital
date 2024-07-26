@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/articles
+    username: ${USER_NAME}
+    password: ${USER_PASSWORD}
+#  sql:
+#   init:
+#      mode: always
+  jpa:
+#    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+logging:
+  level:
+    org.hibernate.SQL: debug
