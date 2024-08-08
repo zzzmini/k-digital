@@ -1,0 +1,226 @@
+※ HTML에서 CSS 편집을 쉽게 해 주는 확장 팩(HTML CSS Support)
+※ CSS에서 HTML에서 사용한 속성이름을 자동완성해 주는 확장 팩
+   (HTML to CSS autocompletion)
+--- View - Command Palette
+> Preferences: Open User Settings (json) 를 입력하시면
+
+그러면 settings.json에 잘 들어가게 됩니다.
+여기어세 필요한 기능을 설정하시면 됩니다.
+
+※ setting.json에 추가하기
+    "css.enabledLanguages": [
+        "html",
+        "javascript"
+    ]
+=====================================================================================
+vsCode  사용법
+
+1. Project : vs code는 하나의 폴더를 하나의 Project로 인식합니다.
+- 폴더의 이름은 영문, 소문자, 공백은 사용하지 않습니다.(공백대신 underscore 『 _ 』 사용)
+
+2. 파일 생성하기 : 두개의 파일을 생성해 봅니다.
+ ① index.html, main.css
+ ② css 라는 이름의 폴더를 생성한 후 main.css → css 폴더로 이동합니다.
+
+3. vsCode 한글적용하기
+ ① 좌측 Activity Bar → 확장(Extention) → 검색 : korean
+ ② 우측 korean language pack for ... 선택 후 설치
+
+ ③ vsCode Editor를 종료 후 재시작합니다.
+
+4. 새 파일 만들고 HTML Layout 적용하기
+① 새 문서 → index.html
+② 우측 Code Window → ! + tab : HTML 기본 구조가 만들어 짐.
+
+ - 문서 기본 언어를 한글로 설정 : <html lang=“en”> → “ko” 로 변경
+5. 한번에 ko 로 바꾸기
+① 검색에서 명령 표시 및 실행 > ctrl + shift + P 선택
+
+② settings.json 입력
+  - 기본설정 : 사용자 설정 열기(JSON)
+⑤ 설정 값 변경하기
+  {
+    "editor.fontSize" : 18,
+    "emmet.variables" : {
+        "lang" : "kr"
+    }
+  }
+⑥ vsCode 재시작 하기
+
+=====================================================================================
+1. 기존의 HTML
+
+<body>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+
+    <li><font color="red">HTML</font></li>
+    <li><font color="red">CSS</font></li>
+    <li><font color="red">JavaScript</font></li>
+</body>
+
+▷ 처음에는 HTML 태그만으로 웹페이지를 표현하는 것에 만족 했으나,
+   이후에 사람들의 요구가 미적인 요소의 추가를 요구하면서
+    HTML안에 일부 style을 포함하여 표시하기 시작함.
+
+▷ 이후 HTML은 정보에 집중.
+▷ CSS 는 디자인에 전념하기 위해 둘을 분리하게 됨.
+
+※ 이후 두가지를 분리하여 발전하게 됨.
+
+ⓐ 위의 코드가 바뀌게 됨..
+<style>
+    li {
+        color : red;
+    }
+</style>
+<body>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+</body>
+
+※ 정보와 디자인을 분리하면서 검색엔진, 시각장애인이 사용하는
+스캔리더 등이 우리 웹페이지에서 정보를 보다 잘 처리하도록 발전하게 됨.
+
+※ 분리의 장점 : 수정이 용이하다. 협업의 장점이 있다.
+
+2. CSS를 실행하는 방법
+문. 
+    <h1>안녕하세요</h1>
+    <h2>안녕하세요</h2>
+    <h3>안녕하세요</h3>
+
+ⓐ 인라인 태그 사용
+
+<h1 style="color: blue;">안녕하세요</h1>
+
+ⓑ style 태그의 사용
+
+<style>
+    h2 {
+        color : darkblue;
+    }
+</style>
+
+ⓒ 별도의 css 파일로 분리하여 사용
+
+01_css.css 파일 생성 후 연결
+
+h3 {
+    color : gold;
+}
+
+<head>
+    <title>Document</title>
+    <link rel="stylesheet" href="./01_css.css">
+</head>
+
+
+3. 선택자와 선언
+ⓐ 태그선택자(type selector)
+ - 일반 HTML 태그를 가리키는 선택자
+ - 지금까지 우리가 했던 것. (ex. li ...)
+
+ⓑ id 선택자(유일)
+ - 일반 태그 선택자는 id, class 속성값을 갖는다.
+ - id가 select 인 태그에 대해 폰트사이즈를 15px로 바꾸고 싶다.
+
+ⓒ class 선택자(다중)
+ - class 가 other인 태그에 대해 밑줄 적용
+
+<!DOCTYPE html>
+<head>
+    <style>
+        li {
+            color: red;
+        }
+        #select {
+            font-size:30px;
+        }
+        .other {
+            text-decoration : underline;
+        }
+    </style>
+</head>
+<body>
+    <li class="other">HTML</li>
+    <li id="select">CSS</li>
+    <li class="other">JavaScript</li>
+</body>
+</html>
+
+4. 부모와 자식 선택자
+<body>
+    <ul>
+        <li>사과</li>
+        <li>배</li>
+        <li>수박</li>
+    </ul>
+    <ol>
+        <li>사이다</li>
+        <li>콜라
+            <ol>
+                <li>코카콜라</li>
+                <li>펩시콜라</li>
+            </ol>
+        </li>
+        <li>환타</li>
+    </ol>
+</body>
+
+ⓐ ul 태그 아래의 li 에 tomato 색상 입히기
+
+    <style>
+        ul li {
+            color : tomato;
+        }
+    </style>
+
+ⓑ ol 태그 밑의 li 태그(사이다, 콜라, 환타)에만 테두리를 긋고 싶다.
+    ol>li {
+        border-color: blue;
+        border: 1px solid;
+    }
+
+ ※ ol 태그의 중첩으로 모두 표시 됨. id로 구분지어 처리해야 함.
+
+    <ol id="beverage">
+        .....
+    </ol>
+
+    #beverage>li {
+        border: 1px solid red;
+        color : blue;
+    }
+※ color : blue; 는 상속의 개념이 적용되는 프로퍼티.. 나중에...
+
+ⓒ  ul태그와 li 태그 모두에 배경색을 powderblue로 줄 때
+ul, ol {
+        background-color: powderblue;
+    }
+
+5. psuedo 선택자 : 가상 클래스 선택자
+
+<a href="www.naver.com">방문함</a>
+<a href="www.daum.net">방문안함</a>
+
+    a:link {
+        color: black;
+    }
+    a:visited {
+        color : red;
+    }
+    a:hover {
+        color : yellow;
+    }
+
+    a:active {
+        color : green;
+    }
+
+    input:focus {
+        background-color : black;
+        color: white;
+    }
