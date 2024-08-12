@@ -1,0 +1,1024 @@
+※ 라이브서버 브라우저 크롬으롭 변경하기
+-> File -> Preferences -> Settings -> Extensions -> 
+   live server config -> Live Server ->
+   Settings : Custom Brower -> Chrome 으로 변경
+
+1. font-size 속성
+
+※ 폰트 사이즈의 단위
+
+px vs em vs rem
+
+-----------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+   <style>
+    #px{font-size:16px;}
+    #rem{font-size: 1rem;}
+   </style> 
+</head>
+<body>
+    <div id="px">PX</div>
+    <div id="rem">REM</div>
+</body>
+</html>
+-----------------------------------------
+ⓐ px : 고정형
+
+ⓑ em / rem: 가변형(오늘날에는 rem을 사용)
+- 사용자가 브라우저의 글꼴을 키웠을 때 상대적으로 크기가 변한다.
+
+- 브라우저의 ctrl + wheel 로 화면 확대/축소하면 똑 같음
+
+※ 다른 방법으로 폰트 크기 조정
+- 크롬 : 우상단 -> 설정 -> 햄버거 메뉴 -> 모양 -> 글꼴 크기 -> 중간에서 아주 크게로 변경
+- 엣지 : 우상단 -> ... -> 설정 -> 햄버거 메뉴 -> 브라우저 디스플레이 -> 맨 아래 -> 글꼴 -> 중간에서 매우큼으로 변경
+
+- rem으로 설정한 폰트사이즈가 상대적으로 커진다.
+- css를 통해 브라우저를 통한 웹페이지 접근에 대한 권리를 향상시켜줄 수 있다.
+
+ⓒ F12 개발자 도구로 확인
+- (위) Elements - (아래) Computed
+
+※ 브라우저의 표준 글꼴 크기는 16px 임.
+
+2. color 속성
+
+ⓐ 색상을 지정하는 세가지 방법
+
+※ color name, hex(16진수), rgb
+-- color name 확인 : www.w3schools.com -> css -> css Colors
+-- RGB 선택 후 조절하여 확인
+
+ⓑ 예제
+
+<style>
+    h1 { color : red;}
+    h2 { color : rgba(0, 255, 0, 0.5)}
+    h3 { color : #0000ff}
+</style>
+
+<h1>Hello world</h1>
+<h2>Hello world</h2>
+<h3>Hello world</h3>
+
+※ rgba (red, green, blue, alpha -- 투명도) or rgb
+
+3. text-align 속성 : 왼쪽, 오른쪽, 가운데 정렬
+
+ⓐ text-align
+
+    <p>text</p>
+
+    p { 
+        text-align: center;
+        border: solid 1px; 
+    }
+
+
+ⓑ text-align: justify; - 양쪽 맞춤.
+ - extention - lorem ipsum 검색 -> Lorem Ipsum 설치
+
+ - 첫번째 문단 복사 p 태그 안에 붙여넣기
+
+     p { 
+        text-align: justify;
+        border: solid 1px; 
+    }
+
+4. font 속성
+
+ⓐ font-family
+
+    <p class="fontFamily">Font Family</p>
+
+
+    .fontFamily {
+        font-size: 2rem;
+        font-family: arial, verdana, sans-serif , monospace;
+    }
+
+※ sans : 부정의 뜻, Serif : 장식 있음.(글꼴 끝이 뾰족하던가...)
+
+즉, 위 문장은 arial 있음 보여주고, 없으면 verdana 보여주되 장식없는
+  글꼴을 찾아주고, 문자간 간격이 고정(monospace)인 글꼴 찾아주라...는 뜻
+
+ⓑ font-weight
+    font-weight: bold;
+
+※ 100 ~ 900까지 지정가능
+
+ⓒ  line-height 
+    * {
+        line-height: 1.5;
+    }
+
+※ 기본 값 : 1.2 -- 정해진 글꼴 크기의 1.2배 만큼 행간격 줌.
+
+5. 상속 
+: HTM 태그들(엘리먼트) 하위엘리먼트가 그 값들을 넘겨받는 것
+
+- F12 - Elements - Style 밑을 보면 Inherited from 구문이 보인다.
+
+※ 대표적으로 color는 상속되지만, border는 상속되지 않는다.
+
+6. Cascading
+
+-- 한개 엘리먼트에 여러가지의 스타일을 사용할 경우 우선순위
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        li {color:red;}
+        #idSel{color:green;}
+        .classSel{color:blue;}
+    </style>
+</head>
+<body>
+    <ul>
+        <li>Apple</li>
+        <li id="idSel" class="classSel" 
+            style="color:yellow">Grape</li>
+        <li>Banana</li>
+    </ul>
+</body>
+</html>
+
+▷ 우선순위
+ⓐ style attribute
+ⓑ id selector
+ⓒ class selector
+ⓓ tag selector
+
+※ 모든 태그 중에 우선순위를 제일 높이려면
+
+    .classSel{color:blue !important;}
+
+
+7. inline vs block level
+
+    <h1>Hello World</h1>안녕하세요
+    <a href="https://naver.com">네이버</a>
+
+    <style>
+        h1, a { border : 1px solid red;}
+        h1 { display: inline;}
+        a { display: block;}
+    </style>    
+
+ⓐ inline : span, img
+
+ⓑ block : h1, h2, div ...
+
+8. box model
+- 태그가 어느 특정 태그에 둘러쌓여 있을 때 부피감을 나타낼 때 사용
+
+<head>
+    <style>
+        p, a {
+            border : 5px solid red;
+            padding : 20px;
+            margin : 40px;
+            width: 200px;
+            /* height: 200px; */ 
+            // BOX에서는 대부분 높이가 적용되지 않는다.
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+        Omnis voluptatibus non labore et molestias nostrum provident 
+        iusto mollitia quasi eum blanditiis, 
+        dolorem voluptates consequuntur sed odio? Porro modi laborum praesentium!
+    </p>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+        Omnis voluptatibus non labore et molestias nostrum provident 
+        iusto mollitia quasi eum blanditiis, 
+        dolorem voluptates consequuntur sed odio? Porro modi laborum praesentium!
+    </p>
+
+    안녕하세요. <a href="https://daum.net">다음 카카오</a>입니다.
+</body>
+※ inline 속성은 margin과 padding은 적용이 되고, witdh, height는 적용되지 않는다.
+
+※ 식당에 갔을 때 음식이 접시의 중앙에 쬐끄만하게 나왔을 때 
+-> 왜 이리 패딩이 작으냐?
+※ 식탁이 좁아 접시간 간격이 좁을 때
+-> 왜 이리 마진이 작으냐?
+
+9. box-sizing
+- box가 padding 또는 border속성을 갖고 있는 경우 width, height값을
+  조정하는 경우 우리가 생각하는 사이즈와 다를 수 있다.
+
+※ width : border, padding 값이 빠져있는 영역을 width로 함.
+   처음에 width를 입력안 한 상태와 입력한 후의 상태를 비교하면
+   width 값을 주었을 때 두 하얀영역이 길이는 같으나
+   border와 padding값 때문에 전체 div 크기는 달라지게 된다.
+
+
+<head>
+    <style>
+        div{
+            margin : 10px;
+            width : 150px
+        }
+        #small{
+            border:10px solid black;
+        }
+        #large{
+            border:30px solid black;
+        }
+    </style>
+</head>
+<body>
+   <div id="small">안녕</div>
+   <div id="large">안녕</div> 
+</body>
+
+※ 이 부분 때문에 박스의 크기를 예측하기 어려워 진다.
+이럴 때 필요한 속성이 box-sizing(컨텐트 박스) 이다.
+즉, border의 사이즈를 width와 height로 바로 사용할 수 있도록 
+모든 엘리먼트에 적용되도록 하고 시작한다.
+
+    * {
+        box-sizing : border-box;
+    }
+
+10. 마진겹침_1
+
+- margin(서로 다른 엘리먼트 간의 간격)이 사라지는 현상
+<head>
+    <style>
+        h1 {
+            border: 1px solid red;
+            margin: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>hello world</h1>
+    <h1>hello world</h1>
+</body>
+
+※ F12를 누르고 Elements를 확인하면 살구색 마진 영역이 두개
+ 엘리먼츠가 겹쳐저서 나온다.
+ 이것이 마진겹침 현상이다.
+
+※ 두개 엘리먼트가 마진 겹침 현상이 생긴경우 더 큰 마진값이 두
+ 엘리먼트간의 간격이 된다.
+ 
+▷ 마진값 수동 조정하기
+ⓐ F12를 누른상태에서 
+ⓑ Elements에서 위의 Hello world 선택
+ⓒ 아래 스타일에서 margin 영역 더블클릭 
+ⓓ 키보드 화살표로 마진의 크기 조정해 보면 확인 가능
+
+※ 만약 마진겹침이 없다면?
+   <ul>
+    <li>Bear</li>
+    <li>Soju</li>
+    <li>Wine</li>
+   </ul>
+
+   li {
+            margin : 10px;
+    }
+
+-- 각 리스트 간 간격이 앞은 10px 두개 사이는 20px... 
+-- 그렇기 때문에 마진겹침현상은 적절히 필요한 것이다.
+
+11. 마진겹침_2
+- 부모와 자식 모드 마진값이 존재하는 경우 겹침 현상.
+
+body>#parent>#child
+
+
+<html>
+<head>
+    <style>
+        #parent {
+            /* border : 1px solid tomato; */
+            margin-top: 100px;
+        }
+        #child {
+            margin-top : 200px;
+            background-color: gold;
+        }
+    </style>
+</head>
+<body>
+    <div id="parent">
+        <div id="child">
+            안녕하세요!!!
+        </div>
+    </div>
+</body>
+</html>
+
+ⓐ 두 개 div 는 부모와 자식간 관계
+ⓑ 부모 div의 마진을 100px 로 주고, 자식을 50px로 주면
+   자연스럽게 두개가 공존한다.
+ⓒ 이 상태에서 부모의 border 엘리먼트가 사라지면,
+   즉, 부모태그가 시각적으로 아무것도 보이지 않는 상태가 되면...
+ⓓ 자식 엘리먼트의 margin 값은 부모와 합쳐져서 처리된다.
+ⓔ 자식과 부모의 엘리먼트 중 큰 마진값이 자식의 마진값이 된다.
+  - 해당 크기를 벗어나면 그 때부터 둘 간 간격이 벌어지게 된다.
+
+※ 결국 모든 엘리먼트간의 관계 내에서 top과 bottom 마진값은 두 개
+  중 더 큰값으로 사용되다가 두 위치 값이 바뀌면 비로소 바뀐 값이 
+  적용된다.
+
+ 
+12. 포지션 - 각각의 엘리먼트가 위치하는 것을 지정하는 중요한 내용
+
+ⓐ 구조 만들기
+#other+#parent>#me
+
+<head>
+<style>
+    html { border : 1px solid gray;}
+    div { 
+        border : 5px solid tomato;
+        margin : 10px;
+        }
+</style>
+</head>
+<body>
+    <div id="other">other</div>
+    <div id="parent">
+        parent
+        <div id="me">me</div>
+    </div>
+</body>
+
+ⓑ me 라는 엘리먼트를 이동시켜 보자.
+    #me {
+        position: relative;
+        right : 100px;
+        left : 100px;
+        bottom : 100px;
+        top : 100px;
+    }
+
+※ me가 움직이려면 position:relative가 선언되어야 함.
+※ left, right : left 우선, top, bottom : top 우선
+   이것은 기준점이 좌상단 점인데 막힌곳으로는 못가니까.. 당연한 것임.
+   그럼, 다음과 같이 정리....
+    #me {
+        position: relative;
+        left : 100px;
+        top : 100px;
+    }
+
+ⓒ 그럼 position:relative가 어떤 역할을 하는 걸까?
+- position의 기본값은 position:static 
+  즉, left, top 값을 무시하고 정적인 위치를 잡는다.
+
+- relative를 주면 자기의 부모(여기서는 parent)를 기준으로
+  상대적인 offset 값 만큼 이동하게 되는 것이다.
+
+13. 절대 포지션(absolute position)
+- 코드 수정
+
+<style>
+    html { border : 1px solid gray;}
+    #parent, #other { 
+        border : 5px solid tomato;
+        }
+    #me {
+        background-color: black;
+        color : white;
+    }
+</style>
+</head>
+<body>
+    <div id="other">other</div>
+    <div id="parent">
+        parent
+        <div id="me">me</div>
+    </div>
+</body>
+
+ⓐ me 엘리먼트를 부모의 상대위치가 아닌, document 즉,
+  html에 대해 절대적인 위치로 이동할 때...
+
+
+ⓑ position : absolute 를 사용했을 때
+
+    #me {
+        position: absolute;
+        background-color: black;
+        color : white;
+        left : 0;
+        top : 0;
+        width : 200px;
+        height : 100px;
+    }
+
+  - 시작위치는 부모 엘리먼트 기준의 좌상단이
+    (left, top) -> (0, 0)이 되며,
+  - absolute를 적용하는 순간 나의 부모가 html이 된다.
+  - 이때 부모와의 링크가 끊기기 때문에 독립객체가 되며,
+    width와 height를 직접 지정해 주어야 한다.
+
+ⓒ 정확한 설명
+  - absolute로 지정된 자식은 자기의 부모 엘리먼트를 찾아 이동하다가
+    부모의 position이 static이 아닌 relative인 곳에서
+    멈춰서 그곳에 (left, top) -> (0, 0)인 곳에 둥지를 틀고
+    상대적으로 위치를 잡게 된다.
+
+ⓓ parent 위의 부모인 grandpa를 지정하고 얘의 position을
+   relative로 주게되면...
+
+<style>
+    html { border : 1px solid gray;}
+    #other, #grandpa, #parent { 
+        border : 5px solid tomato;
+        }
+    #grandpa {
+        position : relative;
+    }
+    #me {
+        position: absolute;
+        background-color: black;
+        color : white;
+        left : 0;
+        top : 0;
+    }
+</style>
+</head>
+<body>
+    <div id="other">other</div>
+    <div id="grandpa">
+        grandpa
+        <div id="parent">
+            parent
+            <div id="me">me</div>
+        </div>
+    </div>
+</body>
+
+
+14. 고정 포지션(fixed position)
+※ fixed는 특정 엘리먼트의 영향 예를 들어, 전체 화면에서
+스크롤되어서 움직이는 경우 스크롤과 무관하게 고정될 수 있도록
+처리 할 때 사용된다.
+※ 주로 배지(badge) UI 작업 할 때 사용됨.
+
+<body>
+    <div id="other">other</div>
+        <div id="parent">
+            parent
+            <div id="me">me</div>
+        </div>
+    <div id="large">large</div>
+</body>
+
+    #large {
+        height : 10000px;
+        background-color: royalblue;
+    }
+ⓐ 우측 고정
+    #me {
+        position: fixed;
+        background-color: black;
+        color : white;
+        right : 0;
+        top : 0;
+    }
+
+ⓑ 아래쪽 고정
+
+    html { 
+        border : 1px solid gray;
+        margin-bottom: 20px;
+    }
+    #me {
+        position: fixed;
+        background-color: black;
+        color : white;
+        bottom : 0;
+        left : 0;
+        text-align: center;
+        width: 100%;
+    }
+
+ⓒ 상단 고정
+    body { 
+        border : 1px solid gray;
+        margin-top: 20px;
+    }
+    #other, #parent { 
+        border : 5px solid tomato;
+        }
+    #me {
+        position: fixed;
+        background-color: black;
+        color : white;
+        top : 0;
+        left : 0;
+        text-align: center;
+        align-content: center;
+        width: 100%;
+    }
+
+
+15. FLEX
+※ FLEX : 주로 Layout을 잡을 때 사용하는 기능
+- 초기에는 표(table)을 갖고 레이아웃을 잡았음.
+- 이후 position을 사용
+- 결국 FLEX를 사용하게 됨
+
+ⓐ FLEX는 반드시 두 단계가 필요함
+<container>
+    <item></item>
+    <item></item>
+</container>
+
+ⓑ container에 부여되는 속성들
+- display
+- flex-direction
+- flex-wrap
+- flex-flow
+- justify-content
+- align-items
+- align-content
+
+ⓒ item에 부여되는 속성들
+- order
+- flex-grow
+- flex-shrink
+- flex-basis
+- flex
+- align-self
+
+ⓓ flex 기본 구조
+
+<style>
+    .container {
+        background-color: powderblue;
+        height: 200px; /* height를 주면 column이 작동함*/
+        display : flex; /* ① 제일먼저 해야 함. */
+        flex-direction: row; /* default */
+        flex-direction: row-reverse; /* 행에대한 역순 */
+        flex-direction: column; /* default */
+        flex-direction: column-reverse;
+	justify-content: center;
+        align-items: center;
+    }
+    .item {
+        background-color: tomato;
+        color : white;
+        border : 1px solid white;
+	text-align: center;
+        align-content: center;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+    </div>
+</body>
+
+16. Container에 부여되는 중요한 FLEX 속성 세가지
+
+ⓐ flex-grow 기본 값은 0
+- 1 이 되면 모든 container안의 item이 균등하게 나뉨
+- 특정 위치 item에 값을 주면 다른 것과 상대적인 크기를 가짐
+문제1> 모든 item의 크기를 균등하게 하되 2번째만 다른 item 보다
+  2배 넒은 면적을 갖게 하려면
+
+    .container {
+        background-color: powderblue;
+        height: 200px; /* height를 주면 column이 작동함*/
+        display : flex; /* ① 제일먼저 해야 함. */
+    }
+    .item {
+        background-color: tomato;
+        color : white;
+        border : 1px solid white;
+        text-align: center;
+        align-content: center;
+    }
+    .item:nth-child(2){
+        flex-grow:2;
+    }
+
+문제2> 모든 item의 크기를 균등하게 하되 
+  2번째 item 만 width 값을 200px로 지정하면...
+
+    .item:nth-child(2){
+        flex-basis: 200px;
+    }
+▷ flex-basis : 얘는 자기 값보다 브라우저가 작아지면 희생함.
+▷ flex-shrink : 얘는 고집스럽게 자기 크기를 갖고 있음.
+    .item:nth-child(2){
+        flex-basis: 200px;
+        flex-shrink : 0; /* 수축 허용치 않음 */
+        flex-shrink : 1; /* 수축 됨. */
+    }
+문제3> item1의 너비 150px, itme2의 너비 500px일때 item1은
+  너비 고정, item2는 자연스럽게 수축되도록 지정
+
+    .item:nth-child(1) {
+        width: 150px;
+        flex-shrink: 0;
+    }
+    .item:nth-child(2){
+        flex-basis: 500px;
+        flex-shrink: 1;
+        /* flex-grow:2; */
+    }
+
+문제4> item1의 너비 300px, itme2의 너비 300px일때 item1과
+  item2의 너비가 1:2 만큼 상대적으로 수축하도록 지정
+
+    .item:nth-child(1) {
+        flex-basis: 300px;
+        flex-shrink: 1;
+    }
+    .item:nth-child(2){
+        flex-basis: 300px;
+        flex-shrink: 2;
+    }
+
+17. Holy Grail(성배) Layout
+
+            Header
+----------------------------------
+      |            |
+Nav   |    Main    |    AD
+----------------------------------
+            Footer
+
+▷ Header, Footer 고정
+▷ 화면이 작아지면 Nav와 AD의 크기는 고정되고
+   Main의 크기가 작아지는 Layout
+▷ 많은 사람들이 이 레이아웃을 찾기 위해 노력했다는 의미
+
+html>head^body
+
+ⓐ 구조만들기
+html>head+body
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Holy Grail Layout</h1>
+        </header>
+        <section class="content">
+            <nav>
+                <ul>
+                    <li>main</li>
+                    <li>about</li>
+                    <li>help</li>
+                </ul>
+            </nav>
+            <main>
+                CSS 수업입니다.
+            </main>
+            <aside>
+                AD
+            </aside>
+        </section>
+        <footer>
+            <a href="http://zzzmini.com">홈페이지</a>
+        </footer>
+    </div>
+
+ⓑ Holy Grail Layout 적용하기(위 모양같이 정리)
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            border-bottom: 1px solid gray;
+        }
+        footer {
+            border-top: 1px solid gray;
+        }
+        .content {
+            display: flex;
+        }
+        .content nav {
+            border-right: 1px solid gray;
+        }
+        .content aside {
+            border-left : 1px solid gray;
+        }
+    </style>
+
+ⓒ nav와 AD에 Flex 고정크기 150px 주기
+
+        nav, aside {
+            flex-basis: 150px;
+            flex-shrink: 0;
+        }
+
+ⓓ header와 footer 정리하기
+
+    header {
+        border-bottom: 1px solid gray;
+        padding-left: 20px;
+    }
+
+    footer {
+        border-top: 1px solid gray;
+        padding: 20px;
+        text-align: center;
+    }        
+
+    main {
+        padding : 10px;
+    }
+
+ⓔ Lorem Generator에서 많은 글 찾아서 main에 넣고 테스트 해 보기
+
+18. Container에 적용되는 flex의 다양한 속성들
+
+ⓐ flex-wrap : 컨테이너보다 아이템들이 크다면, 즉 1줄에 다 표현이
+안되면, 줄 바꿈 처리가 됨.
+
+ⓑ align-items 
+- 기본 값 : stretch (아이템들이 컨테이너의 높이와 같이 늘어남.)
+- center : item이 각각 높이를 갖는다면 컨테이너의 수직 정 중간에 맞춤할 경우
+
+ⓒ justify-content : 아이템을 컨테이너의 가로 정렬할 때
+
+문제> 우리의 컨테이너가 화면의 수평 가운데에 위치할 수 있도록..
+  컨테이너 width : 800px
+
+    body {
+        display: flex;
+        justify-content: center;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 800px;
+    }
+
+19. Multi column
+- 신문과 같이 화면이 큰 화면에서 사용하는 전통적인 방법
+- 한글의 다단과 같은 기능
+- 구현해 보기
+
+ⓐ <div class="column"> 만들기
+ⓑ  안에 Lorem * 20 에서 많은 텍스트 붙여넣기
+
+ⓒ 기본 단수를 지정해서 나누기
+    .column{
+        column-count: 2; */
+        text-align: justify;
+    }
+
+ⓓ 너비를 지정해서 동적으로 나누기
+
+    .column{
+        text-align: justify;
+        column-width: 200px;
+    }
+
+ⓔ 두가지를 동시에 사용할 경우
+ - 기준 컬럼수를 유지하면서 폭이 좁아질 때 더 이상
+  컬럼수를 유지할 수 없을 때 한개씩 줄여가며 표시한다.
+
+
+    .column{
+        text-align: justify;
+        column-width: 200px;
+        column-count : 4;
+    }
+
+※ 이럴 때 컬럼의 수는 4를 넘어가지 않고 줄어들 수는 있다.
+
+ⓕ 컬럼 간격의 조정
+
+    column-gap : 20px;
+
+ⓖ 간격 사이에 줄 넣기 
+    column-rule-style : solid;
+    column-rule-width : 5px;
+    column-rule-color : red;
+
+ⓗ 중간 제목이 컬럼 구조에 영향을 받지 않게 하고 싶을 때
+
+    "Sed ut perspiciatis unde ......
+    <h1>1914 translation by H. Rackham</h1>
+    "But ......
+
+
+    h1 {
+        column-span: all;
+    }
+
+
+20. float
+- 글의 본문에 이미지를 삽입할 때 자연스러게 처리하는 ..
+- 레이아웃을 설정할 때도 사용
+
+<html>
+<head>
+    <style>
+        img {
+            width : 300px;
+        }
+    </style>
+</head>
+<body>
+    <img src="./mount.jpg" alt="mount">
+    <p>
+        Lorem ipsum dolor ....
+    </p>
+</body>
+</html>
+
+ⓐ 이미지를 텍스트 좌측 상단에 위치시키기
+<body>
+    <img src="./mount.jpg" alt="mount">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam felis odio, 
+        egestas sed nulla tincidunt, fringilla vulputate est. 
+        Phasellus efficitur nunc in neque blandit, sit amet interdum lacus laoreet. 
+    </p>
+
+<head>
+    <style>
+        img {
+            width : 300px;
+            float : left;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+ⓑ 두개의 p 태그를 넣고, 아래 p 태그 내용이 이미지와 독립적으로 위치시키기
+<body>
+    <img src="./mount.jpg" alt="mount">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam felis odio, 
+        egestas sed nulla tincidunt, fringilla vulputate est. 
+        Phasellus efficitur nunc in neque blandit, sit amet interdum lacus laoreet. 
+    </p>
+    <p style="clear: both;">
+        Lorem ipsum dolor sit am
+
+21. background 
+<head>
+    <style>
+        div {
+            font-size : 100px; (5)
+            height: 500px; (6)
+            border : 5px solid gray; (2)
+            background-color: tomato; (3)
+            background-image: url(./apple.jpg); (4)
+        }
+    </style>
+</head>
+<body>
+    <div>Hello World</div> (1)
+</body>
+
+ⓐ 이미지가 작으면 반복해서 보여진다.
+
+    background-repeat: no-repeat;
+
+ⓑ body에 lorem*5 하고 백그라운드 화면 고정시킬 때
+    background-attachment: fixed;
+
+- div 태그는 움직이는데 사과는 그대로 있다.
+
+ⓒ 백그라운드 이미지 크기 조절
+- background-size : cover;
+: 백그라운드 이미지를 버리면서 모두 채워넣는다.
+
+- background-size : contain;
+: 백그라운드 이미지를 손실없이 모두 채워넣는다.
+  덕분에 빈 공간이 생길 수 있다.
+
+※ background-size cover contain 요렇게 검색해서 차이점 확인
+
+ⓓ background-position : center top; ...
+
+22. transform
+- 엘리먼트의 크기, 회전, 비틀기 등의 효과를 주는 기능
+
+<head>
+    <style>
+        h1 {
+            background-color: deepskyblue;
+            color:white;
+            display: inline-block;
+            padding: 5px;
+            font-size: 2rem;
+            margin: 50px;
+            transform: scaleX(0.5);
+            transform: scaleY(2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello Transform</h1>
+</body>
+
+ⓐ scale 속성 
+    transform: scaleX(0.5);
+    transform: scaleY(2);
+- 밑에 있는 효과가 위의 효과를 덮어 쓰게된다. 함께 주려면..
+
+    transform: scaleX(0.5) scaleY(2);
+    또는,
+    scale(0.5 , 0.5);
+
+ⓑ transform: rotate(45deg);
+ⓒ transform: skew(45deg);
+ⓓ transform: translate(10px, 20px);
+
+23. Animation_1
+① 1단계
+▶ animation-test.html
+
+    <div class="container">
+        <div class="item">
+        animation
+        </div>
+    </div>
+
+    .container{
+    height: 100px;
+    border: 4px solid black;
+    }
+
+    .container .item{
+    width: 100px;
+    height: 100px;
+    background-color: royalblue;
+    display: flex;
+    color: wheat;
+    align-items: center;
+    justify-content: center;
+    }
+
+② 2단계
+
+    .container .item:hover{
+    transform: rotate(45deg);
+    background-color: orange;
+    border-radius: 50%;
+    }
+
+    .container .item{
+    transition: 1s;
+    }
+
+
+24. Animation_2
+
+① 1단계
+▶ box-transform.html
+
+    <div class="container">
+        <div class="item">
+            box
+        </div>
+    </div>
+
+    .container{
+    height: 100px;
+    border: 4px solid black;
+    }
+
+    .container .item{
+    width: 100px;
+    height: 100px;
+    background-color: royalblue;
+
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    }
+
+② 2단계
+
+.container .item{
+  transform: 
+    translateX(50px) 
+    translateY(50px) 
+    rotate(45deg) 
+    scale(1.5);
+  border-radius: 50%;
+}
