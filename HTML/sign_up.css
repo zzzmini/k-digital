@@ -1,0 +1,49 @@
+#container {
+    width: 600px;
+    margin: 10px auto;
+}
+
+fieldset{
+    margin-bottom: 20px;
+}
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+ul li{
+    margin: 10px;
+}
+li label{
+    width: 120px;
+    line-height: 36px;
+    float: left;
+    font-weight: bold;
+}
+input[type="text"], input[type="password"], 
+input[type="email"] 
+{
+    width: 300px;
+    height: 30px;
+}
+
+#buttons {
+    width: 400px;
+    margin: 20px auto;
+    text-align: center;
+}
+#buttons input {
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
+}
+
+#buttons input:hover {
+    background-color: rgb(27, 134,221);
+    color: #fff;
+    border-color: #fff;
+}
+
+select {
+    width: 100px;
+    height: 30px;
+}
