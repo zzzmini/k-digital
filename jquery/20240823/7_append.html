@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn_append">추가</button>
+    <p>안녕하세요</p>
+    <ul>
+        <li>첫번째 아이템</li>
+        <li>두번째 아이템</li>
+        <li>세번째 아이템</li>
+    </ul>
+    <button id="btn_item_append">아이템 추가</button>
+    <br>
+    <img src="./images/rose.JPG" alt="장미">
+    <button id="btn_img">이미지추가</button>
+
+
+    <script>
+        $(document).ready(function(){
+            $("#btn_append").on("click", function(){
+                $("p").append("Hi~~~~");
+            })
+        });
+        $(document).ready(function(){
+            $("#btn_item_append").on("click", function(){
+                $("ul")
+                    .append("<li>네번째 아이템</li>")
+                    .prepend("<li>영번째 아이템</li>");
+            })
+        });
+        $(document).ready(function(){
+            $("#btn_img").on("click", function(){
+                const leftImage = $("<img></img>")
+                    .attr("src", "./images/left.jpg");
+                const rightImage = $("<img></img>")
+                    .attr("src", "./images/right.jpg");         
+                $("img").before(leftImage)
+                        .after(rightImage);                               
+            })
+        });
+    </script>
+</body>
+</html>

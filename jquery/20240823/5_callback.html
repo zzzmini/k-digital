@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>    
+    <title>Document</title>
+</head>
+<body>
+    <button class="btn">CallBack</button>
+    <p>콜백 함수 테스트 페이지 입니다.</p>
+    <div class="chain">
+        <span>체이닝 연습</span>
+    </div>
+</body>
+<script>
+    // 버튼 누르면 p 태그 내용 hide()되고 
+    // alert('모두 사라짐') 출력하기
+    $(document).ready(function(){
+        $(".btn").on("click", function(){
+            $("p").hide('slow',function(){
+                // alert("모두 사라짐");
+            });
+            $(".chain")
+                .css("background-color", "red")
+                .slideUp(1000)
+                .slideDown(1000);
+        })
+    })
+</script>
+</html>

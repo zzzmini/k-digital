@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>내가 좋아하는 음식</h1>
+    <ul>
+        <li>계란말이</li>
+        <li>김치찌개</li>
+        <li>칼국수</li>
+    </ul>
+    <h1>내가 좋아하는 커피</h1>
+    <ul>
+        <li>아메리카노</li>
+        <li>카푸치노</li>
+        <li>카라멜 마끼아또</li>
+    </ul>
+    <button id="btn_1">눌러주세요</button>
+    <p></p>
+    <a href="www.daum.net" name="daum" title="타이틀">다음</a>
+    <a href="www.naver.com">네이버</a>
+    <button id="btn_2">네이버 찾기</button>
+<script>
+    $(document).ready(()=>{
+        $("#btn_1").click(()=>{
+            $("ul li:first-child")
+                .css("background-color", "gold")
+        });
+        $("#btn_2").click(()=>{
+            $("a[href!='www.naver.com']").css("background-color", "gold")
+        })
+    });
+</script>    
+</body>
+</html>

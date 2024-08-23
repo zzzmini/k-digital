@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>        
+    <title>Document</title>
+</head>
+<body>
+    <p id="message">
+        안녕하세요 아이브
+        <span id="name">안유진</span>
+        입니다.
+    </p>
+    <button id="btn_get">가져오기</button>
+    <button id="btn_change">이름바꾸기</button>
+    <p></p>
+    <input type="text" id="inputName" value="장원영">
+    <input type="hidden" id="hiddenValue">
+    <button id="getName">이름가져오기</button>
+    <br>
+    <p id="ive">아이브</p>
+    <button id="btn_ive">Setting</button>
+    <br>
+    <div class="girl_group">아이브</div>
+    <div class="girl_group">뉴진스</div>
+    <div class="girl_group">아일릿</div>
+    <button id="btn_girl_group">인사하기</button>
+    <p>
+
+    </p>
+    <a href="https://google.com" id="site">구글</a>
+    <input type="hidden" id="flag" value="g">
+    <button id="btn_site">네이버로 바꾸기</button>
+
+    <script>
+        //1. message 의 text 가져오기 - alert
+        //2. message 의 html 가져오기 - alert
+        //3. btn_change 버튼 만들고, 안유진->장원영으로
+        //바꾸기
+        //4. getName을 누르면 hidden에 값을 '홍길동'
+        // 설정하고 ... 얘를 콘솔에 출력
+        $(document).ready(function(){
+            $("#btn_get").on("click", function(){
+                alert($("#message").text());
+                alert($("#message").html());
+            })
+            $("#btn_change").on("click", function(){
+                // $("#name").text('장원영');
+                $("#name").html('<b>장원영</b>')
+            })
+            $("#getName").on("click", function(){
+                // alert($("#inputName").val());
+                let name = document.querySelector("#inputName").value;
+                alert(name);
+                $("#hiddenValue").val('홍길동');
+                console.log($("#hiddenValue").val());
+            })   
+            $("#btn_ive").on("click", function(){
+                $("#ive").text(function(i, originText){
+                    return i + " 안녕하세요" + originText + "입니다."
+                })
+            })        
+            $("#btn_girl_group").on("click", function(){
+                $(".girl_group").text(function(i, originText){
+                    return i + " 안녕하세요" + originText + "입니다."
+                })
+            })   
+            $("#btn_site").on("click", function(){
+                if($("#flag").val()=='g'){
+                    $("#site")
+                        .attr('href', 'https://www.naver.com')
+                        .text('Naver')
+                        .next()
+                        .val('n')
+                    // $("#flag").val('n');
+                    $(this).text('네이버')
+                } else {
+                    $("#site")
+                        .attr('href', 'https://www.google.com')
+                        .text('Google')
+                        .next
+                        .val('g')
+                    // $("#flag").val('g');
+                    $(this).text('구글')
+                }
+                
+            }) 
+        })
+    </script>
+</body>
+</html>
