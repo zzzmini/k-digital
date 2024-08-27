@@ -1,6 +1,7 @@
 export default[
     {
         cus_id : 1,
+        create_date : "2023-09-12",
         cus_name: "윤하나",
         jumin_id: "700110-1324561",
         email: "khg@gmail.com",
@@ -12,6 +13,7 @@ export default[
     },
     {
         cus_id : 2,
+        create_date : "2024-01-15",
         cus_name: "강해라",
         jumin_id: "780120-2324521",
         email: "kkka@naver.com",
@@ -23,6 +25,7 @@ export default[
     },
     {
         cus_id : 3,
+        create_date : "2024-02-16",
         cus_name: "나란다",
         jumin_id: "931125-1015261",
         email: "naranda@daum.net",
@@ -34,6 +37,7 @@ export default[
     },
     {
         cus_id : 4,
+        create_date : "2024-03-02",
         cus_name: "담나라",
         jumin_id: "000110-4324561",
         email: "nara@gmail.com",
@@ -45,6 +49,7 @@ export default[
     },
     {
         cus_id : 5,
+        create_date : "2024-08-02",
         cus_name: "라면다",
         jumin_id: "851027-1000561",
         email: "noodleok@naver.com",
@@ -56,6 +61,7 @@ export default[
     },        
     {
         cus_id : 6,
+        create_date : "2024-05-02",
         cus_name: "박석일",
         jumin_id: "791110-2233561",
         email: "packstone@daum.net",
@@ -67,6 +73,7 @@ export default[
     },    
     {
         cus_id : 7,
+        create_date : "2024-02-08",
         cus_name: "이성경",
         jumin_id: "030110-1324561",
         email: "leebible@yahoo.com",
@@ -78,6 +85,7 @@ export default[
     },    
     {
         cus_id : 8,
+        create_date : "2024-08-26",
         cus_name: "김임시",
         jumin_id: "123456-1234567",
         email: "izoin@naver.com",
