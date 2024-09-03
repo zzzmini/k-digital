@@ -1,0 +1,108 @@
+package vendingMachin_v01;
+
+import java.util.Scanner;
+
+public class VendingMachine {
+	static final int MAX = 5;
+
+	static String[] product = new String[MAX]; // 제품담는 배열
+	static int[] price = new int[MAX]; // 가격 담는 배열
+	static int[] stock = new int[MAX]; // 재고 수량 담는 배열
+
+	// 총 수입금액 변수
+	static int profit = 0;
+	static Scanner sc = new Scanner(System.in);
+	static int money = 0;
+	// 처음 시작 확인
+	static boolean first = true;
+	// 현재 상품 수
+	static int currentProductCount = 0;
+
+	private static void initialize() {
+		product[0] = "콜라";
+		price[0] = 500;
+		stock[0] = 3;
+		product[1] = "사이다";
+		price[1] = 700;
+		stock[1] = 3;
+		product[2] = "커피";
+		price[2] = 1500;
+		stock[2] = 3;
+	}
+
+	public static void main(String[] args) {
+		initialize();
+		user();
+		return;
+	}
+
+	private static void user() {
+		while (true) {
+			String menu = "";
+			for (int i = 0; i < product.length; i++) {
+				if (product[i] != null) {
+					menu = menu + (i + 1) + ":" + product[i] + "(" + price[i] + ")-" + stock[i] + "개 ";
+					currentProductCount++;
+				}
+			}
+
+			System.out.println("==================================================");
+			System.out.println("자판기입니다.(번호:상품(가격)-재고");
+			System.out.println(menu);
+			System.out.println("==================================================");
+			if (first == true) {
+				System.out.println("돈을 넣어주세요");
+				money = sc.nextInt();
+				System.out.println("현재 잔액은 " + money + "원 입니다.");
+				first = false;
+				continue;
+			}
+			int choice = sc.nextInt();
+
+			// 원하는 상품 잘못 선택 했다면...
+			if (choice < 0 || choice >= currentProductCount) {
+				System.out.println("잘못 입력했습니다.");
+				continue;
+			} else if (price[choice - 1] > money) {
+				System.out.println("잔액이 부족합니다!");
+				System.out.println("잔액:" + money);
+				buyContinue();
+				continue;
+			}
+			// 제품 출고
+			System.out.println(product[choice - 1] + "이(가) 나왔다!");
+			money = money - price[choice - 1];
+			stock[choice - 1] = stock[choice - 1] - 1;
+			System.out.println("잔액:" + money);
+			buyContinue();
+			
+		}
+	}
+
+	private static void buyContinue() {
+		while (true) {
+			System.out.println("1:계속구매하기 2:금액추가하기 3:잔돈반환하기");
+			int num = sc.nextInt();
+			switch (num) {
+			case 1:
+				return;
+			case 2:
+				System.out.println("돈을 넣어주세요");
+				int inputMoney = sc.nextInt();
+				money += inputMoney;
+				System.out.println("현재 잔액은 " + money + "원 입니다.");
+				first = false;
+				return;
+			case 3:
+				System.out.println("거스름 돈" + money + "원이 반환 됩니다.");
+				System.out.println("감사합니다! 다음에 또 이용해주세요!");
+				first = true;
+				return;
+			default:
+				
+			}
+		}
+	}
+	
+	
+}
