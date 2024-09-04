@@ -1,0 +1,53 @@
+> 테이블명 : entertainment
+> 필드
+e_id int 자동증가 primary key
+name varchar(100)
+
+SM  -  소녀시대(2), 카라(3), 에프터스쿨(10)
+JYP - 원더걸스(1), 2NE1(6), 포미닛(11)
+안테나 - 브라운아이드걸스(4), 레인보우(9)
+하이브 - 다비치(5), f(x) - (7), 시크릿(8)
+
+girl_group 테이블에 소속사 ID를 추가 : enter_id
+
+1. entertainment table 생성
+
+create table entertainment(
+    e_id int primary key auto_increment,
+    name varchar(100));
+
+2. entertainment table에 데이터 입력
+
+insert into entertainment (name) values('SM');
+insert into entertainment (name) values('JYP');
+insert into entertainment (name) values('안테나');
+insert into entertainment (name) values('하이브');
+
+3. girl_group table에 enter_id Column 추가하기
+
+alter table girl_group
+    add column enter_id int after hit_song_id;
+
+4. girl_group 테이블의 _id를 찾아, entertainment 테이블의
+   primary key와 enter_id를 연결하기(수정)
+
+update girl_group set enter_id=1 where g_id=2;
+update girl_group set enter_id=1 where g_id=3;
+update girl_group set enter_id=1 where g_id=10;
+update girl_group set enter_id=2 where g_id=1;
+update girl_group set enter_id=2 where g_id=6;
+update girl_group set enter_id=2 where g_id=11;
+update girl_group set enter_id=3 where g_id=4;
+update girl_group set enter_id=3 where g_id=9;
+update girl_group set enter_id=4 where g_id=5;
+update girl_group set enter_id=4 where g_id=7;
+update girl_group set enter_id=4 where g_id=8;
+
+5. 출력하기
+문제 1. 걸그룹아이디, 걸구룹이름, 소속사이름 출력
+select g.g_id, g.name as 걸그룹, e.name as 소속사 from girl_group as g
+    inner join entertainment e
+    on g.enter_id = e._id;
+
+문제 2. 회사이름, 그룹이름, 데뷔일, 노래제목 출력... (데뷔일에 대해서 내림차순)
+
