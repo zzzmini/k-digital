@@ -11,13 +11,32 @@ main class name : OOPEatingMain
  |- Pork : 한돈 돼지고기
  |- Beaf : 한우 소고기
 
-- 육식주의자(MeatEater)   - name, MeatEater() 생성자로...
+- 육식주의자(MeatEater) 클래스  
+▶ MeatEater Class : Meat 클래스를 Composition하는 클래스 
  |- Man1
  |- Man2
 
-- 채식주의자(Vegetarian)   - name, vegetableEat() 메서드로...
+- 채식주의자(Vegetarian)
+▶ Vegetarian Class : Fruit 클래스를 Composition하는 클래스 
  |- Woman1
  |- Woman2
+
+
+public class OOPEatingMain {
+    public static void main(String[] args) {
+        Fruit apple = new Apple();
+        Fruit mango = new Mango();
+        Vegetarian woman1 = new Vegetarian();
+        Vegetarian woman2 = new Vegetarian();
+        woman1.vegetableEat(apple);
+        woman2.vegetableEat(mango);
+        System.out.println("=================");
+        Meat pork = new Pork();
+        MeatEater man1 = new MeatEater(pork);
+        man1.meatEat();
+    }
+ }
+
 
 - 출력
  육식주의자가 한돈 돼지고기를 먹어요
