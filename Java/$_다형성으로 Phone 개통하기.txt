@@ -1,0 +1,86 @@
+휴대전화 개통하기
+package name : makePhone
+main class : PhoneMain
+
+1. 기본적으로 모든 폰이 갖고 있는 기능
+▶ PhoneInterface Class
+- call() : 전화걸기
+- message() : 메시지 보내기
+
+2. 폰은 다시 안드로이드 폰과 아이폰으로 나뉨.(OS 때문에...)
+
+▶ Phone Class
+- PhoneInterface를 구현한 abstract 클래스
+- os() : 운영체제 종류 표기
+- touch() : 터치기능유무
+- kakao() : 카카오톡 가능 여부
+
+3. Phone를 상속받는 IPhone과 AndroidPhone이 있음.
+- name() 
+-- 나는 아이폰
+-- 나는 안드로이드폰.
+그 외 os종류, 터치유무, 카카오 가능 여부 처리
+
+4. KT 통신사에서 개통가능 한 폰 종류는 세가지
+KT_Iphone : 기능 다 됨.
+KT_AndroidPhone : 기능 다 됨.
+KT_FolderPhone : 터치와 카카오톡 안됨.
+
+public class PhoneMain {
+	public static void main(String[] args) {
+		// KT 아이폰 구매 후 기능확인
+		IPhone ktIphone = new KT_Iphone();
+		ktIphone.name();
+		ktIphone.call();
+		ktIphone.message();
+		ktIphone.os();
+		ktIphone.touch();
+		ktIphone.kakao();
+		
+		System.out.println("==============");
+		// KT 안드로이드 폰 구매 후 기능확인
+		AndroidPhone ktAndroid = new KT_AndroidPhone();
+		ktAndroid.name();
+		ktAndroid.call();
+		ktAndroid.message();
+		ktAndroid.os();
+		ktAndroid.touch();
+		ktAndroid.kakao();
+		
+		
+		System.out.println("==============");
+		// KT 안드로이드 폴더폰 구매 후 기능확인
+		AndroidPhone ktFolder = new KT_FolderPhone();
+		ktFolder.name();
+		ktFolder.call();
+		ktFolder.message();
+		ktFolder.os();
+		ktFolder.touch();
+		ktFolder.kakao();
+	}	
+}
+
+출력결과
+
+KT에서 개통한 아이폰
+통화 무조건 됨.
+메시지 보내짐
+OS는 iOS
+당근 터치 됨.
+당근 카카오 됨.
+==============
+KT에서 개통한 안드로이드 폰
+통화 무조건 됨.
+메시지 보내짐
+OS는 Android
+터치 기능 있음.
+카톡 가능
+==============
+KT 안드로이드 폴더폰
+통화 무조건 됨.
+메시지 보내짐
+OS는 Android
+터치 안됨
+카톡 안됨
+
+==========================================================
