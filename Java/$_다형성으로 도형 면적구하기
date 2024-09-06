@@ -1,0 +1,55 @@
+문제> 추상클래스 및 인터페이스를 이용해서 여러 가지 도형의 넓이를 구합니다.
+
+▷ 조건은 아래와 같습니다.
+- package name : figureCalculator
+
+① 삼각형(Triangle), 사각형(Rectangle), 원(Circle)의 넓이를 구하는 프로그램을 작성하세요.
+  괄호안의 클래스로 생성
+
+② 인터페이스 구현 : FigureInterface 클래스
+  - 가로(width), 세로(height)의 값은 정수치이며 인터페이스로 값을 할당할 수 있도록 구현합니다.
+  - 단, 원(Circle) 클래스를 구현할 때 위의 내용은 처리하지 않습니다.
+
+public interface FigureInterface {
+    String getName();
+    void setWidth(int width);
+    void setHeight(int height);
+}
+
+③ 추상클래스 구현
+  - class name : Figure
+  - 모든 도형의 면적은 메서드를 사용하여 구해 지도록 
+  - abstract 메서드로 area() 를 추상클래스에서 추가로 정의합니다.
+  - 데이터 타입은 double을 사용합니다.
+
+④ 도형의 면적을 구한 후 출력하는 메서드는 static으로 작성하며,
+    결과와 같이 출력되도록 합니다.
+
+삼각형의 넓이는 25.0
+사각형의 넓이는 50.0
+원의 넓이는 78.53981633974483
+
+⑤ main 함수와 static Method 를 제공하니, 역으로 추적해서 
+  코딩하세요.
+
+public class FigureMain {
+  public static void calArea(Figure figure){
+        System.out.println(figure.getName() + "의 넓이는 " + figure.area());
+  }
+  public static void main(String[] args) {
+        Figure triangle = new Triangle();
+        triangle.setHeight(10);
+        triangle.setWidth(5);
+
+        Figure rectangle = new Rectangle();
+        rectangle.setWidth(10);
+        rectangle.setHeight(5);
+
+        Circle circle = new Circle();
+        circle.setRadius(5);
+
+        calArea(triangle);
+        calArea(rectangle);
+        calArea(circle);
+    }
+}
