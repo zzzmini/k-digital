@@ -1,32 +1,33 @@
 package telBookApp.view;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
 import telBookApp.dto.TelBookDto;
+import telBookApp.exception.InputValidation;
+import telBookApp.exception.MyException;
 import telBookApp.service.TelbookService;
 
 public class DisplayMenu {
 	TelbookService telbookService = new TelbookService();
+	InputValidation validation = new InputValidation();
+	
 	Scanner sc =  new Scanner(System.in);
 	
 	public void menuInput() {
 		System.out.println("데이터 입력 처리화면");
 		while(true) {
 			// 정보를 입력 받음.
-			System.out.println("이름 : ");
-			String name = sc.next();
+			// 이름 validation확인
+			String name = checkName();
 			
-			System.out.println("나이 : ");
-			int age = sc.nextInt();
+			int age = checkAge();
 			
 			System.out.println("주소 : ");
 			String address = sc.next();
 			
-			System.out.println("전화 : ");
-			String phone = sc.next();
+			String phone = checkPhone();
 			
 			// 입력 받은 정보를 TelBookDto에 담아서 서비스로 보냅니다.
 			telbookService.input(TelBookDto
@@ -35,9 +36,79 @@ public class DisplayMenu {
 		}
 	}
 
+	private int checkAge() {
+		boolean check = true;
+		int age = 0;
+		do {
+			try {
+				System.out.println("나이 : ");
+				age = sc.nextInt();
+				validation.ageCheck(age);
+				check = false;
+			} catch (MyException e) {
+				System.out.println(e.getMessage());
+			}
+		} while(check);
+		return age;
+	}
+
+	private String checkName() {
+		boolean checkName = true;
+		String name = "";
+		do {
+			try {
+				System.out.println("이름 : ");
+				name = sc.next();
+				validation.nameCheck(name);
+				checkName = false;
+			} catch (MyException e) {
+				System.out.println(e.getMessage());
+			}
+		} while(checkName);
+		return name;
+	}
+
+	private String checkPhone() {
+		boolean check = true;
+		String phone = "";
+		do {
+			try {
+				System.out.println("전화번호 : ");
+				phone = sc.next();
+				validation.nameCheck(phone);
+				check = false;
+			} catch (MyException e) {
+				System.out.println(e.getMessage());
+			}
+		} while(check);
+		return phone;
+	}
 	public void menuUpdate() {
 		System.out.println("데이터 수정 처리화면");
-		telbookService.update();
+		Long num = 0L;
+		while(true) {
+			System.out.println("수정할 아이디를 입력하세요");
+			num = sc.nextLong();
+			
+			TelBookDto dto = telbookService.searchId(num);
+			
+			menuFindById(dto);
+			
+			System.out.println("수정할 이름 : ");
+			String name = sc.next();
+			System.out.println("수정할 나이 : ");
+			int age = sc.nextInt();
+			System.out.println("수정할 주소 : ");
+			String address = sc.next();
+			System.out.println("수정할 전화번호 : ");
+			String phone = sc.next();
+			// DTO 생성해서 서비스로 넘기기
+			TelBookDto newDto = 
+					new TelBookDto(num, name, age, address, phone);
+			telbookService.update(newDto);			
+			return;
+		}
+
 	}
 
 	public void menuDelete() {
@@ -83,6 +154,10 @@ public class DisplayMenu {
 
 		TelBookDto dto = telbookService.searchId(searchId);
 		
+		menuFindById(dto);
+	}
+
+	private void menuFindById(TelBookDto dto) {
 		if(dto == null) {
 			System.out.println("검색 실패");
 		} else {

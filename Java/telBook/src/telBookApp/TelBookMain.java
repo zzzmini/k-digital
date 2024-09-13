@@ -35,11 +35,13 @@ public class TelBookMain {
 				menu.menuSearch();
 				break;
 			case 6:
+				DBConn.close();
 				return;
 			default:
 				System.out.println("잘못 입력했습니댜.");
 				break;
 			}
 		}
+		
 	}
 }

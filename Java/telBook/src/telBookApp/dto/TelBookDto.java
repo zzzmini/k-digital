@@ -12,7 +12,7 @@ public class TelBookDto {
 	// dto를 TelBook entity로 변환
 	public static TelBook fromDto(TelBookDto dto) {
 		return new TelBook(
-				null,
+				dto.getId(),
 				dto.getName(),
 				dto.getAge(),
 				dto.getAddress(),

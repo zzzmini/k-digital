@@ -47,8 +47,32 @@ public class TelBookDAO implements CrudInterface {
 
 	@Override
 	public int update(TelBook telBook) {
-		System.out.println("DAO update");
-		return 0;
+		int result = 0;
+		
+		Connection conn = DBConn.getConnection();
+		PreparedStatement psmt = null;
+		String sql = "UPDATE telbook " + 
+				"SET name = ?, " +
+				"age = ?, " +
+				"address = ?, " +
+				"phone = ? " +
+				"WHERE id = ?";
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, telBook.getName());
+			psmt.setInt(2, telBook.getAge());
+			psmt.setString(3, telBook.getAddress());
+			psmt.setString(4, telBook.getPhone());
+			psmt.setLong(5, telBook.getId());
+			
+			result =  psmt.executeUpdate();
+			psmt.close();
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return result;
 	}
 
 	@Override

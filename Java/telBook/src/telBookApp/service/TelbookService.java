@@ -23,9 +23,14 @@ public class TelbookService {
 		}
 	}
 
-	public void update() {
+	public void update(TelBookDto dto) {
 		System.out.println("데이터 수정 처리 서비스");
-		dao.update(null);
+		int result = dao.update(TelBookDto.fromDto(dto));
+		if(result > 0) {
+			System.out.println("수정 성공");
+		} else {
+			System.out.println("수정 실패");
+		}
 	}
 
 	public void delete(Long deleteId) {
