@@ -1,0 +1,83 @@
+package dto;
+
+import java.time.LocalDateTime;
+
+import common.CommonField;
+import entity.Article;
+
+public class ArticleDTO extends CommonField{
+	private Long id;
+	private String name;
+	private String title;
+	private String content;
+	
+	// Entity를 받아서 DTO로 변환
+	public static ArticleDTO fromEntity(Article article) {
+		ArticleDTO dto = new ArticleDTO();
+		dto.setId(article.getId());
+		dto.setName(article.getName());
+		dto.setTitle(article.getTitle());
+		dto.setInsertedDate(article.getInsertedDate());
+		return dto;
+	}
+	
+	
+	// DTO를 Entity로 변환(새글의 경우)
+	public static Article makeNewArticle(ArticleDTO dto) {
+		Article article = new Article();
+		article.setId(dto.getId());
+		article.setName(dto.getName());
+		article.setTitle(dto.getTitle());
+		article.setContent(dto.getContent());
+		article.setInsertedDate(LocalDateTime.now());
+	return article;
+}
+	
+	// 입력받은 자료를 DTO로 변환
+	public static ArticleDTO makeArticleDto
+		(Long id, String name, String title, String content) {
+		return new ArticleDTO(id, name, title, content);
+	}
+	
+	
+	public ArticleDTO() {}
+	
+	public ArticleDTO(Long id, String name, String title, String content) {
+		this.id = id;
+		this.name = name;
+		this.title = title;
+		this.content = content;
+	}
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	@Override
+	public String toString() {
+		return "Article [id=" + id + ", name=" + name + 
+				", title=" + title + ", content=" + content + 
+				", InsertDate=" + getInsertedDate() +  
+				", UpdateDate=" + getUpdatedDate() + "]";
+	}	
+}
