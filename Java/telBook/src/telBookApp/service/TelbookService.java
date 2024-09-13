@@ -54,13 +54,21 @@ public class TelbookService {
 
 	public TelBookDto searchId(Long id) {
 //		System.out.println("아이디 검색 처리화면 서비스");
-		TelBookDto dto = TelBookDto.fromEntity(dao.getOne(id));
-		if(dto == null) {
+		TelBook book = dao.getOne(id);
+		if(book == null) {
 			System.out.println("자료 없음");
 			return null;
 		} else {
-		return  dto;
+		return  TelBookDto.fromEntity(dao.getOne(id));
 		}
+	}
+
+	public List<TelBookDto> searchKeyword(int num, String keyword) {
+		List<TelBook> telBooks = dao.searchKeyword(num, keyword);
+		return telBooks
+					.stream()
+					.map(x -> TelBookDto.fromEntity(x))
+					.toList();
 	}
 }
 

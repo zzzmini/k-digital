@@ -15,4 +15,5 @@ public interface CrudInterface {
 	List<TelBook> getListAll();
 	// 단일레코드 검색
 	TelBook getOne(Long id);
+	List<TelBook> searchKeyword(int num, String keyword);
 }

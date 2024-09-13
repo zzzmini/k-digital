@@ -16,7 +16,7 @@ public class TelBookMain {
 		DisplayMenu menu = new DisplayMenu();
 		int num;
 		while (true) {
-			System.out.println("1. 입력 2. 수정 3. 삭제 4. 전체출력 5. 아이디검색 6. 종료");
+			System.out.println("1. 입력 2. 수정 3. 삭제 4. 전체출력 5. 검색 6. 종료");
 			num = sc.nextInt();
 			switch (num) {
 			case 1:
@@ -32,7 +32,7 @@ public class TelBookMain {
 				menu.menuShowAll();
 				break;
 			case 5:
-				menu.menuSearchId();
+				menu.menuSearch();
 				break;
 			case 6:
 				return;
