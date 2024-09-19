@@ -30,19 +30,33 @@ public class ArticleRepository implements CRUDInterface{
 
 	@Override
 	public int deleteById(Long id) {
-		// TODO Auto-generated method stub
+		for(Article article : articles) {
+			if(article.getId() == id) {
+				if(articles.remove(article)) return 1;
+			}
+		}
 		return 0;
 	}
 
 	@Override
 	public int updateById(Article article) {
-		// TODO Auto-generated method stub
-		return 0;
+		int updateIndex = 0;
+		for(Article target : articles) {
+			if(target.getId() == article.getId()) {
+				updateIndex = articles.indexOf(target);
+			}
+		}
+		articles.set(updateIndex, article);
+		return 1;
 	}
 
 	@Override
 	public Article findById(Long id) {
-		// TODO Auto-generated method stub
+		for(Article article : articles) {
+			if(article.getId() == id) {
+				return article;
+			}
+		}
 		return null;
 	}
 	

@@ -2,13 +2,15 @@ package service;
 
 import java.util.List;
 
+import crudInterface.CRUDInterface;
+import dao.ArticleDAO;
 import dto.ArticleDTO;
 import entity.Article;
-import repository.ArticleRepository;
 
 public class ArticleService implements ServiceInterface{
 	
-	ArticleRepository articleRepository = new ArticleRepository();
+//	CRUDInterface articleRepository = new ArticleRepository();
+	CRUDInterface articleRepository = new ArticleDAO();
 	
 	@Override
 	public List<ArticleDTO> findAll() {
@@ -32,20 +34,17 @@ public class ArticleService implements ServiceInterface{
 
 	@Override
 	public Article findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return articleRepository.findById(id);
 	}
 
 	@Override
 	public int delete(Long id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return articleRepository.deleteById(id);
 	}
 
 	@Override
 	public int update(Article article) {
-		// TODO Auto-generated method stub
-		return 0;
+		return articleRepository.updateById(article);
 	}
 
 }

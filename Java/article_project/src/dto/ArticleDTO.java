@@ -17,7 +17,13 @@ public class ArticleDTO extends CommonField{
 		dto.setId(article.getId());
 		dto.setName(article.getName());
 		dto.setTitle(article.getTitle());
+		dto.setContent(article.getContent());
 		dto.setInsertedDate(article.getInsertedDate());
+		if(article.getUpdatedDate()!=null) {
+			dto.setUpdatedDate(article.getUpdatedDate());
+		} else {
+			dto.setUpdatedDate(null);
+		}
 		return dto;
 	}
 	
@@ -29,7 +35,17 @@ public class ArticleDTO extends CommonField{
 		article.setName(dto.getName());
 		article.setTitle(dto.getTitle());
 		article.setContent(dto.getContent());
-		article.setInsertedDate(LocalDateTime.now());
+		if(dto.getInsertedDate() == null) {
+			article.setInsertedDate(LocalDateTime.now());
+		} else {
+			article.setInsertedDate(dto.getInsertedDate());
+		}
+		
+		if(dto.getUpdatedDate()!=null) {
+			article.setUpdatedDate(dto.getUpdatedDate());
+		} else {
+			article.setUpdatedDate(null);
+		}
 	return article;
 }
 	

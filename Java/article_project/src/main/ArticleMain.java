@@ -23,13 +23,13 @@ public class ArticleMain {
 				articleView.showNewArticle();
 				break;
 			case 2 :
-				// 자세히 보기
+				articleView.showDetail();
 				break;
 			case 3 :
-				// 게시글 삭제하기
+				articleView.showDelete();
 				break;
 			case 4 :
-				// 글 수정하기(제목과 내용만...)
+				articleView.showUpdate();
 				break;
 			case 5 :
 				// 종료하기

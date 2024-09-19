@@ -1,5 +1,6 @@
 package view;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
@@ -81,20 +82,64 @@ public class ArticleView implements ViewInterface{
 
 	@Override
 	public void showDetail() {
-		// TODO Auto-generated method stub
+		System.out.println("게시글 상세보기 패이지");
+		System.out.println("상세보기 아이디 입력 : ");
+		Long id = sc.nextLong();
 		
+		ArticleDTO dto = ArticleDTO.fromEntity(articleService.findById(id)) ;
+		viewDetail(dto);
+	}
+
+	private void viewDetail(ArticleDTO dto) {
+		System.out.println("✨ id : " + dto.getId());
+		System.out.println("✨ name : " + dto.getName());
+		System.out.println("✨ title : " + dto.getTitle());
+		System.out.println("✨ content : " + dto.getContent());
+		System.out.println("✨ createdDate : " + dto.getInsertedDate()
+									.format(DateTimeFormatter
+									.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		if(dto.getUpdatedDate() != null) {
+			System.out.println("✨ updatedDate : " + dto.getUpdatedDate()
+			.format(DateTimeFormatter
+			.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		}
 	}
 
 	@Override
 	public void showDelete() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("게시글 삭제 페이지");
+		System.out.println("삭제할 ID를 입력하세요");
+		Long id = sc.nextLong();
+		int result = articleService.delete(id);
+		if(result > 0) {
+			System.out.println("정상적으로 삭제되었습니다.");
+		} else {
+			System.out.println("삭제에 실패하였습니다.");
+		}
 	}
 
 	@Override
 	public void showUpdate() {
-		// TODO Auto-generated method stub
+		System.out.println("게시글 수정 페이지");
+		System.out.println("수정할 게시글 ID 입력");
+		Long id = sc.nextLong();
+		ArticleDTO dto = ArticleDTO.fromEntity(articleService.findById(id)) ;
+		viewDetail(dto);
+		System.out.println("수정할 제목 : ");
+		String updateTitle = sc.next();
+		System.out.println("수정할 내용 : ");
+		String updateContent = sc.next();
 		
+		ArticleDTO updateDto = new ArticleDTO();
+		updateDto.setId(id);
+		updateDto.setName(dto.getName());
+		updateDto.setTitle(updateTitle);
+		updateDto.setContent(updateContent);
+		updateDto.setInsertedDate(dto.getInsertedDate());
+		updateDto.setUpdatedDate(LocalDateTime.now());
+		int result = articleService
+				.update(ArticleDTO.makeNewArticle(updateDto));
+		System.out.println("수정 완료");
 	}
 
 }
