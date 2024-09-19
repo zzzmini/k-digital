@@ -1,0 +1,38 @@
+1. 게시글전체 보기
+-- 댓글까지 출력
+2. 댓글 입력
+-- 게시글 상세보기
+---- 게시글이 갖고 있는 댓글 리스트 출력
+ⓐ 댓글 추가 ⓑ 댓글 삭제  ⓒ 댓글 수정
+
+3. 댓글 처리 추가함수
+
+private List<Article> getArticleComments(List<Article> articles) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+=========================
+ID      작성자         제목         작성일
+----------------------------------------------
+3	안유진	내글	2024-09-19 14:00:00
+      ☞  2   김형민    안유진의 댓글
+      ☞  1   홍길동    내일은 불금..
+2	장원영	수정글	2024-09-19 12:55:46
+=========================
+
+3. Comment CRUD 처리는 CommentService 를 만들어서 처리
+4. CRUD 인터페이스에 추가
+	public void insertComment(Comment comment);
+	// 댓글 수정
+	public void updateComment(Comment comment);
+	// 댓글 삭제
+	public void deleteComment(Long commentId);
+
+
+
+
+
+
+
