@@ -9,10 +9,12 @@ import dto.ArticleDTO;
 import dto.CommentDTO;
 import repository.ArticleRepository;
 import service.ArticleService;
+import service.CommentService;
 
 public class ArticleView implements ViewInterface{
 	public Scanner sc = new Scanner(System.in);
 	public ArticleService articleService = new ArticleService();
+	public CommentService commentService = new CommentService();
 	
 	@Override
 	public void showAll() {
@@ -107,6 +109,73 @@ public class ArticleView implements ViewInterface{
 			System.out.println("✨ updatedDate : " + dto.getUpdatedDate()
 			.format(DateTimeFormatter
 			.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		}
+		
+		showArticleCommentsMenu(dto);
+	}
+
+	private void showArticleCommentsMenu(ArticleDTO dto) {
+		System.out.println("◈◈◈  댓글 리스트  ◈◈◈");
+		if(dto.getCommentLists().size() == 0) {
+			System.out.println("해당 게시글의 댓글은 없습니다.");
+		} else {
+			for(CommentDTO comment : dto.getCommentLists()) {
+				System.out.println(comment);
+			}
+		}
+		
+		// 댓글관련 메뉴 보이기
+		
+		while(true) {
+			System.out.println("1. 댓글입력 2. 댓글수정 3. 댓글삭제 4. 돌아가기");
+			int num = sc.nextInt();
+			switch(num) {
+			case 1 : 
+				System.out.println("새로운 댓글을 추가합니다.");
+				System.out.println("댓글 작성자 : ");
+				String name = sc.next();
+				System.out.println("댓글 내용 : ");
+				String content = sc.next();
+				CommentDTO comment = new CommentDTO(
+						null,
+						dto.getId(),
+						name,
+						content,
+						LocalDateTime.now(),
+						null
+						);
+				commentService.addComment(comment);
+				break;
+			case 2 : 
+				System.out.println("댓글을 수정합니다.");
+				System.out.println("수정할 댓글 번호 입력 : ");
+				Long updateNum = sc.nextLong();
+				System.out.println("수정할 댓글 내용 : ");
+				String updateContent = sc.next();
+				
+				// 수정 내용 입력받아서 DTO 저장
+				CommentDTO updateComment = new CommentDTO(
+						updateNum,
+						dto.getId(),
+						"",
+						updateContent,
+						null,
+						LocalDateTime.now()
+						);
+				commentService.updateComment(updateComment);
+				break;
+			case 3 : 
+				System.out.println("댓글을 삭제합니다.");
+				System.out.println("삭제할 댓글 번호 입력 : ");
+				Long deleteNum = sc.nextLong();
+				commentService.deleteComment(deleteNum);
+				break;
+			case 4 : 
+				return;
+			default :
+				System.out.println("잘못 입력했습니다.");
+				break;
+			}
 		}
 	}
 

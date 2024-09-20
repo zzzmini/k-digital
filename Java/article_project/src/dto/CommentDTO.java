@@ -30,7 +30,19 @@ public class CommentDTO extends CommonField{
 				comment.getInsertedDate(),
 				comment.getUpdatedDate()
 				);
-				
+	}
+	
+	public static Comment fromDTO(CommentDTO dto) {
+		Comment comment = new Comment();
+		comment.setComment_id(dto.comment_id);
+		comment.setArticle_id(dto.article_id);
+		comment.setC_name(dto.c_name);
+		comment.setC_content(dto.c_content);
+		comment.setInsertedDate(dto.getInsertedDate());
+		if(dto.getUpdatedDate() != null) {
+			comment.setUpdatedDate(dto.getUpdatedDate());
+		}
+		return comment;
 	}
 	
 	public CommentDTO(Long comment_id, Long article_id, 

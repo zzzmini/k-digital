@@ -180,7 +180,9 @@ public class ArticleDAO implements CRUDInterface{
 					article.setUpdatedDate(null);
 				}
 			    
-			    return article;
+				// 찾은 게시글의 댓글을 불러와서 리스트에 저장
+				
+			    return getComments(article);
 			}
 			rs.close();
 			psmt.close();
@@ -191,22 +193,94 @@ public class ArticleDAO implements CRUDInterface{
 		return null;
 	}
 
+	private Article getComments(Article article) {
+		Connection conn = DBConn.getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * FROM comments WHERE article_id = ?";
+		
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setLong(1, article.getId());
+			
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				Comment comment = new Comment();
+				comment.setComment_id(rs.getLong("comment_id"));
+				comment.setArticle_id(rs.getLong("article_id"));
+				comment.setC_name(rs.getString("c_name"));
+				comment.setC_content(rs.getString("c_content"));
+				article.getCommentLists().add(comment);
+			}
+			rs.close();
+			psmt.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return article;
+	}
+
 	@Override
 	public void insertComment(Comment comment) {
-		// TODO Auto-generated method stub
-		
+		Connection conn = DBConn.getConnection();
+		PreparedStatement psmt = null;
+		String sql = "INSERT INTO comments"
+				+ "(article_id, c_name, c_content, inserted_date)"
+				+ "VALUES(?,?,?,?)";
+		try {
+			psmt =conn.prepareStatement(sql);
+			psmt.setLong(1, comment.getArticle_id());
+			psmt.setString(2 , comment.getC_name());
+			psmt.setString(3, comment.getC_content());
+			psmt.setTimestamp(4, Timestamp.valueOf(comment.getInsertedDate()));
+			
+			psmt.executeUpdate();
+			psmt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void updateComment(Comment comment) {
-		// TODO Auto-generated method stub
+		Connection conn = DBConn.getConnection();
+		PreparedStatement psmt = null;
 		
+		String sql = "UPDATE comments SET " +
+							"c_content = ?, updated_date = ? WHERE comment_id = ?";
+		
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, comment.getC_content());
+			psmt.setTimestamp(2, Timestamp.valueOf(comment.getUpdatedDate()));
+			psmt.setLong(3, comment.getComment_id());
+			
+			psmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	@Override
 	public void deleteComment(Long commentId) {
-		// TODO Auto-generated method stub
-		
+		Connection conn = DBConn.getConnection();
+		PreparedStatement psmt = null;
+		String sql = "DELETE FROM comments WHERE comment_id = ?";
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setLong(1, commentId);
+			
+			psmt.executeUpdate();
+			psmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
