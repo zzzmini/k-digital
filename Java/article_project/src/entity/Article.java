@@ -1,5 +1,8 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import common.CommonField;
 
 public class Article extends CommonField{
@@ -7,6 +10,15 @@ public class Article extends CommonField{
 	private String name;
 	private String title;
 	private String content;
+	
+	private List<Comment> commentLists = new ArrayList<Comment>();
+	
+	public List<Comment> getCommentLists() {
+		return commentLists;
+	}
+	public void setCommentLists(List<Comment> commentLists) {
+		this.commentLists = commentLists;
+	}
 	
 	public Long getId() {
 		return id;

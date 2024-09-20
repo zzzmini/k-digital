@@ -5,6 +5,7 @@ import java.util.List;
 
 import crudInterface.CRUDInterface;
 import entity.Article;
+import entity.Comment;
 
 public class ArticleRepository implements CRUDInterface{
 	// 게시글의 자동생성 아이디 역할
@@ -58,6 +59,24 @@ public class ArticleRepository implements CRUDInterface{
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void insertComment(Comment comment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateComment(Comment comment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteComment(Long commentId) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

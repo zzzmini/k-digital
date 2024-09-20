@@ -12,6 +12,7 @@ import java.util.List;
 import crudInterface.CRUDInterface;
 import db.DBConn;
 import entity.Article;
+import entity.Comment;
 
 public class ArticleDAO implements CRUDInterface{
 
@@ -49,6 +50,42 @@ public class ArticleDAO implements CRUDInterface{
 			psmt.close();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		}
+		// 가져온 게시글의 댓글들을 각 article commentList에 담아오는 루틴
+		return getArticleComments(articles);
+//		return articles;
+	}
+
+	private List<Article> getArticleComments(List<Article> articles) {
+		// for 루프를 돌면서 article의 id로 게시글의 댓글을 찾는다.
+		// 찾은 댓글을 article의 댓글 리스트에 담는다.
+		Connection conn = DBConn.getConnection();
+		
+		for(Article article : articles) {
+			PreparedStatement psmt = null;
+			ResultSet rs = null;
+			
+			String sql = "SELECT * FROM comments WHERE article_id = ?";
+			
+			try {
+				psmt = conn.prepareStatement(sql);
+				psmt.setLong(1, article.getId());
+				
+				rs = psmt.executeQuery();
+				
+				while(rs.next()) {
+					Comment comment = new Comment();
+					comment.setComment_id(rs.getLong("comment_id"));
+					comment.setArticle_id(rs.getLong("article_id"));
+					comment.setC_name(rs.getString("c_name"));
+					comment.setC_content(rs.getString("c_content"));
+					article.getCommentLists().add(comment);
+				}
+				rs.close();
+				psmt.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		return articles;
 	}
@@ -152,6 +189,24 @@ public class ArticleDAO implements CRUDInterface{
 			System.out.println(e.getMessage());
 		}
 		return null;
+	}
+
+	@Override
+	public void insertComment(Comment comment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateComment(Comment comment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteComment(Long commentId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

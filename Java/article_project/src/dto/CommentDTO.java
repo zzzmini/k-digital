@@ -3,6 +3,7 @@ package dto;
 import java.time.LocalDateTime;
 
 import common.CommonField;
+import entity.Comment;
 
 public class CommentDTO extends CommonField{
 	private Long comment_id;
@@ -10,8 +11,27 @@ public class CommentDTO extends CommonField{
 	private String c_name;
 	private String c_content;
 	
+	
+	
+	
+	@Override
+	public String toString() {
+		return "\t 🎃" + comment_id + "\t" + c_name + "\t" + c_content;
+	}
+
 	public CommentDTO() {}
 	
+	public static CommentDTO fromComment(Comment comment) {
+		return new CommentDTO(
+				comment.getComment_id(),
+				comment.getArticle_id(),
+				comment.getC_name(),
+				comment.getC_content(),
+				comment.getInsertedDate(),
+				comment.getUpdatedDate()
+				);
+				
+	}
 	
 	public CommentDTO(Long comment_id, Long article_id, 
 			String c_name, String c_content, LocalDateTime insertedDate,

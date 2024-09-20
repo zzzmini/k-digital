@@ -1,9 +1,12 @@
 package dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import common.CommonField;
 import entity.Article;
+import entity.Comment;
 
 public class ArticleDTO extends CommonField{
 	private Long id;
@@ -11,6 +14,20 @@ public class ArticleDTO extends CommonField{
 	private String title;
 	private String content;
 	
+	private List<CommentDTO> commentLists 
+					= new ArrayList<CommentDTO>();
+	
+	
+	public List<CommentDTO> getCommentLists() {
+		return commentLists;
+	}
+
+
+	public void setCommentLists(List<CommentDTO> commentLists) {
+		this.commentLists = commentLists;
+	}
+
+
 	// Entity를 받아서 DTO로 변환
 	public static ArticleDTO fromEntity(Article article) {
 		ArticleDTO dto = new ArticleDTO();
@@ -24,6 +41,12 @@ public class ArticleDTO extends CommonField{
 		} else {
 			dto.setUpdatedDate(null);
 		}
+		
+		dto.commentLists = article.getCommentLists()
+										.stream()
+										.map(x -> CommentDTO.fromComment(x))
+										.toList();
+		
 		return dto;
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import dto.ArticleDTO;
+import dto.CommentDTO;
 import repository.ArticleRepository;
 import service.ArticleService;
 
@@ -32,6 +33,10 @@ public class ArticleView implements ViewInterface{
 									dto.getName() + "\t" +
 									dto.getTitle() + "\t" +
 									insertDate);  
+				// 해당 게시글의 댓글을 출력하는 부분
+				for(CommentDTO comment : dto.getCommentLists()) {
+					System.out.println(comment);
+				}
 			}	
 		}
 		
