@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>if, unless</h1>
+  <table border="1">
+    <tr>
+      <th>No</th>
+      <th>name</th>
+      <th>age</th>
+      <th>미성년유무</th>
+    </tr>
+    <tr th:each="user, x : ${userList}" th:object="${user}">
+      <td th:text="${x.count}"></td>
+      <td th:text="*{name}"></td>
+      <td th:text="*{age}"></td>
+      <td>
+        <span  th:if="*{age < 20}"
+                th:text="|미 성년자 현재 나이는 *{age}|"></span>
+<!--        <span  th:unless="*{age >= 20}" th:text="미성년자"></span>-->
+      </td>
+    </tr>
+  </table>
+  <h1>switch</h1>
+  <table border="1">
+    <tr>
+      <th>No</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Generation</th>
+    </tr>
+    <tr th:each="x, y : ${userList}">
+      <td>[[ ${y.count} ]]</td>
+      <td>[[ ${x.name} ]]</td>
+      <td>[[ ${x.age} ]]</td>
+      <td th:switch="${x.age/10}">
+        <span th:case="1">10대</span>
+        <span th:case="2">20대</span>
+        <span th:case="3">30대</span>
+        <span th:case="*">모름</span>
+      </td>
+    </tr>
+  </table>
+  <h1>thymeleaf Block 요소</h1>
+  <th:block th:each="user : ${userList}" th:object="${user}">
+    <div >
+      멤버이름 : <span th:text="*{name}"></span>
+      , 멤버나이 : <span th:text="*{age}"></span>
+    </div>
+  </th:block>
+  
+  <div th:each="user : ${userList}" th:object="${user}">
+    멤버이름 : <span th:text="*{name}"></span>
+    , 멤버나이 : <span th:text="*{age}"></span>
+  </div>
+</body>
+</html>
+
+
+
+
+
+

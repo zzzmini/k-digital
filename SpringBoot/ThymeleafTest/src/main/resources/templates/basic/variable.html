@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Spring EL(Expression Language) 표현식</h1>
+    <ul>
+        Object
+        <li>${kim.name} = <span th:text="${kim.name}"></span></li>
+        <li>${kim.age} = <span th:text="${kim.age}"></span></li>
+        <li>${kim.getName()} = <span th:text="${kim.getName()}">
+        </span></li>
+    </ul>
+    <ul>List
+        <li>${userList[1].name} =
+            <span th:text="${userList[1].name}"></span></li>
+        <li>${userList[1].age} =
+            <span th:text="${userList[1].age}"></span></li>
+    </ul>
+    <ul>Map
+        <li>${userMap['kim'].name} =
+            <span th:text="${userMap['kim'].name}"></span></li>
+        <li>${userMap['kim'].age} =
+            <span th:text="${userMap['kim'].age}"></span></li>
+    </ul>
+    <!-- 변수 선언방법 -->
+    <div th:with="item=${kim}">
+        <ul>
+            <li>이름 : <span th:text="${item.name}"></span></li>
+            <li>나이 : [[ ${item.age} ]]</li>
+        </ul>
+    </div>
+</body>
+</html>

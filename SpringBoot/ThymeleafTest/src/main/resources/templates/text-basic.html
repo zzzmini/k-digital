@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>나는 text-basic.html 파일입니다.</h1>
+    <h3>가져온 Model 데이터는 [[ ${data} ]] 입니다.</h3>
+    <ul>
+        <li> 이름 : <span th:text="${name}">안녕</span></li>
+        <li> 나이 : <span th:text="${age}">안녕</span></li>
+    </ul>
+</body>
+</html>

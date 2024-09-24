@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>URL 링크</h1>
+  <ul>
+    <li><a href="/linkTest">1. basic url</a></li>
+    <li><a th:href="@{/linkTest}">2. thymeleaf basic url</a></li>
+    <li><a th:href="@{/linkTest(pName=${name},
+                                    pAge=${age})}">
+          3. Query Param</a></li>
+    <li><a th:href="@{/linkTest/{name}/{age}(name=${name},
+                                  age=${age})}">
+      4. Path Variable</a></li>
+    <li><a th:href="@{/linkTest/{name}(name=${name}, age=${age})}">
+        5. Path Variable + Query Parameter</a></li>
+  </ul>
+</body>
+</html>
