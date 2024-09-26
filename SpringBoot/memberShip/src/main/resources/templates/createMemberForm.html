@@ -9,9 +9,12 @@
       <div>
         <label for="name">이름</label>
         <input type="text" name="name"
-                placeholder="이름을 입력하세요">
+                placeholder="이름을 입력하세요" required>
       </div>
       <button type="submit">등록</button>
+    <div>
+        <span th:text="${msg}"></span>
+    </div>
     </form>
 </body>
 </html>

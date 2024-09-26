@@ -10,9 +10,9 @@
       <th>ID</th>
       <th>이름</th>
     </tr>
-    <tr>
-      <td>1</td>
-      <td>김형민</td>
+    <tr th:each="member : ${members}" th:object="${member}">
+      <td th:text="*{id}">1</td>
+      <td th:text="*{name}">김형민</td>
     </tr>
   </table>
   <a href="/">돌아가기</a>

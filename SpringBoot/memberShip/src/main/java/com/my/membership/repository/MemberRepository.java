@@ -11,4 +11,10 @@ public interface MemberRepository {
 
     Optional<Member> findByName(String name);
     List<Member> findAll();
+
+    // 삭제
+    Long deleteById(Long id);
+
+    // 수정
+    Long updateById(Long id, Member member);
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,5 +89,34 @@ class MemberRepositoryImplTest {
         List<Member> members = repository.findAll();
         // Then
         assertThat(members.size()).isEqualTo(2);
+    }
+
+    @Test
+    void 삭제테스트() {
+        // Given
+        Member member = new Member();
+        member.setName("장원영");
+        repository.save(member);
+        // When
+        Long deleteId = 1L;
+        repository.deleteById(deleteId);
+        // Then
+        Member result = repository.findById(deleteId).orElse(null);
+        assertThat(result).isEqualTo(null);
+    }
+    @Test
+    void 수정테스트() {
+        // Given
+        Member member = new Member();
+        member.setName("장원영");
+        repository.save(member);
+        // When(1번 아이디 수정)
+        Member updateMember = new Member();
+        updateMember.setId(1L);
+        updateMember.setName("안유진");
+        repository.updateById(1L, updateMember);
+        // Then
+        Member result = repository.findById(1L).orElse(null);
+        assertThat(result.getName()).isEqualTo("안유진");
     }
 }

@@ -4,12 +4,14 @@ import com.my.membership.dto.Member;
 import com.my.membership.repository.MemberRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class MemberService {
     // MemberRepsotoryImpl 여기서 정의한 메서드를 이용

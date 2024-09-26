@@ -1,6 +1,7 @@
 package com.my.membership.repository;
 
 import com.my.membership.dto.Member;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 
@@ -32,6 +33,26 @@ public class MemberRepositoryImpl implements MemberRepository{
     @Override
     public List<Member> findAll() {
         return new ArrayList<>(store.values());
+    }
+
+    @Override
+    public Long deleteById(Long id) {
+        Member member = store.remove(id);
+        if(ObjectUtils.isEmpty(member)){
+            return 0L;
+        } else {
+            return 1L;
+        }
+    }
+
+    @Override
+    public Long updateById(Long id, Member member) {
+        Member result = store.put(id, member);
+        if(ObjectUtils.isEmpty(result)){
+            return 0L;
+        } else {
+            return 1L;
+        }
     }
 
     public void clearStore() {
