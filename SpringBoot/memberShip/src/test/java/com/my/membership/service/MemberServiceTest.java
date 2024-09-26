@@ -81,4 +81,33 @@ class MemberServiceTest {
         assertThat(result.get().getName())
                 .isEqualTo("장원영");
     }
+
+    @Test
+    void 아이디로삭제하기() {
+        // Given
+        Member member = new Member();
+        member.setName("장원영");
+        service.join(member);
+        // When
+        Long deleteId = 1L;
+        Long result = service.delete(deleteId);
+        // Then
+        assertThat(result).isEqualTo(0L);
+    }
+
+    @Test
+    void 수정하기() {
+        // Given
+        Member member = new Member();
+        member.setName("장원영");
+        service.join(member);
+        // When
+        Member updateMember = new Member();
+        updateMember.setId(1L);
+        updateMember.setName("안유진");
+        service.update(1L, updateMember);
+        // Then
+        Member result = service.findOne(1L).get();
+        assertThat(result.getName()).isEqualTo("안유진");
+    }
 }

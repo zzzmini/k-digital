@@ -48,4 +48,14 @@ public class MemberService {
             return 0L;
         }
     }
+
+    // 수정
+    public Long update(Long id, Member member) {
+        return repository.updateById(id, member);
+    }
+
+    // 삭제
+    public Long delete(Long id) {
+        return repository.deleteById(id);
+    }
 }

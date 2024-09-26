@@ -39,9 +39,9 @@ public class MemberRepositoryImpl implements MemberRepository{
     public Long deleteById(Long id) {
         Member member = store.remove(id);
         if(ObjectUtils.isEmpty(member)){
-            return 0L;
-        } else {
             return 1L;
+        } else {
+            return 0L;
         }
     }
 
