@@ -24,12 +24,20 @@
         <td th:text="*{age}">22</td>
         <td th:text="*{address}">모름</td>
         <td>
-          <form>
-            <input type="submit" value="수정">
-          </form>
+          <a th:href="@{/member/update(id=*{id})}">
+            <input type="button" value="수정">
+          </a>
+<!--          <form>-->
+<!--            <input type="submit" value="수정">-->
+<!--          </form>-->
         </td>
         <td>
-          <form>
+<!--          <form th:action="@{member/delete/{id}(id=*{id})}" method="post">-->
+<!--          <form action="" method="get">-->
+<!--            <a th:href="@{/member/delete(id=*{id})}">-->
+<!--                <input type="button" value="삭제"></a>-->
+          <form th:action="@{member/delete}" method="post">
+            <input type="hidden" name="id" th:value="*{id}">
             <input type="submit" value="삭제">
           </form>
         </td>

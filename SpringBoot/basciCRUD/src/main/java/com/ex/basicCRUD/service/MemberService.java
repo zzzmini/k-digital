@@ -19,4 +19,17 @@ public class MemberService {
                 .map(entity -> MemberDTO.fromEntity(entity))
                 .toList();
     }
+
+    public void saveMember(MemberDTO dto) {
+        memberRepository.save(MemberDTO.fromDTO(dto));
+    }
+
+    public void deleteMember(Long id) {
+        memberRepository.deleteById(id);
+    }
+
+    public MemberDTO findById(Long id) {
+        Member member = memberRepository.findById(id).get();
+        return MemberDTO.fromEntity(member);
+    }
 }
