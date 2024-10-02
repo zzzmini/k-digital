@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymelead.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 목록</title>
+</head>
+<body align="center">
+    <h1>회원 목록</h1>
+    <table border="1" align="center">
+        <thead>
+            <tr>
+                <td>NO</td>
+                <td>ID</td>
+                <td>pw</td>
+                <td>인증상태</td>
+                <td>가입일</td>
+                <td>수정일</td>
+                <td>정답횟수</td>
+                <td>오답횟수</td>
+                <td>삭제</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="dto : ${members}" th:object="${dto}">
+                <td th:text="*{no}"></td>
+                <td th:text="*{id}"></td>
+                <td th:text="*{password}"></td>
+                <td th:if="*{status == true}">
+                    인증완료
+                </td>
+                <td th:unless="*{status == true}">
+                    <a th:href="@{/member/certify(no=*{no},status=*{status})}">인증하기</a><br>
+                </td>
+                <td th:text="*{#temporals.format(insertedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="*{#temporals.format(updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="*{answerTrue}"></td>
+                <td th:text="*{answerFalse}"></td>
+                <td th:if="*{status == true}">
+                    <a th:href="@{/member/certify(no=*{no},status=*{status})}">인증삭제</a><br>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p></p>
+    <a th:href="@{/quiz}">퀴즈 목록</a><br>
+</body>
+</html>
