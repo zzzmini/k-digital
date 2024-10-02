@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원관리 : 수정</title>
+</head>
+<body>
+<ul>
+    <h1>회원 정보 수정</h1>
+</ul>
+<form th:action="@{/member/update}" method="post" th:object="${memberDto}">
+    <input type="hidden" th:value="*{no}" name="no">
+    <div>
+        <ul>
+            <label for="memberId">ID : </label>
+            <input type="text" name="memberId" id="memberId" th:value="*{memberId}" readonly>
+        </ul>
+        <ul>
+            <label for="password">Password : </label>
+            <input type="text" name="password" id="password" th:value="*{password}">
+        </ul>
+        <ul>
+            <input type="submit" value="수정하기">
+            <a href="/member">
+                <input type="button" value="돌아가기">
+            </a>
+        </ul>
+    </div>
+</form>
+</body>
+</html>
