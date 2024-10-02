@@ -1,0 +1,9 @@
+insert into idol_member(group_id, name) values (1, '장원영');
+insert into idol_member(group_id, name) values (2, '하니');
+insert into idol_member(group_id, name) values (1, '안유진');
+insert into idol_member(group_id, name) values (2, '다니엘');
+insert into idol_member(group_id, name) values (1, '이서');
+insert into idol_member(group_id, name) values (2, '민지');
+
+insert into idol_group values (1, '아이브');
+insert into idol_group values (2, '뉴진스');
