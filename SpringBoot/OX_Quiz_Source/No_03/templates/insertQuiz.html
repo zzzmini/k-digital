@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>퀴즈등록</title>
+</head>
+<body>
+<h1>OX Quiz Application</h1>
+<h3>등록 폼</h3>
+<form th:action="@{/quiz/insert}" method="post" th:object="${dto}">
+    <div>
+        <div>퀴즈 내용:</div>
+        <textarea name="content" cols="50" rows="5"></textarea>
+        <div th:errors="*{content}" style="color:red"></div>
+    </div>
+    <div>
+        <div>퀴즈 정답:</div>
+        <span>
+            <input type="radio" name="answer" value="O" class="form-check-input">
+            <label class="form-check-label">O</label>
+        </span>
+        <span>
+            <input type="radio" name="answer" value="X" class="form-check-input">
+            <label class="form-check-label">X</label>
+        </span>
+    </div>
+    <div>
+        <div>작성자:</div>
+        <input type="text" name="name"></input>
+    </div>
+    <input type="submit" value="등록">
+</form>
+<br>
+<a th:href="@{/quiz}">퀴즈목록 화면으로 돌아가기</a>
+</body>
+</html>
