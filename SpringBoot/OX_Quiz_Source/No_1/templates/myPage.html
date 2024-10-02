@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyPage</title>
+</head>
+<body>
+<ul>
+    <h1>My Page</h1>
+</ul>
+<form th:action="@{/main/myPage/update}" method="post" th:object="${session.memberDto}">
+    <div>
+        <ul>
+            <span th:text="${success}" style="color: blue; font-weight:bold;"></span>
+        </ul>
+        <ul>
+            <label for="memberId">ID : </label>
+            <input type="text" name="memberId" id="memberId" th:value="*{memberId}" readonly>
+        </ul>
+        <ul>
+            <label for="password">Password : </label>
+            <input type="password" name="password" id="password" th:value="${password}" placeholder="변경할 비밀번호 입력">
+            <span th:text="${error}" style="color: red; font-size: 12px"></span>
+        </ul>
+        <ul>
+            <input type="password" name="psw" id="psw" placeholder="기존 비밀번호 입력"> <input type="submit" value="수정하기">
+            <span th:text="${notMatch}" style="color: red; font-size: 12px"></span>
+        </ul>
+        <ul>
+            <a href="/main">
+                <input type="button" value="돌아가기">
+            </a>
+        </ul>
+    </div>
+</form>
+</body>
+</html>
