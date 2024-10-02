@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login Form</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+<h1><b>OX Quiz Application</b></h1>
+<form th:action="@{/member/login}" method="post">
+    <div>
+        <label for="memberId">아이디 : </label><br>
+        <input type="text" name="memberId">
+    </div>
+    <p></p>
+    <div>
+        <label for="password">비밀번호 : </label><br>
+        <input type="text" name="password">
+    </div>
+    <p></p>
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color:red;"></p>
+    </div>
+    <p></p>
+    <input type="submit" value="로그인">
+</form>
+<p></p>
+<a th:href="@{/quiz}" align="center"><button>메인 화면으로 돌아가기</button></a>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OX Quiz Insert Page</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+<h1><b>OX Quiz Application</b></h1>
+<h2>등록 폼</h2>
+<p></p>
+<p></p>
+<form th:action="@{/quiz/insert}" method="post"
+        th:object="${dto}">
+    <div>
+        <label for="question">퀴즈 내용 : </label><br>
+        <textarea name="question" th:field="*{question}"></textarea>
+    </div>
+    <span th:errors="*{question}" style="color:red;"></span>
+    <p></p>
+    <!-- 다중 라디오 버튼-->
+    <div>
+        <div>퀴즈 정답 : </div>
+        <div class="answer-options">
+            <div th:each="a : ${answer}">
+                <input type="radio" th:field="*{answer}" th:value="${a}" th:id="${a}">
+                <label th:for="${a}" th:text="${a.desc}">O</label>
+            </div>
+        </div>
+        <span th:errors="*{answer}" style="color:red;"></span>
+    </div>
+    <p></p>
+    <div>
+        <label for="writer">작성자 : </label><br>
+        <input type="text" name="writer" th:field="*{writer}">
+    </div>
+    <span th:errors="*{writer}" style="color:red;"></span>
+    <p></p>
+    <div><input type="submit" value="등록"></div>
+    <p></p>
+</form>
+<a th:href="@{/quiz/view}"><button>퀴즈 관리 페이지</button></a>
+</body>
+</html>

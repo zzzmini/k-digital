@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>OX Quiz Main Page</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+<h1><b>OX Quiz Application</b></h1>
+<h2>등록된 사용자 목록</h2>
+<p></p>
+<p></p>
+<table border="1">
+  <thead align="center">
+  <tr>
+    <td><b>NO</b></td>
+    <td><b>ID</b></td>
+    <td><b>Password</b></td>
+    <td><b>인증상태</b></td>
+    <td><b>정답갯수</b></td>
+    <td><b>오답갯수</b></td>
+    <td><b>변경</b></td>
+    <td><b>비활성화</b></td>
+    <td><b>생성일</b></td>
+    <td><b>수정일</b></td>
+  </tr>
+  </thead>
+  <tbody align="center">
+  <tr th:each="dto : ${lists}" th:object="${dto}">
+    <td th:text="*{no}">1</td>
+    <td th:text="*{memberId}">abc</td>
+    <td th:text="*{password}">1111</td>
+    <td>
+      <span th:if="*{status}">인증완료</span>
+      <form th:if="! *{status}" th:action="@{/member/verify}" method="post">
+        <input type="hidden" name="no" th:value="*{no}">
+        <input type="submit" value="인증하기">
+      </form>
+    </td>
+
+    <td th:text="*{answerTrue}">정답갯수</td>
+    <td th:text="*{answerFalse}">오답갯수</td>
+    <td><a th:href="@{/member/update(no=*{no})}"><input type="button" value="변경"></a></td>
+    <td>
+      <form th:action="@{/member/deactivate(no=*{no})}" method="post">
+        <input type="hidden" name="no" th:value="*{no}">
+        <input type="submit" value="비활성화">
+      </form>
+    </td>
+    <td th:text="*{insertedAt}">생성일</td>
+    <td th:text="*{updatedAt}">수정일</td>
+  </tr>
+  </tbody>
+</table>
+<p></p>
+<a th:href="@{/member/insert}"><input type="button" value="새로운 회원 등록"></a>
+<p></p>
+<a th:href="@{/member/admin}"><input type="button" value="관리자 페이지"></a>
+</body>
+</html>

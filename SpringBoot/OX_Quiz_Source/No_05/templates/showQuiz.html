@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OX Quiz Main Page</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+<h1><b>OX Quiz Application</b></h1>
+<h2>등록된 퀴즈 목록 <a th:href="@{/quiz/play}">플레이</a></h2>
+<p></p>
+<p></p>
+<table border="1">
+    <thead align="center">
+    <tr>
+        <td><b>ID</b></td>
+        <td><b>내용</b></td>
+        <td><b>해답</b></td>
+        <td><b>작성자</b></td>
+        <td><b>변경</b></td>
+        <td><b>삭제</b></td>
+        <td><b>생성일</b></td>
+        <td><b>수정일</b></td>
+        </b>
+    </tr>
+    </thead>
+    <tbody align="center">
+    <tr th:each="dto : ${lists}" th:object="${dto}">
+        <td th:text="*{id}">15</td>
+        <td th:text="*{question}">옛날 임금들은 웃음내시가 있었다.</td>
+        <td th:text="*{answer}">○</td>
+        <td th:text="*{writer}">김망고</td>
+        <td><a th:href="@{/quiz/update(id=*{id})}"><input type="button" value="변경"></a></td>
+        <td>
+            <form th:action="@{/quiz/delete}" method="post">
+                <input type="hidden" name="id" th:value="*{id}">
+                <input type="submit" value="삭제">
+            </form>
+        </td>
+        <td th:text="*{insertedAt}"></td>
+        <td th:text="*{updatedAt}"></td>
+    </tr>
+    </tbody>
+</table>
+<p></p>
+<a th:href="@{/quiz/insert}"><button>새로운 퀴즈 등록</button></a>
+<p></p>
+<a th:href="@{/member/admin}"><button>관리자 페이지</button></a>
+</body>
+</html>

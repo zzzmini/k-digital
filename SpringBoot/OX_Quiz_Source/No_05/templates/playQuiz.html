@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>OX Quiz Play Page</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+<!--<div th:unless="${session.loginId == null}">-->
+<!--  session 값을 확인 : <span th:text="${session.loginId}"></span>-->
+<!--</div>-->
+<h1><b>OX 퀴즈 게임 : PLAY</b></h1>
+<h2>퀴즈</a></h2>
+<p></p>
+<p></p>
+
+<div th:each="dto : ${list}" th:object="${dto}">
+  <span th:text="*{question}">바늘 한 쌍은 모두 22개이다.</span>
+  <p></p>
+  <form th:action="@{/quiz/check}" method="post">
+    <input type="hidden" name="id" th:value="*{id}">
+    <div class="answer-options">
+      <div th:each="a : ${answer}">
+        <input type="submit" name="answer" th:value="${a}" th:id="${a}"></div>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>
