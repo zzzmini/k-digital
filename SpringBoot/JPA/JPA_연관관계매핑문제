@@ -1,0 +1,13 @@
+Entertainment 
+id : starship ,  YG
+name : 스타쉽, 와이지
+
+GirlGroup
+id : ive, blackPink
+name : 아이브, 블핑
+
+IdolMember 
+id : 안유진 , 장원영, 제니, 지수
+name : 유진, 원영, 째니, 지수다
+
+지수가 속한 걸그룹 이름과 엔터테인트 회사 이름 출력하기.
