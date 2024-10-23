@@ -1,0 +1,842 @@
+◈ 프로젝트 생성하기
+- thymeleaf
+- web
+- jpa
+- lombok
+- mysql
+
+------------------------
+- security
+- org.thymeleaf.extras:thymeleaf-extras-springsecurity6 
+
+-- 나중에 추가하기
+
+------------------------
+#MySql 셋팅
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/security_db
+    username: root
+    password: 1111
+  sql:
+    init:
+      mode: never
+      # always : 매번, embedded : 내장 DB만, never : 모든 동작 안함
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate :
+        show_sql: true
+        format_sql: true
+
+------------------------
+
+
+1. 스프링시큐리티 프로젝트 생성 및 기본 Config 파일 만들기
+ 
+ⓐ 인가
+- 특정한 경로에 요청이 오면 Controller 클래스에 도달하기 전 필터에서 
+  Spring Security가 검증을 함 
+
+Ⅰ. 해당 경로의 접근은 누구에게 열려 있는지
+Ⅱ. 로그인이 완료된 사용자인지
+Ⅲ. 해당되는 role을 가지고 있는지
+
+------------------------------------------------------------------------------
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+                        .anyRequest().authenticated()
+                );
+
+        return http.build();
+    }
+}
+
+------------------------------------------------------------------------------
+
+ⓑ 로그인 페이지 기본 유저이름은 user, 비번은 콘솔에....
+ⓒ main, admin 페이지 만들어서 테스트 해 보기
+
+==============================================
+
+2. 스프링 시큐리티 : 버전별 Security Config 구현 방법
+
+ⓐ 시큐리티 버전별 특성
+- 스프링은 버전에 따라 구현 방식이 변경되는데 시큐리티의 경우 특히 세부 버전별로 
+구현 방법이 많이 다르기 때문에 버전 마다 구현 특징을 확인해야 한다.
+
+- 새로운 버전이 출시될 때마다 GitHub의 Spring 리포지토리에서 Security의 Release 
+항목을 통해 변경된 점을 확인할 수 있다.
+
+▶ https://github.com/spring-projects/spring-security/releases 
+
+ⓑ 스프링 부트 2.X.X ~ 2.6.X (스프링 5.X.X ~ 5.6.X)
+------------------------------------------------------------------------------
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+				http
+	        .authorizeRequests()
+            .antMatchers("/").authenticated()
+            .anyRequest().permitAll();
+
+    }
+}
+------------------------------------------------------------------------------
+
+ⓒ 스프링 부트 2.7.X ~ 3.0.X (스프링 5.7.X M2 ~ 6.0.X)
+------------------------------------------------------------------------------
+public class SpringSecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+	.authorizeHttpRequests()
+	.requestMatchers("/admin").hasRole("ADMIN")
+	.anyRequest().authenticated();
+
+        return http.build();
+    }
+}
+------------------------------------------------------------------------------
+
+ⓓ 스프링 부트 3.1.X ~ (스프링 6.1.X ~ )
+------------------------------------------------------------------------------
+public class SpringSecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+            .authorizeHttpRequests((auth) -> auth
+                  .requestMatchers("/login", "/join").permitAll()
+                  .anyRequest().authenticated()
+        );
+
+        return http.build();
+    }
+}
+------------------------------------------------------------------------------
+
+※ 3.1.X 버전 부터 람다형식 표현 필수
+
+==============================================
+
+3. 커스텀 로그인
+
+ⓐ Config 설정 후 로그인 페이지
+스프링 시큐리티 Config 클래스 설정 후 특정 경로에 대한 접근 권한이 없는 경우 
+자동으로 로그인 페이지로 리다이렉팅 되지 않고 오류 페이지가 발생한다.
+
+ⓑ 위 문제를 해결하기 위해 Config 클래스를 설정하면 
+    로그인 페이지 설정도 진행해야 한다.
+
+ⓒ 커스텀 로그인 페이지
+------------------------------------------------------------------------------
+login.html
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, 
+		initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    login page
+    <hr>
+    <form action="/loginProc" method="post" name="loginForm">
+        <input id="username" type="text" 
+	name="username" placeholder="id"/>
+        <input id="password" type="password" 
+	name="password" placeholder="password"/>
+        <input type="submit" value="login"/>
+    </form>
+</body>
+</html>
+
+------------------------------------------------------------------------------
+
+ⓓ LoginController
+------------------------------------------------------------------------------
+@Controller
+public class LoginController {
+
+    @GetMapping("/login")
+    public String login() {
+
+        return "login";
+    }
+}
+------------------------------------------------------------------------------
+
+ⓔ Security Config 로그인 페이지 설정 및 로그인 경로
+
+------------------------------------------------------------------------------
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+        ..........................
+
+        http
+                .formLogin((auth) -> auth.loginPage("/login")
+                        .loginProcessingUrl("/loginProc")
+                        .permitAll()
+                );
+
+        http
+                .csrf((auth) -> auth.disable());
+
+
+        return http.build();
+    }
+}
+
+▷ csrf 란?
+
+CSRF란, Cross Site Request Forgery의 약자로, 
+한글 뜻으로는 사이트간 요청 위조를 뜻합니다.
+CSRF는 웹 보안 취약점의 일종이며, 사용자가 
+자신의 의지와는 무관하게 공격자가 
+의도한 행위(데이터 수정, 삭제, 등록 등)를 특정 
+웹사이트에 요청하게 하는 공격입니다.
+예를 들어, 피해자의 전자 메일 주소를 변경하거나 
+암호를 변경하거나 자금이체를 하는 등의 동작을 
+수행하게 할 수 있습니다.
+
+특성에 따라, 공격자는 사용자의 계정에 대한 완전한 
+제어권을 얻을 수 있을 수도 있습니다.
+
+
+▼ CSRF 동작원리
+
+CSRF가 성공하려면, 아래 3가지 조건이 만족되어야 합니다.
+
+1. 사용자는 보안이 취약한 서버로부터 이미 로그인되어 있는 상태여야 합니다.
+2. 쿠키 기반의 서버 세션 정보를 획득할 수 있어야 합니다.
+3. 공격자는 서버를 공격하기 위한 요청 방법에 대해 미리 파악하고 있어야 합니다. 
+예상하지 못한 요청 매개변수가 없어야 합니다.
+
+▼ CSRF 방어방법 - 사용자 입장
+1. 사용자 입장에서는 이상한 URL 을 함부로 클릭하지 않고, 
+2. 의심이 되는 메일을 열어보지 않는것이 중요합니다.
+-- CSRF는 클릭만해도 바로 내가 의도하지 않은 action이 수행될 수 있기 때문
+
+▼ CSRF 방어방법 - 웹개발자/운영자 입장
+1. Referer check (리퍼러 체크)HTTP 요청 헤더(request header) 
+정보에서 Referrer 정보를 확인
+2. CAPTCHA 도입 - 구글에서 무료로 제공 중.
+3. CSRF 토큰사용
+
+------------------------------------------------------------------------------
+
+==============================================
+4. BCrypt 암호화 메소드
+
+ⓐ 시큐리티 암호화
+- 스프링 시큐리티는 사용자 인증(로그인)시 비밀번호에 대해 단방향 해시 암호화를 
+진행하여 저장되어 있는 비밀번호와 대조한다.
+ⓑ 따라서 회원가입시 비밀번호 항목에 대해서 암호화를 진행해야 한다.
+ⓒ 스프링 시큐리티는 암호화를 위해 BCrypt Password Encoder를 제공하고 권장한다. 
+  따라서 해당 클래스를 return하는 메소드를 만들어 
+  @Bean으로 등록하여 사용하면 된다.
+
+ⓓ Security Config 암호화 Bean 추가
+------------------------------------------------------------------------------
+@Bean
+public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
+    return new BCryptPasswordEncoder();
+}
+------------------------------------------------------------------------------
+
+==============================================
+
+5. 회원 가입 로직 처리하기
+ⓐ 회원가입 페이지
+
+join.html
+------------------------------------------------------------------------------
+<form action="/joinProc" method="post" name="joinForm">
+    <input type="text" name="username" placeholder="Username"/>
+    <input type="password" name="password" placeholder="Password"/>
+		<input type="submit" value="Join"/>
+</form>
+------------------------------------------------------------------------------
+
+ⓑ JoinDTO
+------------------------------------------------------------------------------
+@Setter
+@Getter
+public class JoinDTO {
+
+    private String username;
+    private String password;
+}
+------------------------------------------------------------------------------
+
+ⓒ JoinController
+------------------------------------------------------------------------------
+public class JoinController {
+
+    @Autowired
+    private JoinService joinService;
+
+    @GetMapping("/join")
+    public String join() {
+        return "join";
+    }
+
+    @PostMapping("/joinProc")
+    public String joinProcess(JoinDTO joinDTO) {
+        System.out.println(joinDTO.getUsername());
+        joinService.joinProcess(joinDTO);
+        return "redirect:/login";
+    }
+}
+
+------------------------------------------------------------------------------
+
+ⓓ UserEntity / Repository
+------------------------------------------------------------------------------
+
+public enum UserRole {
+    ROLE_ADMIN,
+    ROLE_USER
+}
+
+@Entity
+@Setter
+@Getter
+public class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(unique = true)
+    private String username;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+}
+------------------------------------------------------------------------------
+
+ⓔ JoinService
+------------------------------------------------------------------------------
+@Service
+public class JoinService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public void joinProcess(JoinDTO joinDTO) {
+
+        //db에 이미 동일한 username을 가진 회원이 존재하는지?
+        boolean isUser = userRepository.
+	existsByUsername(joinDTO.getUsername());
+        if (isUser) {
+            return;
+        }
+        UserEntity data = new UserEntity();
+
+        data.setUsername(joinDTO.getUsername());
+        data.setPassword(bCryptPasswordEncoder.
+	encode(joinDTO.getPassword()));
+        data.setRole(UserRole.ROLE_USER);
+
+        userRepository.save(data);
+    }
+}
+------------------------------------------------------------------------------
+
+ⓕ SecurityConfig 접근 권한 추가하기
+
+------------------------------------------------------------------------------
+http
+          .authorizeHttpRequests((auth) -> auth
+                  .requestMatchers("/", "/login", "/loginProc", 
+			"/join", "/joinProc").permitAll()
+                  .requestMatchers("/admin").hasRole("ADMIN")
+                  .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+                  .anyRequest().authenticated()
+          );
+
+
+==============================================
+
+6. 회원 중복 검증 및 처리 로직
+
+ⓐ 회원 중복 검증
+
+- UserEntity Unique 설정
+	@Column(unique = true)
+	private String username;
+
+ⓑ JoinService 중복 검증
+------------------------------------------------------------------------------
+▷ UserRepository(쿼리메서드 만들기)
+
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+
+    boolean existsByUsername(String username);
+}
+
+▷ JoinService
+
+@Service
+public class JoinService {
+
+    public void joinProcess(JoinDTO joinDTO) {
+
+        //db에 이미 동일한 username을 가진 회원이 존재하는지?
+        boolean isUser = userRepository.
+	existsByUsername(joinDTO.getUsername());
+        if (isUser) {
+            return;
+        }
+
+==============================================
+
+7. DB기반 로그인 검증 로직
+
+ⓐ 인증
+- 시큐리티를 통해 인증을 진행하는 방법은 
+- 사용자가 Login 페이지를 통해 아이디, 비밀번호를 
+- POST 요청시 스프링 시큐리티가 데이터베이스에 저장된 회원 정보를 조회 후 
+- 비밀번호를 검증하고 
+- 서버 세션 저장소에 해당 아이디에 대한 세션을 저장한다.
+
+ⓑ UserDetailsService
+------------------------------------------------------------------------------
+@Service
+public class CustomUserDetailsService implements 
+		UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) 
+			throws UsernameNotFoundException {
+
+        UserEntity userData = userRepository.findByUsername(username);
+
+        if (userData != null) {
+
+            return new CustomUserDetails(userData);
+        }
+
+        return null;
+    }
+}
+------------------------------------------------------------------------------
+
+ⓒ UserRepository
+
+------------------------------------------------------------------------------
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+
+    .................
+    UserEntity findByUsername(String username);
+}
+------------------------------------------------------------------------------
+
+ⓓ dto 패키지 -> UserDetails
+------------------------------------------------------------------------------
+public class CustomUserDetails implements UserDetails {
+
+    private UserEntity userEntity;
+
+    public CustomUserDetails(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+
+        collection.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return userEntity.getRole();
+            }
+        });
+        return collection;
+    }
+
+    @Override
+    public String getPassword() {
+        return userEntity.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return userEntity.getUsername();
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
+------------------------------------------------------------------------------
+ⓔ admin(Admin role) 회원가입하고 테스트하기
+
+
+==============================================
+
+8. 세션 정보
+-- 서비스로 만들어 사용하기
+
+ⓐ 세션 현재 사용자 아이디
+------------------------------------------------------------------------------
+SecurityContextHolder.getContext().getAuthentication().getName();
+------------------------------------------------------------------------------
+
+ⓑ 세션 현재 사용자 role
+------------------------------------------------------------------------------
+Authentication authentication = 
+	SecurityContextHolder.getContext().getAuthentication();
+
+Collection<? extends GrantedAuthority> authorities = 
+	authentication.getAuthorities();
+Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+GrantedAuthority auth = iter.next();
+String role = auth.getAuthority();
+------------------------------------------------------------------------------
+
+ⓒ maina page에 model로 id와 role 전달하고 테스트하기
+
+==============================================
+
+9. 세션 설정
+
+ⓐ 세션 소멸 시간 설정
+
+------------------------------------------------------------------------------
+application.properties
+
+//초 기반
+server.servlet.session.timeout=1800
+
+//분 기반
+server.servlet.session.timeout=90m
+------------------------------------------------------------------------------
+
+ⓑ 다중 로그인 설정(점검)
+
+------------------------------------------------------------------------------
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) 
+		throws Exception{
+
+    http
+            .sessionManagement((auth) -> auth
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true));
+
+    return http.build();
+}
+
+▷ sessionManagement() 메소드를 통한 설정을 진행한다.
+- maximumSession(정수) : 하나의 아이디에 대한 다중 로그인 허용 개수
+- maxSessionPreventsLogin(불린) : 다중 로그인 개수를 초과하였을 경우 처리 방법
+	＊ true : 초과시 새로운 로그인 차단
+	＊ false : 초과시 기존 세션 하나 삭제
+
+------------------------------------------------------------------------------
+
+ⓒ 세션 고정 보호
+------------------------------------------------------------------------------
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+
+    http
+            .sessionManagement((auth) -> auth
+                    .sessionFixation().changeSessionId());
+
+    return http.build();
+}
+- sessionManagement().sessionFixation().none() : 
+	로그인 시 세션 정보 변경 안함
+- sessionManagement().sessionFixation().newSession() : 
+	로그인 시 세션 새로 생성
+- sessionManagement().sessionFixation().changeSessionId() : 
+	로그인 시 동일한 세션에 대한 id 변경
+------------------------------------------------------------------------------
+
+10. CSRF 설정
+
+ⓐ CSRF란?
+- CSRF(Cross-Site Request Forgery)는 요청을 위조하여 사용자가 원하지 않아도 
+서버측으로 특정 요청을 강제로 보내는 방식이다. 
+(회원 정보 변경, 게시글 CRUD를 사용자 모르게 요청)
+
+- CSRF 토큰은 웹 애플리케이션이 각 사용자 세션마다 고유하게 생성하는 임의의 난수이다.
+- 이 토큰은 사용자가 서버에 요청을 보낼 때마다 함께 전송되며, 
+- 서버는 이 토큰을 검증하여 요청이 실제로 해당 세션의 사용자에 의해 
+  발생했는지를 확인
+
+ⓑ CSRF 토큰의 동작 원리
+
+- 토큰 발급 : 사용자가 웹 애플리케이션에 접속하면, 
+   	서버는 사용자 세션에 고유한 CSRF 토큰을 생성하여 저장
+- 토큰 전달 : 서버는 사용자에게 HTML 페이지를 전달할 때, 
+	이 CSRF 토큰을 숨겨진 폼 필드(<input type="hidden">)에 포함시켜 
+	클라이언트에게 전송합니다.
+ ------------------------------------------------------------------------------
+일반 : <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+thymeleaf(Post) : 
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+------------------------------------------------------------------------------
+ 
+- 요청 시 토큰 전송 : 사용자가 폼을 제출하거나 서버로 요청을 보낼 때, 
+ 	해당 요청에 이 숨겨진 필드의 CSRF 토큰이 포함되어 전송 됨.
+- 토큰 검증 : 서버는 요청을 받을 때, 요청에 포함된 토큰과 세션에 저장된 
+ 	토큰을 비교.
+	두 토큰이 일치하면 요청을 처리하고, 그렇지 않으면 요청을 거부 함.
+
+ⓒ 배포 환경에서 진행 사항
+- security config 클래스에서 csrf.disable() 설정을 진행하지 않으면 
+- 자동으로 enable 설정이 진행된다. 
+- enable 설정시 스프링 시큐리티는 CsrfFilter를 통해 
+	POST, PUT, DELETE 요청에 대해서 
+- 토큰 검증을 진행한다.
+
+※ Security Config 클래스 설정 : csrf.disable() 구문 삭제
+
+ⓓ 개발자가 직접 logout 처리하기
+------------------------------------------------------------------------------
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+
+    http
+            .logout((auth) -> auth.logoutUrl("/logout")
+                    .logoutSuccessUrl("/"));
+
+    return http.build();
+}
+
+@Controller
+public class logoutController {
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, 
+	HttpServletResponse response) throws Exception {
+
+        Authentication authentication = 
+	SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null) {
+            new SecurityContextLogoutHandler()
+	.logout(request, response, authentication);
+        }
+
+        return "redirect:/";
+    }
+}
+
+==============================================
+
+11. HttpBasic 인증
+- HTTP 기본 인증은 HTTP header를 사용하는 인증 방법 중에 하나
+▶ HttpBasic 방식 인증을 위한 Config 클래스 설정
+▶ formLogin() 메소드 제거 후 httpBasic() 메소드를 통해 설정
+
+ⓐ 방법
+- Basic 인증 방식은 가장 기본적인 인증 방식
+- 인증 정보로 사용자 ID, 비밀번호를 사용
+- base64로 인코딩한 “사용자ID:비밀번호” 문자열을 Basic과 함께 인증 헤더에 입력
+- 자세한 내용은 RFC 7617에 정의
+- 단순 base64 인코딩된 사용자 ID와 비밀번호를 HTTP로 전달하면 
+  요청의 보안이 보장 안됨
+- Basic 인증을 사용하는 요청은 꼭 HTTPS, SSL/TLS로 통신해야 안전 함
+
+ⓑ 장단점
+◈ 장점
+- 간단함
+- 쉬운 접근이 중요시되는 웹 서비스를 기반으로 사용
+- 단순하고 구축하기 쉬움
+
+◈ 단점
+- 서버에 사용자 목록 저장
+- 요청한 리소스가 많거나 사용자가 많으면 목록에서 권한을 확인하는 시간이 길어지짐
+- 사용자 변화가 잦은 서비스가 Basic 인증을 사용하면 서버에 부담이 커짐
+
+ⓒ 사용법
+------------------------------------------------------------------------------
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+    http
+            .httpBasic(Customizer.withDefaults());
+
+    return http.build();
+}
+
+==============================================
+
+12. Role Hierarchy 6.3.x Deprecated 대처
+
+ⓐ 이슈
+- Role Hierarchy의 구현 방식이 스프링 시큐리티 6.3.x 버전대에서 변경 됨.
+------------------------------------------------------------------------------
+▷ 6.3.x 이후 버전에서 사용 불가능한 구현
+@Bean
+public RoleHierarchy roleHierarchy() {
+
+    RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+
+    hierarchy.setHierarchy("ROLE_C > ROLE_B\n" +
+            "ROLE_B > ROLE_A");
+
+    return hierarchy;
+}
+
+------------------------------------------------------------------------------
+▷ 변경된 RoleHierarchyImpl() 방식 사용 : fromHierarchy 메소드 활용
+
+@Bean
+public RoleHierarchy roleHierarchy() {
+
+    return RoleHierarchyImpl.fromHierarchy("""
+            ROLE_C > ROLE_B
+            ROLE_B > ROLE_A
+            """);
+}
+
+▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷ 변환 ...
+@Bean
+public RoleHierarchy roleHierarchy() {
+
+    return RoleHierarchyImpl.withDefaultRolePrefix()
+            .role("C").implies("B")
+            .role("B").implies("A")
+            .build();
+}
+
+
+==============================================
+
+12. Thymeleaf Security
+
+ⓐ .gradle 설정
+
+maven repository -> Thymeleaf Extras Springsecurity5
+
+------------------------------------------------------------------------------
+implementation 'org.springframework.boot:spring-boot-starter-security'
+// 타임리프에서 스프링시큐리티의 문법이나 형식을 지원하는 확장팩 라이브러리
+
+implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+------------------------------------------------------------------------------
+
+ⓑ html 페이지에 네임스페이스 등록하기
+------------------------------------------------------------------------------
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+------------------------------------------------------------------------------
+
+ⓒ 사용하기
+------------------------------------------------------------------------------
+<p th:text="${#authentication.name}"></p>
+<p th:text="${#authentication.authorities}"></p>
+<p th:text="${#authentication.authenticated}"></p>
+------------------------------------------------------------------------------
+
+<div th:if="${#authorization.expression('isAuthenticated()')} 
+	and *{userAccount.userId} == ${#authentication.name}">
+	<input type="button" value="수정">
+</div>
+
+ⓓ 조건 결과를 true,  false로 if와 같은 기능으로 사용 가능
+------------------------------------------------------------------------------
+
+<div sec:authorize="isAnonymous()"></div>
+<div sec:authorize="isAuthenticated()"></div>
+<div sec:authorize="hasRole('ROLE_ADMIN')"></div>
+<div sec:authorize="hasRole('ROLE_USER')"></div>
+<div sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')"></div>
+------------------------------------------------------------------------------
+
+ⓔ 간단예제
+------------------------------------------------------------------------------
+// ADMIN 일 때 상품등록 버튼 보이기
+<div class="item-btn admin-btn" sec:authorize="hasRole('ROLE_ADMIN')">
+	<a th:href="@{/item/new}">
+	<input type="button" value="상품등록">
+	</a>
+</div>
+------------------------------------------------------------------------------
+
+※ 기타
+ⓐ 로그인 시 이메일 및 기타 속성으로 로그인 할 때
+.usernameParameter("email")
+
+ⓑ 롤을 Enum 타입으로 만들기
+@Getter
+public enum UserRole {
+    ADMIN("ROLE_ADMIN"),
+    USER("ROLE_USER");
+
+    UserRole(String value) {
+        this.value = value;
+    }
+
+    private String value;
+}
+
+ⓒ 메서드에서 인증확인하고 처리하기
+@PreAuthorize("isAuthenticated()")
+@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
+public class SecurityConfig {
+
+
+
+
+
