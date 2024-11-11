@@ -1,0 +1,1093 @@
+1. 장바구니 페이지 만들기
+ⓐ App.js Route에서 /cart 페이지 이동할 수 있도록
+==========================================
+App.js -- 기존에 만들어 놨음
+
+        <Route path="/cart" element={
+		<Cart />
+	} />
+
+            <Nav.Link
+              href="#"
+              onClick={() => {
+                navigate("/detail");
+              }}
+            >
+              Detail
+            </Nav.Link>
+==========================================
+  
+ⓑ Cart.js 만들기 - react bootstrap 이용
+==========================================
+> routes 폴더 아래 Cart.js
+
+import Table from 'react-bootstrap/Table';
+function Cart() {
+  return (
+    <div>
+      <Table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>상품명</th>
+            <th>수량</th>
+            <th>변경하기</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+        </tbody>
+      </Table>
+    </div>
+  );
+}
+export default Cart;
+
+
+==========================================
+ 
+ⓒ App.js 에서 import 하기
+==========================================
+import Cart from "./routes/Cart.js";
+==========================================
+
+ⓓ 터미널 열고 npm start 입력
+  >> http://localhost:3000/
+
+2. Redux Toolkit 설치하기
+ⓐ 기능 : 컴포넌트들이 props 없이도 state 공유 가능
+Ⅰ. Redux 설치 시 redux.store.js 파일에
+    모든 state를 저장
+Ⅱ. 컴포넌트들이 저장된 state를 꺼내서 사용함.
+Ⅲ. 큰 프로젝트에서는 대부분 Redux 사용
+
+ⓑ 설치 전 확인 사항
+- package.json
+: 사이트에 필요한 모든 라이브러리가 설치
+
+※ react와 react-dom 버전이 18.1 이상이어야 함.
+
+ⓒ 터미널에서 설치하기
+> npm install @reduxjs/toolkit react-redux
+
+ⓓ setting 하기
+
+==========================================
+▷ src 폴더 아래 store.js 파일 생성
+
+import { configureStore } from '@reduxjs/toolkit'
+
+export default configureStore({
+  reducer: { }
+}) 
+
+==========================================
+
+ⓔ index.js 에서 사용한다고 선언
+
+==========================================
+index.js
+
+...............
+import { Provider } from "react-redux";
+import store from "./store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  // <React.StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+  // </React.StrictMode>
+);
+...............
+==========================================
+
+3. store에 state 보관하고 사용하기
+ⓐ Redux 사용 이유
+-> 컴포넌트 간 state 공유가 편해 짐.
+-> props 전송이 필요없음.
+
+================================
+store.js 
+
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+
+// createSlice가 useState 역할을 함.
+let userName = createSlice({
+    name : 'userName',
+    initialState : 'kim'
+})
+
+export default configureStore({
+  reducer: { 
+    userName : userName.reducer,
+  }
+}) 
+================================
+
+ⓑ Cart.js에서 사용해 보기
+================================
+Cart.js 
+
+import { useSelector } from "react-redux";
+
+function Cart() {
+  // Redux stroe 가져와 줌.
+  let storeData = useSelector((state) => {
+    return state;
+  });
+
+  console.log(storeData);
+================================
+
+ⓒ 상품재고 등록해 보기
+================================
+Cart.js 
+
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+
+// createSlice가 useState 역할을 함.
+let userName = createSlice({
+    name : 'userName',
+    initialState : ['kim', 'lee', 'park']
+})
+
+let productStock = createSlice({
+    name : 'productStock',
+    initialState : [10, 11, 12]
+})
+
+export default configureStore({
+  reducer: { 
+    userName : userName.reducer,
+    productStock : productStock.reducer,
+  }
+}) 
+================================
+
+ⓓ redux 내의 특정 state 만 가져오기
+================================
+import { useSelector } from "react-redux";
+
+function Cart() {
+  // Redux stroe 가져와 줌.
+  let storeData = useSelector((state) => state.userName);
+  console.log(storeData);
+
+================================
+
+※ 모든 데이터를 Redux에 넣을 필요는 없다.
+ 특정 컴포넌트에서만 사용되는 것은 state로 사용하는 것이 좋다.
+
+================================
+
+문제. 장바구니 정보를 Redux에 보관하고 binding 처리하기
+
+[
+  {id : 0, name : 'White and Black', count : 2},
+  {id : 2, name : 'Grey Yordan', count : 1}
+] 
+
+----------------------------------------------------
+store.js
+
+let cartData = createSlice({
+  name: "cartData",
+  initialState: [
+    { id: 0, name: "White and Black", count: 2 },
+    { id: 2, name: "Grey Yordan", count: 1 },
+  ],
+});
+
+export default configureStore({
+  reducer: {
+    userName: userName.reducer,
+    productStock: productStock.reducer,
+    cartData : cartData.reducer,
+  },
+});
+
+----------------------------------------------------
+Cart.js
+
+function Cart() {
+  // Redux stroe 가져와 줌.
+  let cartData = useSelector((state) => state.cartData);
+  console.log(cartData);
+  return (
+    <div>
+      <Table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>상품명</th>
+            <th>수량</th>
+            <th>변경하기</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cartData.map((x) => {
+            return (
+                <tr>
+                  <td>{x.id}</td>
+                  <td>{x.name}</td>
+                  <td>{x.count}</td>
+                  <td>4</td>
+                </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    </div>
+  );
+}
+export default Cart;
+
+================================
+
+4. Redux store 데이터 변경하기
+
+ⓐ 수정하기 버튼 만들고 테스트하기
+Ⅰ. state 변경하는 함수 만들기
+Ⅱ. export 하기
+Ⅲ. dispatch(state변경함수(()) 실행하기
+
+================================
+store.js
+
+let user = createSlice({
+    name : 'user',
+    initialState : 'kim',
+    reducers : {
+        changeName(state){
+            return 'john ' + state
+        },
+    }
+})
+// state 는 원 데이터...
+export let { changeName } = user.actions;
+
+----------------------------------------------------
+Cart.js
+
+import { useSelector, useDispatch } from "react-redux";
+import { changeName } from "./../store";
+
+function Cart() {
+  // Redux stroe 가져와 줌.
+  let cartData = useSelector((state) => state.cartData);
+
+  let user = useSelector((state) => state.user);
+  // useDispatch : store.js로 요청보내는 함수
+  let dispatch = useDispatch();
+  ...........
+  return (
+    <div>
+      <p />
+      <h4>{user}의 장바구니</h4>
+      <p />
+   ...........
+        <tbody>
+          ...........
+                <td>
+                  <button
+                    onClick={() => {
+                      dispatch(changeName()); 
+			// dispatch : 메시지보내줘
+                    }}
+                  >
+                    +
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+
+================================
+
+ⓑ Obect 와 Array Type의 변경 방법
+
+================================
+store.js
+▷ user 를 Object Type으로 바꾸기
+
+let user = createSlice({
+    name : 'user',
+    initialState : { name : 'kim', age : 20},
+    reducers : {
+        changeName(state){
+            //return { name : 'park', age : 20}
+	   state.name='park' 
+	   // immer.js lib 도움을 받음(복사본 리턴함.)
+        },
+    }
+})
+================================
+
+================================
+문제. 이름 밑에 버튼 만들고 전달한 나이 증가시키기
+
+store.js
+
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+let user = createSlice({
+    name : 'user',
+    initialState : { name : 'kim', age : 20},
+    reducers : {
+        changeName(state){
+            state.name = 'Park'
+        },
+        changeAge(state, action){
+            state.age += action.payload;
+            // 전송되는 '순수한 데이터'를 뜻, 화물, 택배
+            //보통 action으로 작명을 많이 함.
+        }
+    }
+})
+
+export let { changeName, changeAge } = user.actions;
+
+----------------------------------------------------
+Cart.js
+
+import { changeName, changeAge } from "./../store";
+
+  return (
+    <div>
+      <p />
+      <h4>{user.name}의 장바구니 / 나이는 {user.age} </h4>
+      <p />
+      <button onClick={()=>{
+        dispatch(changeAge(3))
+      }}>나이증가</button>
+
+================================
+
+ⓒ store 안의 createSlice 분할 파일 만들어 사용하기
+
+> store 폴더 생성하고 userSlice.js 파일 만들고 옮기기
+
+================================
+userSlice.js
+
+import { createSlice } from "@reduxjs/toolkit";
+
+let user = createSlice({
+    name : 'user',
+    initialState : { name : 'kim', age : 20},
+    reducers : {
+        changeName(state){
+            state.name = 'Park'
+        },
+        changeAge(state, action){
+            state.age += action.payload;
+            // 전송되는 '순수한 데이터'를 뜻
+        }
+    }
+})
+export let { changeName, changeAge } = user.actions;
+export default user;
+----------------------------------------------------
+store.js
+
+import user from "./store/userSlice.js"; 
+
+export let { changeName, changeAge } = user.actions;
+
+----------------------------------------------------
+Cart.js  : 경로 수정하기
+
+import { changeName, changeAge } from "./../store/userSlice.js";
+================================
+
+ⓓ 문제
+================================
+문제1. + 버튼 누르면 수량이 1 증가되도록 처리하기
+
+
+store 폴더 아래 > cartDataSlice.js 만들기
+
+import { createSlice } from "@reduxjs/toolkit";
+
+let cartData = createSlice({
+  name: "cartData",
+  initialState: [
+    { id: 0, name: "White and Black", count: 2 },
+    { id: 2, name: "Grey Yordan", count: 1 },
+  ],
+  reducers: {
+    // + 버튼 누르면 해당 상품 수량 증가시키기
+    addCount(state, action) {
+      let index = action.payload;
+      console.log(index);
+      const target = state.findIndex((x) => x.id === index);
+      console.log(target);
+      state[target].count += 1;
+    },
+    // 상품 상세페이지에서 주문 버튼 누르면 initialState에 추가하기
+    addCart(state, action){
+        let newCartData = action.payload;
+        
+        let inputData = {
+            id : newCartData.id,
+            name : newCartData.title,
+            count : 1
+        }
+        this.initialState = [... state , inputData];
+        console.log(this.initialState)
+    }
+  },
+});
+
+export let { addCount, addCart } = cartData.actions;
+export default cartData;
+----------------------------------------------------
+Cart.js
+
+import { addCount } from "../store/cartDataSlice.js";
+
+function Cart() {
+  // Redux stroe 가져와 줌.
+  let cartData = useSelector((state) => state.cartData);
+
+  .........
+
+                    <button
+                    onClick={() => {
+                    //   dispatch(changeName());
+                        dispatch(addCount(x.id));
+                    }}
+                  >
+                    +
+                  </button>
+
+================================
+
+================================
+문제2. 상품 상세 페이지에서 주문하기 단추 누르면
+  카드에 담고 주문수량 1로 만들기
+
+store 폴더 아래 > cartDataSlice.js 만들기
+
+import { createSlice } from "@reduxjs/toolkit";
+
+let cartData = createSlice({
+  name: "cartData",
+  initialState: [
+    { id: 0, name: "White and Black", count: 2 },
+    { id: 2, name: "Grey Yordan", count: 1 },
+  ],
+  reducers: {
+  .........
+    // 상품 상세페이지에서 주문 버튼 누르면 initialState에 추가하기
+    addCart(state, action){
+        let newCartData = action.payload;
+        
+        let inputData = {
+            id : newCartData.id,
+            name : newCartData.title,
+            count : 1
+        }
+        console.log(inputData)
+        state.push(inputData);
+    }
+  },
+});
+
+export let { addCount, addCart } = cartData.actions;
+export default cartData;
+----------------------------------------------------
+Detail.js
+
+import { addCart } from "../store/cartDataSlice.js";
+import { useDispatch } from "react-redux";
+
+
+function Detail(props) {
+
+  let dispatch = useDispatch();
+  ....
+
+          <div className="col-md-6">
+          <h4 className="pt-5">{findProduct.title}</h4>
+          <p>{findProduct.content}</p>
+          <p>{findProduct.price.toLocaleString()}원</p>
+          <button className="btn btn-danger" onClick={()=>{
+            dispatch(addCart(findProduct))
+          }}>주문하기</button>
+        </div>
+================================
+
+================================
+문제3. 카트에 담긴 상품 수량 줄이기
+
+Ⅰ. Cart.js에 minus 단추 만들기
+                  <button>
+                    -
+                  </button>
+
+Ⅱ. 전달한 id의 상품 수량을 줄이는 함수 만들기
+
+    minusCount(state, action){
+      let index = action.payload;
+      const target = state.findIndex((x) => x.id === index);
+      if(state[target].count > 0) state[target].count -= 1;
+    }
+
+export let { addCount, addCart, minusCount } = cartData.actions;
+
+Ⅲ. 버튼에 연결처리하기
+
+import { addCount, minusCount } from "../store/cartDataSlice.js";
+                  <button
+                    onClick={() => {
+                        dispatch(minusCount(x.id));
+                    }}
+                  >
+                    -
+                  </button>
+================================
+
+
+================================
+문제4. 중복 상품 주문 시 주문수량만 1 증가시키기
+
+cartDataSlice.js 함수 수정하기
+
+    addCart(state, action) {
+      let exist = -1;
+      let newCartData = action.payload;
+      // 기존에 카트에 있는지 확인하기
+      exist = state.findIndex((x) => x.id === newCartData.id);
+      // 없으면 추가
+      if (exist < 0) {
+        let inputData = {
+          id: newCartData.id,
+          name: newCartData.title,
+          count: 1,
+        };
+        console.log(inputData);
+        state.push(inputData);
+      } else {
+        //존재하면 수량만 증가
+        state[exist].count += 1;
+      }
+    },
+    minusCount(state, action) {
+      let index = action.payload;
+      const target = state.findIndex((x) => x.id === index);
+      if (state[target].count > 0) state[target].count -= 1;
+    },
+  },
+
+================================
+
+================================
+문제5. 카트 상품 삭제하기
+
+Ⅰ. Cart.js 에 x 버튼 만들기
+
+                <td>
+                  <button>삭제</button>
+                </td>
+----------------------------------------------------
+Ⅱ. cartDataSlice.js 에 deleteItem 함수 정의하기
+
+    deleteItem(state, action) {
+      let deleteId = state.findIndex((x)=> x.id === action.payload);
+      state.splice(deleteId, 1);
+    }
+----------------------------------------------------
+Ⅲ. 버튼에 연결처리하기
+import { addCount, minusCount, deleteItem } from "../store/cartDataSlice.js";
+
+                <td>
+                  <button onClick={()=>{
+                    dispatch(deleteItem(x.id))
+                  }}>
+                    삭제</button>
+                </td>
+
+================================
+
+
+5. if 구문 작성 패턴 다섯가지
+
+ⓐ 컴포넌트 안에서 쓰는 if/else
+================================
+function Component() {
+  if ( true ) {
+    return <p>참이면 보여줄 HTML</p>;
+  } else {
+    return null;
+  }
+} 
+================================
+
+ⓑ JSX안에서 쓰는 삼항연산자 
+================================
+Ⅰ. 일반 삼항연산자
+
+function Component() {
+  return (
+    <div>
+      {
+        1 === 1
+        ? <p>참이면 보여줄 HTML</p>
+        : null
+      }
+    </div>
+  )
+} 
+----------------------------------------------------
+Ⅱ. 중첩 삼항연산자
+function Component() {
+  return (
+    <div>
+      {
+        1 === 1
+        ? <p>참이면 보여줄 HTML</p>
+        : ( 2 === 2 
+            ? <p>안녕</p> 
+            : <p>반갑</p> 
+          )
+      }
+    </div>
+  )
+} 
+================================
+
+ⓒ && 연산자로 if 역할 대신하기
+================================
+function Component() {
+  return (
+    <div>
+      {
+        1 === 1
+        ? <p>참이면 보여줄 HTML</p>
+        : null
+      }
+    </div>
+  )
+} 
+
+위 아래는 동일한 구문
+
+function Component() {
+  return (
+    <div>
+      { 1 === 1 && <p>참이면 보여줄 HTML</p> }
+    </div>
+  )
+}
+================================
+ 
+ⓓ  switch / case 조건문
+
+================================
+function Component2(){
+  var user = 'seller';
+  switch (user){
+    case 'seller' :
+      return <h4>판매자 로그인</h4>
+    case 'customer' :
+      return <h4>구매자 로그인</h4>
+    default : 
+      return <h4>그냥 로그인</h4>
+  }
+}
+================================
+
+ⓔ object/array 자료형 응용
+================================
+예를 들면 쇼핑몰에서 상품설명부분을 탭으로 만든다고 합시다.
+
+상품클릭 시 하단에 보여주는 
+상품정보 / 배송정보 / 환불약관 내용을 보여주고 싶은겁니다.
+
+현재 state가 info면 <p>상품정보</p>
+현재 state가 shipping이면 <p>배송정보</p>
+현재 state가 refund면 <p>환불약관</p>
+
+이런걸 보여주자는겁니다.
+----------------------------------------------------
+let tabUI = {
+           info : <p>상품정보</p>,
+           shipping : <p>배송관련</p>,
+           refund : <p>환불약관</p>
+}
+
+
+function Component() {
+  let state = 'info';
+  return (
+    <div>
+      {
+        tabUI[state]
+      }
+    </div>
+  )
+} 
+
+================================
+
+6. localStorage로 만드는 최근 본 상품 기능
+
+※ 서버 없이도 반영구적으로 데이터 저장하는 기능
+
+▶ localStroage 구경하기
+Ⅰ. F12 개발자 탭 → Application → 좌측 Storage → local Storage 보임.
+
+Ⅱ. 특징
+   - key : value 형태로 저장 가능
+   - 문자데이터만 저장 가능
+   - 5MB 까지 저장
+   - 브라우저 청소만 안하면 삭제되지 않음.
+   - 보안 : 다른 도메인에서 접근 불가능
+   - 예시 : 로그인 정보, 사용자 설정 등 장기간 보관해야 하는 정보
+
+Ⅲ. console에서 localStorage 사용해 보기
+
+>> localStorage.setItem('name','장원영')
+>> undefined
+>> localStorage.getItem('name')
+>> '장원영'
+>> localStorage.setItem('age',20)
+>> undefined
+>> localStorage.getItem('age')
+>> '20'
+>> localStorage.removeItem('age')
+
+※ 수정은 불가 함.
+→ 읽은 다음에 수정해서 다시 저장해야 함.
+
+※ Object 또는 Array는 JSON 타입으로 저장하면 가능
+================================
+App.js 에서 테스트 해 보기
+
+  // 저장하기
+  let tempData = {name : 'kim'}
+  localStorage.setItem('data', JSON.stringify(tempData))
+
+  // 꺼내기
+  let outputData = localStorage.getItem('data');
+  console.log(JSON.parse(outputData).name);
+ ...........
+================================
+
+================================
+문제. 상세페이지에서 봤던 상품의 번호들을
+ localStorage에 저장하기
+
+function Product(props) {
+  let newIndex = props.index + 1;
+  let image = "./images/shoes" + newIndex + ".jpg";
+  let navigate = useNavigate();
+  return (
+    <div>
+      <img
+        src={process.env.PUBLIC_URL + image}
+        width="80%"
+        onClick={() => {
+          let getRecentData = localStorage.getItem("recent");
+          let saveData = [];
+	  // localStorage에 recent 존재 여부 확인하기
+          if(getRecentData == null){
+            saveData.push(props.shoes.id);
+            localStorage.setItem("recent", JSON.stringify(saveData));
+          } else {
+            saveData = JSON.parse(getRecentData);
+            saveData.push(props.shoes.id);
+            // 중복된 값을 Set으로 없애준 뒤 배열로 저장
+            saveData = [... new Set(saveData)]
+            localStorage.setItem("recent", JSON.stringify(saveData));
+          }
+          navigate(`/detail/${props.index}`);
+        }}
+      />
+      {/* <h4>{props.product[props.index].title}</h4>
+        <p>{props.product[props.index].content}</p> */}
+      <h4>{props.shoes.title}</h4>
+      <p>{props.shoes.content}</p>
+    </div>
+  );
+}
+
+----------------------------------------------------
+※ localStorage 초기화 다른 방법
+
+App.js
+
+function App(){
+	useEffect(()=>{
+		localStorage.setItem('recent', JSON.stringify( [ ] ));
+	},[ ])
+}
+
+※ 매번 실행하면 초기화 되니 비교해서 처리되도록 조치 필요
+
+================================
+
+7. react-query : 실시간 데이터 처리
+- ajax 성공 시 / 실패 시 다른 html을 보여주려면?
+- 몇 초마다 자동으로 ajax 요청?
+- 실패 시 몇 초 후 재요청하려면?
+- 다음 페이지 미리 가져오기(prefetch)?
+- 실시간 SNS, 코인거래 등 사이트에서 사용함.
+
+
+ⓐ 설치하기
+================================
+>> npm install react-query@3    
+================================
+
+ⓑ index.js 에서 setting하기
+================================
+.........
+import {QueryClientProvider, QueryClient} from 'react-query';
+const queryClient = new QueryClient();
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </QueryClientProvider>
+  // </React.StrictMode>
+);
+
+================================
+
+ⓒ 서버에서 유저이름 가져와서 보여주기
+
+https://zzzmini.github.io/js/userdata.json
+
+================================
+{
+  "name": "zzzMini",
+  "email": "zzzMini@gmail.com"
+}
+================================
+
+ⓓ 네비게이션 바에 이름 출력부분 만들기
+================================
+          <Nav className="me-auto">
+            <Nav.Link>반가워요 kim</Nav.Link>
+          </Nav>
+        </Container>
+================================
+
+ⓔ ajax 를 useQuery로 감싸서 요청한 유저정보 가져오기
+================================
+import { useQuery } from 'react-query';
+
+function App() {
+   ..........
+
+  let invitedUser = useQuery('invitedUserQuery', ()=>
+    axios.get('https://zzzmini.github.io/js/userdata.json')
+    .then((result)=>{ return result.data })
+  )
+
+  console.log("=========================")
+  console.log("loadingUser : " )
+  console.log(invitedUser.data)
+  console.log("loadingUser.isLoading : " + invitedUser.isLoading);
+  return ( ......
+================================
+
+ⓕ 출력부분 수정하기
+
+================================
+          <Nav className="me-auto">
+            <Nav.Link>
+              { invitedUser.isLoading ? '로딩중' : invitedUser.data.name}
+            </Nav.Link>
+          </Nav>
+----------------------------------------------------
+※ 출력 부분을 아래와 같이 수정해도 가능함.
+
+      { result.isLoading && '로딩중' }
+      { result.error && '에러남' }
+      { result.data && result.data.name }
+
+================================
+
+ⓖ 지속적으로 요청하는 useQuery 확인하기
+
+================================
+
+  let invitedUser = useQuery('invitedUserQuery', ()=>
+    axios.get('https://zzzmini.github.io/js/userdata.json')
+    .then((result)=>{ 
+      console.log("요청함.")
+      return result.data }),
+      {staleTime : 2000}  // 2초 간은 재요청 안함.
+  )
+
+▷ 다른 App에 다녀오거나, 다른 탭에 다녀오면 다시 요청..
+▷ 즉, 실시간 처리에 적합함.
+▷ 오류가 발생해도 지속적으로 재시도 해줌.
+================================
+
+※ 자식컴포넌트나 타 컴포넌트에서 필요하면 그냥 다시 
+ useQuery 통해 ajax 실행코드 삽입하면 됨. 그러면, react가
+ 알아서 몰아서 한번에 처리해 줌.
+
+▶ 요청에 성공했을 경우에는 결과를 5분간 캐싱해 두고 사용한다.
+-> 재요청 시 기존 캐시로 먼저 보여주고, 추후에 재 요청해서 갱신함.
+
+
+8. 성능개선 1 : 개발자도구 & lazy import
+ⓐ react DevTools 설치하기
+================================
+- 크롬 웹 스토어에서 react Developer Tools 검색
+- 확장프로그램 설치
+- 크롬 개발자 탭에 Components 탭이 생성 됨.
+- 좌 상단 □ 검사봉 클릭해서 좌측 엘리먼트를 선택하면
+  어떤 컴포넌트에서 작업한 내용인지 확인 가능함.
+- props를 오른쪽에 보여 줌. 이거 보고 데이터 처리
+- 좌측 
+  App 컴포넌트를 선택하면 우측화면에 state 등의 정보확인가능
+
+- 우측 <> 를 클릭하면 예> 카드컴포넌트가 어떤 파일에
+몇 번째 줄에 있는지 확인도 가능함.
+
+================================
+ⓑ Redux 툴도 설치하면 비슷한 기능을 보여줌.
+
+ⓒ npm run build 하면 
+
+하나의 js, css 로 만들어 지며, 사이즈가 커진다.
+리액트 실행 시 관련 없는 컴포넌트는 즉시 로딩하지 않고
+lazy 하게 import 할 수 있다.
+
+================================
+import { lazy, useEffect, useState } from 'react'
+
+const Detail = lazy(()=> import('./routes/Detail.js'));
+================================
+
+▶ 이렇게 하면 별도의 js 파일로 만들어 준다.
+▶ 약간의 지연시간 발생 가능성 있음.
+
+※ 해당 지연시간 동안 뭔가를 보여주고 싶을 때
+================================
+
+import { lazy, useEffect, useState, suspense } from 'react'
+
+<Route path="/detail/:id" element={
+	<Suspense fallback={<div>로딩중임</div>}>
+		<Detail shos={shoes} />
+	</Suspense>
+ } />
+
+※ 대부분 <Routes> 전체 태그를 <Suspense>
+감싸서 사용한다.
+
+================================
+
+9. Node.js 와 연동하기
+ⓐ server 폴더 만들기
+ⓑ server.js
+
+================================
+
+const express = require('express');
+const path = require('path');
+const app = express();
+
+app.listen(8080, function(){
+    console.log('listening on 8080');
+})
+================================
+
+ⓒ 터미널에서
+
+>> npm init -y
+>> npm install express
+>> node server.js
+
+ⓓ 리액트 빌드하기
+>> npm run build
+
+ⓔ build 폴더에 보면 index.html 이 있음.
+
+ⓕ 리액트 프로젝트를 node 폴더로 옮겨 한번에 보이게 함.
+================================
+app.use(express.static(path.join(__dirname, 'shop/build')));
+app.get('/', function(req, res){
+    res.sendFile(path.join(__dirname, 'shop/build/index.html'))
+})
+================================
+
+ⓖ url 직접요청의 경우 오류가 생김
+
+>> http://localhost:8080/cart 
+
+Cannot GET /cart
+
+▶ 라우터 기능을 리액트가 직접 담당하도록 함.
+================================
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, '/react-project/build/index.html'));
+});
+================================
+
+ⓗ DB 데이터는 어떻게?
+
+예를 들어서 DB에서 글목록 데이터를 꺼내서 HTML로 보여주고 싶은 경우
+
+server-side rendering / client-side rendering 둘 중 하나 선택
+
+▷ server-side rendering은 html을 서버가 만들어서 보냄
+1. DB에서 데이터 뽑아서
+2. 글목록.html 파일에 꽂아넣고
+3. 그 html 파일을 서버에서 보내주는 것임 
+
+▷ client-side rendering은 html을 리액트가 브라우저안에서 만듦
+1. 리액트가 서버에 GET요청으로 DB데이터를 가져와서
+2. 그걸 html로 만들어서 보여주는 것임 
+
+※ 리액트를 쓰는 경우 보통 client-side rendering를 함.
+
+▷ DB에 있는 상품목록을 가져와서 리액트에서 보여주고 싶으면 
+1. 누군가 /product로 GET요청 함.
+2. 서버는 DB에서 데이터 꺼내서 보내주라고 API를 짜놓음
+3. 리액트는 상품목록을 보여주고 싶을 때 ajax로
+4. 서버의 /product 주소로 GET요청 날림
+5. 받아온 데이터를 html에 집어넣든 맘대로 개발 함.
+
+※ 리액트는 서버와의 통신은 거의 ajax로 진행 
+
+================================
+근데 nodejs 서버파일 상단엔
+================================
+app.use(express.json());
+var cors = require('cors');
+app.use(cors());
+================================
+
+>> npm install cors
+
+- express.json() : 유저가 보낸 array/object 데이터를 출력 용
+- cors는 다른 도메인 주소끼리 ajax 요청 주고받을 때 필요

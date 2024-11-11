@@ -1,0 +1,721 @@
+warning message 제거하기
+
+app.js 맨 위 상단에
+
+/* eslint-disable */ 넣어주기
+
+1. 프로젝트 생성하기 
+ⓐ 폴더 생성 후 shift + 마우스 우클릭 -> 여기에 powershell 창 열기
+  > npx create-react-app blog
+ⓑ 생성 안될 시 - 파워쉘을 관리자 모드로 열기
+  > Set-ExecutionPolicy Unrestricted
+ 
+ⓒ vs-code 열어서 생성된 blog 폴더 열기 
+ⓓ 터미널 열고 npm start 입력
+  >> http://localhost:3000/
+
+ⓔ 유용한 Extension 설치하기
+> Prettier : 단축키 설정 법 -- ctrl + shift + p --> 
+	Open Keyboard Shortcuts 검색 -> format document 검색 
+	-> key binding 설정
+(기본 : ctrl + shift + f)
+
+> auto close tag
+
+> react hooks snippets -> react hook의 snippets 제공 
+	-> ush 입력 후 tab
+
+> reactjs code snippets -> code snippet 제공 -> rsc 입력 후 tab
+
+2. 구조 설명
+ⓐ node_modules : 필요한 라이브러리가 모여있는 곳
+ⓑ public : 정적 파일이 놓이는 곳
+ⓒ src : 코딩하는 곳
+  -- app.js : main page
+  -- app.js 파일이 public 폴더 내의 index.html에 넣어줌. 
+  -- 누가? index.js 파일이...
+ⓓ package.json : 프로젝트 정보가 들어 있음.(자동생성 됨)
+
+ⓔ app.js 파일 열고 <div> 하나 남기고 지우기
+function App() {
+  return (
+    <div className="App">
+      
+    </div>
+  );
+}
+
+3. 리액트에서 레이아웃 만들기(JSX)
+
+ⓐ 블로그 레이아웃 만들기
+function App() {
+  return (
+    <div className="App">  ← JSX(.js에서 쓰는 html 대체 폼 정도)
+      
+    </div>
+  );
+}
+--> 실제 리액트에서 <diiv> 만드는 법
+React.createElement('div', null, 'Hello World') 이렇게 길게 써야하는 것을
+간단히 만들 수 있도록 지원해 주는 문법
+<div className="App">
+      <div>
+        React로 만드는 블로그
+      </div>
+    </div>
+
+ⓑ app.css로 스타일 주기
+<div className="black-bg">  ← JSX는 className으로 써야한다.
+        React로 만드는 블로그
+</div> 
+
+※ class 로 쓰면 js 문법으로 생각 함.
+
+app.css ================================
+
+.black-bg {
+  display: flex;
+  background: black;
+  width: 100%;
+  height: 50px;
+  color: white;
+  padding-left: 20px;
+  align-items: center;
+}
+
+--> 위의 내용을 적용하기 위해 app.js에서
+import './App.css'; 이렇게 임포트 되어 있다.
+
+ⓒ 중괄호 이용해서 글 제목 만들기 -> 데이터 바인딩
+function App() {
+  let post = '인천 우동 맛집';
+
+  return (
+    <div className="App">
+      <div className="black-bg">
+        React로 만드는 블로그
+      </div>
+      <h4>{post}</h4>
+    </div>
+  );
+}
+
+※ html 태그 내 모든 attribute내에서 {} 사용 가능함.
+
+ⓓ html 내에서 style을 사용할 때
+-- style={ {color : 'red' } } 와 같이 중괄호 내에 Object 타입으로 써야 함.
+-- <h4 style={{color : 'red', font-size : '16px'}}>{post}</h4>
+한 개 이상 적을 때는 , 로 구분해서 추가함. 
+그러나, 
+항상 Camel Case 사용해야함(스타일의 "-"를 minus로 인식하는
+자바스크립트의 기질이 있다.)
+
+<h4 style={{color : 'red', fontSize : '16px'}}>{post}</h4>
+
+4. state 사용하기(중요 함.)
+
+ⓐ 글 목록 추가해 보기
+<div className="list">
+        <h4>글 제목</h4>
+        <p>작성일 : 10월 8일</p>
+</div>
+
+================================
+div {
+  box-sizing: border-box;
+}
+.list {
+  padding-left: 20px;
+  text-align: left;
+  border-bottom: 1px solid gray;
+}
+================================
+
+※ return태그 내에는 무조건 1개 이상의 <div>태그가 있어야 한다.
+
+ⓑ state : 자료를 잠깐 저장하는 용도(변수 선언과 유사)
+※ 순서
+첫째, import {useState} from 'react'
+둘째, useState(보관할 자료);
+셋째, let [x, y] : x = getter, y = setter
+
+ let post = '인천 우동 맛집';
+ let[a, b] = useState{'남자 코드 추천'}
+--> js Destructuring
+ let num = [1, 2];
+ let a = num[0];
+ let c = num[1]; 이 두 문장을 하나로...
+ let [a, c] = [1, 2]; 배열의 값을 a, c 변수에 각각 넣어줌.
+
+※ useState(보관할 자료)는 
+ useState(보관할 자료, 값을수정할함수)가 들어 있어서
+ let [x, y] : x = getter, y = setter
+ 이렇게 mapping 됨.
+
+ⓒ 변수와 state의 차이
+※ 일반 변수는 자동 rendering 안되나, state는 자동으로
+    다시 rendering 되서 바로 반영 된다.
+ 즉, 변경 내용이 잦아 자주 렌더링 되어야 하는 요소는
+ state를 사용하고, 그렇지 않으면 변수 선언해서 사용함.
+
+[문제] 블로그 글 제목과 내용을 세개 작성해서 state로
+만들어 뿌려보자
+================================
+  남자코트 추천
+  2월 17일 발행
+  ------------------------------------------------
+  강남 우동맛집
+  2월 17일 발행
+  ------------------------------------------------
+  자바독학
+  2월 17일 발행
+  ------------------------------------------------
+================================
+import logo from './logo.svg';
+import './App.css';
+import {useState} from 'react'
+
+function App() {
+  let post = '인천 우동 맛집';
+  let[title, setTitle] = useState(
+    [
+    '남자 코트 추천',
+    '강남 우동맛집',
+    '자바독학'
+    ]
+  );
+  let[createDate, setCreateDate] = useState(
+    [
+    '2024-04-01',
+    '2024-04-05',
+    '2024-04-09'
+    ]
+  );
+
+  return (
+    <div className="App">
+      <div className="black-bg">
+        React로 만드는 블로그
+      </div>
+      <div className="list">
+        <div>
+          <h4>{title[0]}</h4>
+          <p>{createDate[0]}</p>
+        </div>
+        <div>
+          <h4>{title[1]}</h4>
+          <p>{createDate[1]}</p>
+        </div>
+        <div>
+          <h4>{title[2]}</h4>
+          <p>{createDate[2]}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+================================
+
+
+5. 좋아요 버튼 누르면 실행되게 만들기
+ⓐ 좋아요 버튼 만들기
+
+let [like, setLike] = useState(0);
+
+<div>
+          <h4>{title[0]} <span>👍</span> {like} </h4>
+          <p>{createDate[0]}</p>
+</div>
+
+ⓑ onClick 이벤트 만들고 좋아요 증가 시키기
+ -- 아무 태그 내에나 다 적용 됨
+ <h4>{title[0]} 
+	<span onClick={함수명 or 익명함수}>
+	👍</span> {like} </h4>
+
+또는 
+onClick={function(){body}} or 
+onClick={()=>{body}}
+이렇게 다 집어 넣어도 되나, 
+긴 것은 밖으로 빼고, 
+짧은 함수는 주로 화살표 함수로 주로 사용한다.
+
+ⓒ function은 
+function App() {
+ 변수작성;
+ state 작성;
+ 함수작성;
+ return();
+}
+================================
+※ state 변경은 항상 setter를 이용한다.(재랜더링됨)
+<span onClick={addLikes}>👍</span> {like}
+
+① function addLikes(){
+    	setLike(like+1);
+    }
+② <span onClick={()=>{setLike(like+1)}}>👍
+
+================================
+[문제] 남자코트 추천 옆에 버튼하나 만들고 누르면
+여자코트 추천으로 바뀌도록 수정
+================================
+<span>
+<button onClick={changeTitle}>변경</button>
+</span>
+
+let[title, setTitle] = useState(
+    [
+    '남자 코트 추천',
+    '강남 우동맛집',
+    '자바독학'
+    ]
+  );
+
+  function changeTitle(){
+    let temp = [... title];
+    temp[0] = '여자 코트 추천';
+    setTitle([...temp]);
+  }
+
+① 기존 state와 값 비교 후 바뀌면 수정처리 함.
+② let arr = [1,2,3]; 은 arr은 배열의 주소값을 가짐
+→ 그러니 새 배열에 딥카피 해야함.
+    let temp = arr;  -- 주소만 복사됨.
+    console.log(arr == temp); --> true
+    결국 딥카피(or shallow copy)해서 새롭게 주소를 
+    할당받아야 데이터가 바뀌고 처리됨.
+================================
+
+================================
+[문제] 맨위에 버튼 만들고 누르면 제목에 따라
+  오름차순 정렬되도록 처리.
+================================
+<div>
+        <button onClick={()=>{
+          let temp = [... title];
+          temp.sort((a,b)=>{
+            if(a<b) return -1;
+            if(a>b) return 1;
+            return 0;
+          });
+          setTitle(temp);
+        }}>글정렬하기</button>
+</div>
+================================
+
+6.  컴포넌트로 상세페이지 만들기
+- 글을 클릭하면 하단에 모달페이지로 보이기
+
+ⓐ 디자인하기
+================================
+맨 아래에 만들기
+
+<div className="modal">
+        <h4>제목</h4>
+        <p>날짜</p>
+        <p>상세내용</p>
+</div>
+
+================================
+app.css
+
+.modal {
+  margin-top: 20px;
+  padding: 20px;
+  background: #eee;
+  text-align: left;
+}
+
+================================
+
+ⓑ 컴포넌트로 변환하기
+step 1. function 만들기(함수밖에 만들기)
+ - 첫자 대문자로..
+step 2. function의 body 내부
+ return에 넣기
+step 3. 함수명(컴포넌트)을 태그이름으로 바꾸기
+
+================================
+function Modal(){
+  return(
+    <div className="modal">
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+  );
+}
+
+<Modal></Modal>
+
+※ 모든 함수는 하나의 <div></div>안에
+들어가야 한다. 
+의미없는 <div>대신 <></>를 써도 됨
+: fragment 라고 한다.
+※ <Modal /> 이렇게 써도 됨.
+================================
+
+ⓒ 언제 컴포넌트를 사용하는가?
+- 반복적인 html 축약
+- 큰 페이지를 컴포넌트로 만들기
+- 자주 변경되는 UI를 컴포넌트로 만들기
+  (항상 그런것은 아님)
+단, state 값을 사용할 때 문제 생김 즉, 참조 불가
+
+================================
+※ let or const로 만들기
+
+let Modal = () => {
+	return (
+		<div>
+			어쩌구
+		</div>
+	);
+}
+
+이렇게 생성해도 결과는 같음.
+================================
+
+7. 동적인 UI 만들기(모달창)
+- 글 제목 클릭하면 모달창 열기
+
+※ 순서
+step 1. html css로 미리 디자인 만들기
+step 2. UI의 현재 상태를 state로 저장하기
+step 3. state에 따라 UI가 어떻게 보일지 작성
+
+ⓐ  UI의 현재 상태를 state로 저장
+ let [modal, setModal] = useState(false);
+- 현재 안보이니까 false 로 setting
+
+ⓑ modal 값에 따라 <Modal /> 컴포넌트 보이게하기
+     {
+        modal == true? <Modal /> : null
+      }
+※ 자바스크립트의 if 함수는 안 먹고 삼항연산 작동 함. 
+
+ⓒ 글제목 클릭하면 modal state를 true로 바꾸기
+	<h4 onClick={()=>{
+            setModal(true);
+          }}> {title[0]} 
+
+================================
+[문제] 제목을 다시 누르면 모달이 사라지도록...
+즉, 스위칭 되도록 수정하기
+================================
+<h4 onClick={()=>{
+            if(modal == false){
+              setModal(true);
+            } else {
+              setModal(false);
+            }
+            
+          }}>{title[0]}
+================================
+
+8. map으로 반복처리하기
+
+ⓐ js의 map 살펴보기
+
+▶ console에서 확인하기
+
+[1,2,3].map(function(){
+	console.log(1);
+});
+
+▶ 배열의 수 만큼 리턴해서 새로운 배열을 리턴
+[1,2,3].map(function(x){
+    console.log(x);
+    return 'test';
+});
+
+Please type ‘allow pasting’ below and hit Enter to allow pasting.
+
+입력 후 복붙....
+
+(3) ['test', 'test', 'test']
+
+ⓑ html 안에서 중괄호{} 는 js의 for 사용불가
+
+▷ 그런데 map()은 사용가능
+
+{
+	[1,2,3].map(function(){
+		return <div>안녕</div>
+	})
+}
+
+-- 이렇게 하면 
+
+지금 이 중괄호가 실행되는 그 자리에
+[<div>안녕</div>, <div>안녕</div>,<div>안녕</div>] 
+리턴되는데 
+react가 html 태그만 남기고 잘 정리해 줌.
+
+ⓒ state에 있는 만큼 반복해서 출력하고, 자리잡기
+-- 코드 정리하기(좋아요.. 날짜 등...)
+
+================================
+let [likes, setLikes] = useState([0,0,0]);
+
+<div className="list">
+      {
+        title.map(function(x, index){
+          return (
+            <div>
+              <h4 onClick={()=>{
+               	setModal(true);
+                }}>{title[index]} 
+              {/* {x} */}
+            <span onClick={()=>{
+              let copy = [ ... likes];
+              copy[index] ++;
+              setLikes(copy);
+            }}>👍</span> {likes[index]} 
+            <span><button onClick={changeTitle}>
+		변경</button></span>
+          </h4>
+          <p>{createDate[index]}</p>
+        </div>
+          )
+        })
+      }
+
+================================
+
+
+9. props : 자식이 부모 state 사용하기
+
+step 1. 컴포넌트 안에 
+{
+    modal == true? <Modal propsName = {stateName} />
+		 : null
+}
+
+step 2. 받는 자식 컴포넌트 인자로 전달
+-- 보통 props로 사용
+
+function Modal(props){
+}
+
+step 3. 사용하는 곳에 
+-- props.title로 씀.
+
+▶ 모달창 배경색을 props로 보내 바꾸기
+
+{
+  modal == true ? <Modal color="royalblue" 
+          title={title} /> : null
+}
+
+function Modal(props) {
+  return (
+    <div className="modal" style={{background : props.color}}>
+      <h4>{props.title[0]}</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+);
+
+================================
+[문제] 모달창 상세내용 밑에 글수정 버튼 만들고
+ 클릭하면 글 제목이 여자코트 추천으로 바뀌게 
+ 만들기
+※ 힌트 
+ props는 함수, 문자, state 등 모든것을 전달할 수 있다.
+================================
+{
+        modal == true ? <Modal color="yellow" 
+        title={title} currentIndex={currentIndex}
+        changeTitle={changeTitle}/> : null
+      }
+
+function Modal(props) {
+  return (
+    <div className="modal" style={{background : props.color}}>
+      <h4>{props.title[props.currentIndex]}</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+      <p><button onClick={props.changeTitle}>변경</button></p>
+    </div>
+  );
+}
+================================
+
+10. props로 상세페이지 만들기
+
+================================
+ⓐ 현재 글을 지정하는 index state 생성하기
+let [currentIndex, setCurrentIndex] = useState(0);
+
+ⓑ 제목을 클릭할 때마다 인덱스 변경하기
+<h4 onClick={() => {
+        setModal(true);
+        setCurrentIndex(index);}}>
+{title[index]}
+
+ⓒ 모달에 props로 전송하기
+      {
+        modal == true ? <Modal color="yellow" 
+        title={title} 
+        createDate={createDate}
+        currentIndex={currentIndex}
+        changeTitle={changeTitle}/> : null
+      }
+
+ⓓ 모달창에 보이게하기
+
+function Modal(props) {
+  return (
+    <div className="modal" style={{background : props.color}}>
+      <h4>{props.title[props.currentIndex]}</h4>
+      <p>{props.createDate[props.currentIndex]}</p>
+      <p>상세내용</p>
+      <p><button onClick={props.changeTitle}>변경</button></p>
+    </div>
+  );
+}
+================================
+
+
+11. 사용자가 입력한 글 처리
+
+- 게시글 하단 input 를 만들고 입력 후 발행 단추를 누르면
+게시글로 등록되는 기능만들기
+
+※ react의 모든 태그는 닫는 태그가 반드시 필요하다.
+
+ⓐ input tag 만들기
+<input onChange={(e)=>{
+        console.log(e.target.input.value)
+      }}></input>
+
+※ e : input 태그에서 지금 발생하는 이벤트에 관련된 여러
+ 기능이 담겨 있음.
+
+<input onChange={(e)=>{
+        console.log(e.target.value)
+      }}></input>
+
+※ F12 눌러서 e에서 파생되는 것중 target을 누르면.. input
+의 value가 나온다... 얘를 쓰면 됨.
+
+※ 따봉을 갖고 있는 span Tag를 누르면 이벤트 버블링 때문에 상위
+요소로 이벤트가 전달되서 <h4> <div> 까지 눌러진다.
+
+▶ Event Bubbling 처리를 강제로 막는 법 
+- 막고자 하는 이벤트에(여기서는 따봉)
+  <span onClick={(e)=>{e.stopPropagation(); changeLikes(likes+1)}}
+
+>>>>  propagation : 번식.. 이니까 번식을 막는다^^
+
+그러니까..이벤트가 세번 발생하게 됨.
+
+ⓑ input 상자안의 값을 state에 저장하기(변수도 가능)
+	
+let [inputValue, setInputValue] = useState('');
+
+
+      <input onChange={(e)=>{
+        // console.log(e.target.value)
+        setInputValue(e.target.value);
+        console.log(inputValue)
+      }}></input>
+
+> 두번째 글부터 출력됨. 이유는 react가 기본적으로 비동기이기때문
+   즉, 값을 state에 저장하기 전에 다음 명령을 실행해 줌.
+   그래서 입력한 값이 바로 적용이 안되는 것.
+
+
+12. 블로그 글 발행 기능 만들기
+
+================================
+[문제 1] 지금 생성한 input 상자에 글을 적고 버튼을 누르면
+  기존 title 배열에 추가되도록.. 
+  물론 날짜도 현재 입력 날짜가 나오도록 처리해야 함.
+  출력은 자동으로 됨.
+
+<button onClick={()=>{
+	if(document.querySelector('input').value == '') {
+          alert("글을 입력하세요");
+          document.querySelector('input').focus();
+          return;
+        }
+        // 타이틀 넣기
+        let imsi = [... title];
+        imsi.unshift(inputValue);
+        setTitle(imsi);
+
+        // 생성한 날짜 넣기
+        let today = new Date();
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var dateString = year + '-' + month  + '-' + day;
+        imsi = [... createDate];
+        imsi.unshift(dateString);
+        setCreateDate(imsi);
+
+        // 좋아요 추가하기
+        let imsi = [... likes];
+        imsi.unshift(0);
+        setLikes(imsi);
+
+        setCurrentIndex(0);
+      }}>등록하기</button>
+
+================================
+[문제 2] 각 글 옆에 변경 단추를 삭제버튼으로 변경하고
+ 누르면 글이 삭제되도록 처리하기
+================================
+
+<span><button onClick={(e)=>{
+                      e.stopPropagation();
+                      
+                      console.log("현재 인덱스 : " + index)
+
+                      // 제목, 날짜, 좋아요 삭제 처리하기
+                      let tempTitle = [... title];
+                      let tempCreateDate = [... createDate];
+                      let tempLikes = [... likes];
+
+                      tempTitle.splice(index, 1);
+                      tempCreateDate.splice(index, 1);
+                      tempLikes.splice(index, 1);
+
+                      setTitle(tempTitle);
+                      setCreateDate(tempCreateDate);
+                      setLikes(tempLikes);
+                    }
+                  }>삭제</button>
+</span>
+
+================================
+
+13. class 이용 옛날 React 문법
+
+class Modal2 extends React.Component(){
+	construnctor(props){
+		super(props);
+		this.state = {
+			name : 'kim',
+			age : 20
+			}		
+	}
+	render(){
+		return(
+		<div>안녕 {this.state.name} or {this.props.name}
+			<button onClick={()=>{
+				this.setState({age : 21})
+			}}</button>버튼
+		</div>
+		)
+	}
+}
+
+
+14. 배포하기(build & git pages)
+
