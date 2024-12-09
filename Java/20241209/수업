@@ -1,1 +1,32 @@
 
+자동차 클래스
+
+src -> carPackage 생성
+- class name : Car
+  - member
+    - brand : 현대, 현대기아, 삼성
+    - power : 2000
+    - name : 그랜저, k5, sm6
+    - color : 흰색, 검정, 회색
+    - navigation : true, false
+    - speed = 0
+§ brand와 power, name 는 출고 시 결정
+§ navigation, color는 출고 후에 결정
+   speedUp()
+   speedDown()
+--- speedUp과 down은 매 실행시 마다 5km 증감
+-- speed === 0되면 멈췄습니다.
+-- speed 0kim보다 커지면 
+   출발합니다. 
+   현재 속도는 몇 km 입니다.
+-- speed 30km를 넘으면 -- 학교앞
+   과속입니다.
+   현재 30km를 유지합니다.
+
+- class name : CarMain (main)
+
+
+출력
+
+나의 애마 000은 00 브랜드 000 cc입니다.
+색상은 00이고, 네이게이션은 있습니다.(없습니다)
