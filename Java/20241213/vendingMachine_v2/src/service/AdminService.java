@@ -53,4 +53,12 @@ public class AdminService {
             return false;
         }
     }
+
+    public int existItem(String item) {
+        return repository.findIndex(item);
+    }
+
+    public void updateItem(int index, Product newProduct) {
+        repository.update(index, newProduct);
+    }
 }
