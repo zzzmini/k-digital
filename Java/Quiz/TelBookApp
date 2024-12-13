@@ -20,7 +20,7 @@ private String telNum;
 
 @Override
 public String toString() {
-  return id +  "\t  "  + name + "\t" + age + "\t" + address + "\t" + phone;
+  return id +  "\t  "  + name + "\t" + age + "\t" + address + "\t" + telNum;
 }
 
 
