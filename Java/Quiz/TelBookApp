@@ -4,7 +4,7 @@
 ✏ project name : telBookApp
 
 ✏ package 
-  - interface
+  - myInterface
   - repository
   - dto (기존 vo)
   - service
