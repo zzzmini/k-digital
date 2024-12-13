@@ -52,7 +52,29 @@ public class AdminView {
     }
 
     public void updateMenu() {
-        System.out.println("관리자 메뉴수정 화면");
+        System.out.println("수정 할 제품명 입력");
+        String item = sc.next();
+
+        // 수정할 제품이 있는지 먼저 검사
+        int index = adminService.existItem(item);
+        if (index == -1) {
+            System.out.println("수정할 제품이 없습니다.");
+            return;
+        } else {
+            System.out.println("(수정) 메뉴 이름 :");
+            String newItem = sc.next();
+
+            System.out.println("(수정) 메뉴 가격 :");
+            int newPrice = sc.nextInt();
+
+            System.out.println("(수정) 재고 수량 :");
+            int newStock = sc.nextInt();
+
+            Product newProduct = new Product(newItem, newPrice, newStock);
+            adminService.updateItem(index, newProduct);
+            System.out.println("수정완료");
+            viewAllList();
+        }
     }
 
     public void updateStock() {

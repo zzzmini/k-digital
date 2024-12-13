@@ -1,6 +1,9 @@
 import view.AdminView;
 import view.UserView;
+import vo.Product;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MachineMain {
@@ -41,12 +44,10 @@ public class MachineMain {
                                 adminView.deleteMenu(); // 완료
                                 break;
                             case 3:
-                                System.out.println("3. 메뉴수정");
-                                adminView.updateMenu();
+                                adminView.updateMenu(); // 완료
                                 break;
                             case 4:
-                                System.out.println("4. 재고등록");
-                                adminView.updateStock();
+                                adminView.updateStock(); // 완료
                                 break;
                             case 5:
                                 adminView.viewAllList(); // 완료
