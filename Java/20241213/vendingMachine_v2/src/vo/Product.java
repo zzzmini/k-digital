@@ -16,11 +16,8 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "item : '" + item + '\'' +
-                ", price : " + price +
-                ", stock : " + stock +
-                '}';
+        String result = "제품명 : " + item + " / 가격 : " + price + " / 재고개수 : " + stock;
+        return result;
     }
 
     public String getItem() {

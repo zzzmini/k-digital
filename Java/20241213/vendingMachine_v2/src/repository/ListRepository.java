@@ -4,6 +4,7 @@ import myInterface.ArrayListInterface;
 import vo.Product;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ListRepository implements ArrayListInterface {
@@ -14,6 +15,7 @@ public class ListRepository implements ArrayListInterface {
     @Override
     public boolean insert(Product product) {
         productList.add(product);
+        System.out.println(productList);
         return true;
     }
 
@@ -37,6 +39,16 @@ public class ListRepository implements ArrayListInterface {
             }
         }
         return null;
+    }
+
+    @Override
+    public int findIndex(String name) {
+        for (Product x : productList) {
+            if (x.getItem().equals(name)) {
+                return productList.indexOf(x);
+            }
+        }
+        return -1;
     }
 
     @Override
