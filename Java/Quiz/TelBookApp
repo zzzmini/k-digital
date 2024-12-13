@@ -27,9 +27,9 @@ public String toString() {
 3. interface 
 public interface CrudInterface {
 	// 입력
-	int insert(TelBook telBook);
+	int insert(TelBookDto telBook);
 	// 수정
-	int update(TelBook telBook);
+	int update(TelBookDto telBook);
 	// 삭제
 	int delete(Long id);
 	// 전체검색
