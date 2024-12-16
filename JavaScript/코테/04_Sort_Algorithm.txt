@@ -1,0 +1,571 @@
+1. 선택(Selection) 정렬
+
+- 선택정렬은 매 단게에서 가장 작은 원소를 선택해서 앞으로 보냄
+- 앞으로 보내진 원소는 더 이상 위치가 변하지 않는다.
+- 시간복잡도 O(N^2)로 비효율적 정렬 알고리즘 중 하나.
+
+※ 동작방식
+ⓐ 각 단계에서 가장 작은 원소를 선택
+ⓑ 현재까지 처리되지 않은 원소들 중 가장 앞의 원소와 교체
+
+예> 4 1 2 5 3 
+1단계 : 1 4 2 5 3
+2단계 : 1 2 4 5 3
+3단계 : 1 2 3 5 4
+4단계 : 1 2 3 4 5 
+
+
+- 입력
+sort.txt 파일의 첫째 줄에 4 1 2 5 3 가 주어진다.
+
+- 출력
+위의 예시와 같은 결과 출력.
+
+------------------------------------------------------------------
+let fs = require('fs');
+input = fs.readFileSync('sort.txt').toString().split('\n');
+let data = input[0].split(' ').map(Number);
+console.log('source = ' + data);
+for(let i=0; i<data.length-1; i++){
+    let minIndex = i;
+    for(let j=i+1; j<data.length; j++){
+        if(data[minIndex] > data[j]){
+            minIndex = j;
+        }
+    }
+    
+    swap(i, minIndex);
+    console.log((i+1) + '회전 : ' + data);
+}
+
+function swap(i, minIndex){
+    let temp = data[i];
+    data[i] = data[minIndex];
+    data[minIndex] = temp;
+}
+------------------------------------------------------------------
+
+2. 버블정렬
+
+- 인접한 두 원소를 비교하여, 정렬이 안되어 있으면 위치를 서로 변경
+- 시간복잡도 O(N^2)로 비효율적 정렬 알고리즘 중 하나.
+
+※ 동작방식
+ⓐ 각 단계에서 인접한 두 개의 원소를 비교하여 큰 값을 뒤로 보냄.
+ⓑ 매 회차마다 가장 큰 원소가 맨 뒤로 이동된다.
+
+예> 9 8 2 4 3  
+1단계 : 8 2 4 3 9 
+2단계 : 2 4 3 8 9
+3단계 : 2 3 4 8 9
+4단계 : 2 3 4 8 9 
+
+------------------------------------------------------------------
+let fs = require('fs');
+input = fs.readFileSync('sort.txt').toString().split('\n');
+let data = input[0].split(' ').map(Number);
+console.log('source = ' + data);
+bubble(data);
+
+function bubble(data){
+    for(let i=0; i<data.length-1; i++){
+        for(let j = 0 ; j<data.length -i ; j++){
+            if(data[j] > data[j+1]){
+                swap(j, j+1);
+            }
+        }
+        console.log((i+1) + '회전 : ' + data);
+    }
+}
+
+function swap(i, j){
+    let temp = data[i];
+    data[i] = data[j];
+    data[j] = temp;
+}
+------------------------------------------------------------------
+
+※ 데이터 3만개 만들어서 시간 측정하기
+------------------------------------------------------------------
+// 서로 다른 30000 개 배열 생성
+let data = Array.from({length:30000}, 
+    ()=> Math.floor(Math.random()*1000));
+startTime = new Date().getTime();
+bubble(data);
+endTime = new Date().getTime();
+console.log('버블소트 소요시간 : ' , endTime - startTime , 'ms');
+
+// 값이 7인 30000개 담은 배열 생성
+data = Array.from({length:30000}, () => 7);
+startTime = new Date().getTime();
+bubble(data);
+endTime = new Date().getTime();
+console.log('버블소트 소요시간 : ' , endTime - startTime , 'ms');
+------------------------------------------------------------------
+
+3. 삽입정렬(Insertion)
+
+- 각 숫자를 적절한 위치에 삽입하는 정렬 기법
+- 시간복잡도 O(N^2)로 비효율적 정렬 알고리즘 중 하나.
+
+※ 동작방식
+ⓐ 각 단계에서 현재 원소가 삽입될 위치를 찾는다.
+ⓑ 적절한 위치에 도달할 때까지 반복적으로 왼쪽으로 이동한다.
+ⓒ 두번째 원소부터 비교하여 앞으로 이동시킨다.
+
+※ 삽입, 버블정렬에 비해 빠르다. 거의 정렬되어 있는 구조는 더 빠르다.
+예> 9 8 2 4 3  
+1단계 : 8 9 2 4 3 
+2단계 : 2 8 9 4 3
+3단계 : 2 4 8 9 3
+4단계 : 2 3 4 8 9 
+
+------------------------------------------------------------------
+function insertion(data){
+    for(let i=1; i<data.length; i++){
+        for(let j = i ; j > 0 ; j--){
+            if(data[j] < data[j-1]){
+                swap(j, j-1);
+            }
+            // 자기보다 작으면 멈춤
+            else {
+                break;
+            }
+        }
+        console.log((i+1) + '회전 : ' + data);
+    }
+}
+------------------------------------------------------------------
+
+4. 병합정렬(Merge Sort)
+
+- 현재 많이 사용되고 있는 효율적인 알고리즘 중 하나
+- 시간복잡도 O(NlogN)로 비효율적 정렬 알고리즘 중 하나.
+- 10만 건이 넘는 자료 정렬 시 적절함.
+- 분할과 정복의 개념(divide and conquer)이 적용됨.
+
+
+※ 분할 정복(Divide and Conquer)
+ⓐ Divide : 큰 문제를 작은 부분문제로 분할
+ⓑ Conquer : 작은 부분의 문제를 각각 해결
+ⓒ 조합(Combine) : 해결한 부분 문제의 답을 이용하여 다시 큰문제 해결
+
+※ 동작방식
+ⓐ 일반적으로 재귀함수를 이용하여 구현
+ⓑ 그 이유는? 큰 문제를 작은 문제로 "분할하는 방식이 동일" 경우가 많기 때문
+ⓒ 더 이상 쪼갤 수 없을 때까지 계속 분할 
+
+※ 두 부분으로 나누어 정렬한 후 다시 병합하는 방식이
+예> 8 4 6 1 2 5 7 3  
+분할 단계 : 8 4 6 1       2 5 7 3 
+분할 단계 : 8 4    6 1       2 5    7 3 
+분할 단계 : 8  4    6  1       2  5    7  3
+정복 단계 : 4  8    1  6       2  5    3  7
+정복 단계 : 1  4  6  8         2  3  5  7
+정복 단계 : 1 2 3 4 5 6 7 8 
+
+※ 병합 정렬의 시간복잡도
+- 직관적으로 봤을 때 높이 O(logN)이고 너비가 O(N)인 사각형과 유사
+- 최악의 시간복잡도는 O(NlogN) 이다.
+- 장점 : 최악의 경우에도 O(NlogN) 유지
+- 단점 : 임시배열 필요
+
+------------------------------------------------------------------
+let fs = require('fs');
+input = fs.readFileSync('sort.txt').toString().split('\n');
+let data = input[0].split(' ').map(Number);
+
+console.log('source = ' + data);
+let sorted = [];
+
+mergeSort(data, 0, data.length-1);
+console.log('result = ' + data);
+
+function mergeSort(arr, left, right){
+    // 원소 1개 인 경우
+    if(left < right){
+        //원소 2개 이상
+        let mid = parseInt((left+right)/2);
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid+1, right);
+        myMerge(arr, left, mid, right);
+    }
+}
+
+function myMerge(arr, left, mid, right){
+    let i = left;
+    let j = mid + 1;
+    let k = left;  // 결과 배열의 첫 인덱스
+
+    while(i<=mid && j <= right){
+        if(arr[i] <= arr[j]){
+            sorted[k++] = arr[i++];
+        } else {
+            sorted[k++] = arr[j++];
+        }
+    }
+    // 왼쪽 배열 처리 끝
+    if(i > mid){
+        for(; j <= right; j++){
+            sorted[k++] = arr[j]
+        }
+    }
+    // 오른쪽 배열 처리 끝
+    else{
+        for(; i <= mid; i++){
+            sorted[k++] = arr[i];
+        }
+    }
+    // 정렬결과 원본 반영
+    for(let x = left; x <= right; x++){
+        arr[x] = sorted[x];
+    }
+    console.log('sorted : ' + sorted);
+}
+------------------------------------------------------------------
+
+5. 자바스크립트 정렬 라이브러리 : sort()
+
+5-1. 숫자의 정렬
+- 배열에 포함된 데이터를 정렬하는 sort() 함수를 제공
+- 최악의 경우 시간복잡도 O(NlogN)을 보장
+
+※ 두 개의 원소 a, b를 입력 받은 경우
+ⓐ 반환값이 0 보다 작은 경우 -> a가 우선순위가 높아, 앞에 위치
+ⓑ 반환값이 0 보다 큰 경우 -> b가 우선순위가 높아, 앞에 위치
+ⓒ 반환 값이 0 인 경우 -> 순서 변화 없음.
+ⓓ 위의 비교를 사용하지 않으면 문자열 처리가 된다.
+
+------------------------------------------------------------------
+let fs = require('fs');
+input = fs.readFileSync('sort.txt').toString().split('\n');
+let data = input[0].split(' ').map(Number);
+console.log('source = ' + data);
+
+data.sort((a, b)=> a-b);
+console.log('result(asc) = ' + data);
+
+data.sort((a, b)=> b-a);
+console.log('result(desc) = ' + data);
+------------------------------------------------------------------
+
+5-2. 문자의 정렬
+- 기본 오름차순 정렬은 내부 함수 없이 가능
+- 내림차순  정렬은 함수 명기 필요
+
+------------------------------------------------------------------
+let data = ['fineapple', 'durian', 'carrot', 'banana', 'apple'];
+console.log('source = ' + data);
+data.sort();
+console.log('result(asc) = ' + data);
+
+data.sort(compare);
+console.log('result(desc) = ' + data);
+
+function compare(a,b){
+    if(a>b) return -1;
+    if(a<b) return 1;
+    else return 0;
+}
+------------------------------------------------------------------
+
+5-3. 대소문자 무관한게 비교하기(toUpperCase)
+-- 위의 자료에서 carrot을 Carrot로 바꾸면 정렬 안됨.. 대문자 나중에
+- 모든 문자를 아예 대문자로 변환비교 처리 해야 함.
+
+------------------------------------------------------------------
+function compare(a,b){
+    let upperA = a.toUpperCase();
+    let upperB = b.toUpperCase();
+    if(upperA>upperB) return -1;
+    if(upperA<upperB) return 1;
+    else return 0;
+}
+------------------------------------------------------------------
+
+5-4. 객체 비교하기
+
+------------------------------------------------------------------
+let data = [
+    {name: '홍길동', score : 90},
+    {name: '김철수', score : 85},
+    {name: '박영희', score : 99},
+];
+console.log(data);
+// 성적 오름차순 정렬하기(즉, 성적 순...)
+data.sort((a,b) => (b.score - a.score));
+
+function compare(a, b){
+    return b.score - a.score;
+}
+console.log(data);
+------------------------------------------------------------------
+
+
+문제 1. 좌표정렬하기
+
+- 문제
+2차원 평면 위의 점 N개가 주어진다. 좌표를 x좌표가 증가하는 순으로, 
+x좌표가 같으면 y좌표가 증가하는 순서로 정렬한 다음 
+출력하는 프로그램을 작성하시오.
+
+- 입력
+첫째 줄에 점의 개수 N (1 ≤ N ≤ 100,000)이 주어진다. 
+둘째 줄부터 N개의 줄에는 i번점의 위치 xi와 yi가 주어진다. 
+(-100,000 ≤ xi, yi ≤ 100,000) 좌표는 항상 정수이고, 
+위치가 같은 두 점은 없다.
+
+- 출력
+첫째 줄부터 N개의 줄에 점을 정렬한 결과를 출력한다.
+
+- 예제 입력 1 
+5
+3 4
+1 1
+1 -1
+2 2
+3 3
+
+- 예제 출력 1 
+1 -1
+1 1
+2 2
+3 3
+3 4
+
+------------------------------------------------------------------
+let fs = require('fs');
+let input = fs.readFileSync('sort_test.txt').toString().split('\n');
+
+let n = Number(input[0]);
+let data = [];
+
+for(let i=1; i<=n; i++){
+    let [x, y] = input[i].split(' ').map(Number);
+    data.push([x, y]);
+}
+console.log('소스 : ');
+console.log(data);
+
+data.sort(compare);
+function compare(a, b){
+    if(a[0] != b[0]){
+        return a[0] - b[0]; // x 좌표 기준 오름차순
+    } else {
+        return a[1] - b[1]; // y 좌표 기준 오름차순
+    }
+}
+
+console.log('결과 : ');
+console.log(data);
+console.log('출력 : ');
+
+let result = '';
+for(let item of data){
+    result += item[0] + ' ' + item[1] + '\n';
+}
+console.log(result);
+------------------------------------------------------------------
+
+문제 2. 단어정렬
+
+- 문제
+알파벳 소문자로 이루어진 N개의 단어가 들어오면 아래와 같은 조건에 따라 
+정렬하는 프로그램을 작성하시오.
+
+길이가 짧은 것부터
+길이가 같으면 사전 순으로
+단, 중복된 단어는 하나만 남기고 제거해야 한다.
+
+- 입력
+첫째 줄에 단어의 개수 N이 주어진다. (1 ≤ N ≤ 20,000) 
+둘째 줄부터 N개의 줄에 걸쳐 알파벳 소문자로 이루어진 단어가 한 줄에 하나씩 주어진다. 
+주어지는 문자열의 길이는 50을 넘지 않는다.
+
+- 출력
+조건에 따라 정렬하여 단어들을 출력한다.
+
+- 예제 입력 1 
+13
+but
+i
+wont
+hesitate
+no
+more
+no
+more
+it
+cannot
+wait
+im
+yours
+
+- 예제 출력 1 
+i
+im
+it
+no
+but
+more
+wait
+wont
+yours
+cannot
+hesitate
+
+------------------------------------------------------------------
+let fs = require('fs');
+let input = fs.readFileSync('sort_word.txt').toString().split('\n');
+
+let n = parseInt(input[0]);
+let data = [];
+for(let i = 1; i <= n; i++){
+    data.push(input[i]);
+}
+console.log(data.length);
+// 중복항목 제거위해 set으로 변환 후 배열로 되돌리기
+data = [... new Set(data)];
+// 정렬
+data.sort((a,b)=>{
+    // 길이가 같으면 짧은 것 부터
+    if(a.length != b.length) return a.length - b.length;
+    else {
+        // 길이가 같으면 사전 순으로
+        if(a < b) return -1;
+        if(a > b) return 1;
+        else return 0;
+    }
+})
+
+// 하나씩 출력
+for(let x of data){
+    console.log(x);
+}
+------------------------------------------------------------------
+
+※ 정렬 정리(x, y)
+
+1. 숫자일때 
+---- 음수 : 앞에 것 우선
+---- 양수 : 뒤에 것 우선
+---- 0 : 안바뀜
+
+sort((a,b) = > {
+    return a - b;
+});
+
+만약, a = 1, b = 3 이면,
+    return a - b ==> return 1 - 3;  ==> return -2;
+    즉, 리턴값이 음수이므로 a 가 앞에, 그러니까 오름차순
+
+문자건 숫자건 유니코드로 대소비교
+문자열 정렬시에는
+    arr.sort((a,b)=>{
+        if(a > b) return -1;
+        if(a < b) return 1;
+        else return 0;
+    })
+
+    위의 거는 a 가 b 보다 크다면, 즉 알파벳 뒤 쪽에 있다면
+    결과 -1 리턴이니까 a 가 먼저.... 즉, 내림차순.
+
+문제 3. 값의 상대적 순위구하기
+
+- 문제
+여러개의 값을 입력받아 작은 값부터 큰 값의 상대 순위를 구하시오.
+
+- 입력
+첫째 줄에 N이 주어진다.
+둘째 줄에는 공백 한 칸으로 구분된 X1, X2, ..., XN이 주어진다.
+
+- 출력
+첫째 줄에 X'1, X'2, ..., X'N을 공백 한 칸으로 구분해서 출력한다.
+
+- 예제 입력 1 
+5
+2 4 -10 4 -9
+
+- 예제 출력 1 
+2 3 0 3 1
+
+- 예제 입력 2
+6
+1000 999 1000 999 1000 999
+
+- 예제 출력 2
+1 0 1 0 1 0
+
+------------------------------------------------------------------
+let fs = require('fs');
+let input = fs.readFileSync('sort_map.txt').toString().split('\n');
+
+let n = parseInt(input[0]);
+let data = input[1].split(' ').map(Number);
+// set으로 중복 제거
+let setData = [... new Set(data)];
+// 오름차순 정렬 수행
+setData.sort((a, b)=> a -b);
+
+// 맵으로 저장
+let myMap = new Map();
+for(let i = 0; i < setData.length; i++){
+    myMap.set(setData[i], i);
+}
+
+// data 를 출력하되 map에 매핑되어 있는 value 값 출력
+let result = '';
+for(x of data){
+    result += myMap.get(x) + ' ';
+}
+console.log(result);
+------------------------------------------------------------------    
+
+문제 4. 숫자의 정렬
+
+- 문제
+배열을 정렬하는 것은 쉽다. 수가 주어지면, 
+그 수의 각 자리수를 내림차순으로 정렬해보자.
+
+- 입력
+첫째 줄에 정렬하려고 하는 수 N이 주어진다. 
+N은 1,000,000,000보다 작거나 같은 자연수이다.
+
+- 출력
+첫째 줄에 자리수를 내림차순으로 정렬한 수를 출력한다.
+
+- 예제 입력 1 
+2143
+- 예제 출력 1 
+4321
+
+- 예제 입력 2 
+999998999
+- 예제 출력 2 
+999999998
+
+- 예제 입력 3 
+61423
+- 예제 출력 3 
+64321
+
+------------------------------------------------------------------
+let fs = require('fs');
+let input = fs.readFileSync('sort_num.txt').toString().split('\n');
+
+let n = input[0];
+let cnt = Array.from({length:10}, () => 0);
+for(let x of n){
+    cnt[Number(x)] ++;
+}
+console.log(cnt);
+let result = '';
+// 결과 출력 - cnt 배열에 든 수만큼 값 인쇄
+// 단, 뒤에서 부터
+for(let i = 9; i >= 0; i--){
+    for(let j = 0; j < cnt[i]; j++){
+        result += i + '';
+    }
+}
+console.log(result);
+------------------------------------------------------------------    

@@ -1,0 +1,152 @@
+1. 이진탐색
+
+- 아래 리스트에서 7를 찾고자 한다.
+- 이진탐색 : 탐색 범위를 절반씩 좁혀가며 데이터를 탐색한다.
+    1, 3, 5, 7, 9, 11, 13, 15, 17, 19
+- 탐색을 위한 복잡도 : O(logN)
+
+※ 이진탐색 코드 예시(재귀함수)
+------------------------------------------------------------------
+function binarySearch(arr, target, start, end){
+    if(start > end) return -1;
+    let mid = parseInt((start + end)/2);
+    // 찾은 경우 중간점 찾기
+    if(arr[mid] == target) return mid;
+    // 중간점 보다 찾는값이 적은 경우
+    else if(arr[mid] > target) {
+        return binarySearch(arr, target, start, mid-1);
+    // 중간점 보다 찾는값이 큰 경우
+    } else {
+        return binarySearch(arr, target, mid+1, end);
+    }
+}
+
+let n =10;
+let target = 7;
+arr = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+// 이진탐색 호출
+let result = binarySearch(arr, target, 0, n-1);
+if(result == -1) console.log('찾는 값이 없습니다.');
+else console.log(`${result+1}번째에 있습니다.`)
+------------------------------------------------------------------    
+
+2. 정렬된 배열에서 특정 원소의 개수 구하기
+- 정렬된 배열에서 값이 특정 범위에 해당하는 원소의 개수 계산
+- c++ 등에서는 제공되나 자바, 자바스크립트에서는 
+    lowerBound(), upperBound() 함수는 제공하지 않는다.
+
+※ 하한선과 상한선 함수
+- lowerBound(arr, x) : arr에 x를 넣을 가장 왼쪽 인덱스 반환
+- upperBound(arr, x) : arr에 x를 넣을 가장 오른쪽 인덱스 반환
+
+    3    4    5    5    5    7    9
+              ↑              ↑
+    lowerBound(arr, 5)     upperBound(arr, 5)
+      : index = 2                : index = 5
+
+- 데이터가 몇개 존재하는가 : upperBound - lowerBound = 3 개
+
+------------------------------------------------------------------  
+function countByRange(arr, left, right){
+    let rightIndex = upperBound(arr, right, 0, arr.length);
+    let leftIndex = lowerBound(arr, left, 0, arr.length);
+    return rightIndex - leftIndex;
+}
+
+let arr = [1, 2, 3, 3, 3, 3, 4, 4, 8, 9];
+// 값이 4인 데이터 개수 출력
+console.log(countByRange(arr, 4, 4));
+// 값이 [-1, 3] 범위의 갯수 출력
+console.log(countByRange(arr, -1, 3));
+
+function lowerBound(arr, target, start, end){
+    while(start < end){
+        let mid = parseInt((start+end)/2);
+        if(arr[mid] >= target) end = mid;
+        else start = mid + 1;
+    }
+    return end;
+}
+
+function upperBound(arr, target, start, end){
+    while(start < end){
+        let mid = parseInt((start+end)/2);
+        if(arr[mid] > target) end = mid;
+        else start = mid + 1;
+    }
+    return end;
+}
+
+3. 파라메트릭 서치
+- 특정 조건을 만족하는 값을 가장 빠르게 찾는 최적화 문제
+
+- 문제
+국가의 역할 중 하나는 여러 지방의 예산요청을 심사하여 국가의 예산을 분배하는 것이다. 
+국가예산의 총액은 미리 정해져 있어서 모든 예산요청을 배정해 주기는 어려울 수도 있다. 
+그래서 정해진 총액 이하에서 가능한 한 최대의 총 예산을 다음과 같은 방법으로 배정한다.
+
+모든 요청이 배정될 수 있는 경우에는 요청한 금액을 그대로 배정한다.
+모든 요청이 배정될 수 없는 경우에는 특정한 정수 상한액을 계산하여 그 이상인 예산요청에는 
+모두 상한액을 배정한다. 상한액 이하의 예산요청에 대해서는 요청한 금액을 그대로 배정한다. 
+예를 들어, 전체 국가예산이 485이고 4개 지방의 예산요청이 각각 120, 110, 140, 150이라고 하자. 
+이 경우, 상한액을 127로 잡으면, 위의 요청들에 대해서 각각 120, 110, 127, 127을 
+배정하고 그 합이 484로 가능한 최대가 된다. 
+
+여러 지방의 예산요청과 국가예산의 총액이 주어졌을 때, 위의 조건을 모두 만족하도록 
+예산을 배정하는 프로그램을 작성하시오.
+
+- 입력
+첫째 줄에는 지방의 수를 의미하는 정수 N이 주어진다. 
+N은 3 이상 10,000 이하이다. 
+다음 줄에는 각 지방의 예산요청을 표현하는 N개의 정수가 빈칸을 사이에 두고 주어진다. 
+이 값들은 모두 1 이상 100,000 이하이다. 
+그 다음 줄에는 총 예산을 나타내는 정수 M이 주어진다. 
+M은 N 이상 1,000,000,000 이하이다. 
+
+- 출력
+첫째 줄에는 배정된 예산들 중 최댓값인 정수를 출력한다. 
+
+- 예제 입력 1 
+4
+120 110 140 150
+485
+
+- 예제 출력 1 
+127
+
+- 예제 입력 2 
+5
+70 80 30 40 100
+450
+
+- 예제 출력 2 
+100 
+
+------------------------------------------------------------------    
+let fs = require('fs');
+let input = fs.readFileSync('06_03_최적화.txt').toString().split('\n');
+
+console.log(input);
+let n = parseInt(input[0]);
+let arr = input[1].split(' ').map(Number);
+let m = Number(input[2]);
+
+let start = 1;
+let end = arr.reduce((a, b) => Math.max(a, b));
+
+let result = 0;
+while(start <= end){
+    let mid = parseInt((start + end) / 2);
+    let total = 0;
+    for(let x of arr){
+        total += Math.min(x, mid); // 지방예산과 중간값을 비교 작은 값 선택
+    }
+    if(total <= m){
+        result = mid;
+        start = mid + 1;
+    } else {
+        end = mid - 1;
+    }
+}
+console.log(result);
+------------------------------------------------------------------    
