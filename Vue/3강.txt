@@ -1,0 +1,1802 @@
+3강. 몬스타그램 만들기
+
+#1. monstargram 프로젝트 만들기
+ⓐ vue 폴더 open
+ⓑ terminal 에서
+> vue create monstargram
+ⓒ blog 폴더 생성 후 프로젝트 기본 틀 만들어짐
+ⓓ 위에 있는데로 실행하기
+ $ cd monstargram
+ $ npm run serve
+
+ⓔ 필요 없는 hello world 모두 지우기
+
+▷ 프로젝트 구성
+------------------------
+| App.vue     상단메뉴  |
+------------------------
+| Container.vue        |
+|                      |
+| -------------------  |
+| |                 |  |
+| |    Post.vue     |  |
+| |                 |  |
+| -------------------  |
+| -------------------  |
+| |                 |  |
+| |    Post.vue     |  |
+| |                 |  |
+| -------------------  |
+|              하단메뉴 |
+------------------------
+
+#2. CSS/HTML 붙여넣기
+ⓐ App.vue <template>안에 들어갈 내용 
+
+<div class="header">
+    <ul class="header-button-left">
+      <li>Cancel</li>
+    </ul>
+    <ul class="header-button-right">
+      <li>Next</li>
+    </ul>
+    <img src="./assets/logo.png" class="logo" />
+  </div>
+
+  <Container />
+
+  <div class="footer">
+    <ul class="footer-button-plus">
+      <input type="file" id="file" class="inputfile" />
+      <label for="file" class="input-plus">+</label>
+    </ul>
+ </div>
+
+
+ⓑ App.vue <style>안에 들어갈 내용 
+body {
+  margin: 0;
+}
+ul {
+  padding: 5px;
+  list-style-type: none;
+}
+.logo {
+  width: 22px;
+  margin: auto;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 13px;
+}
+.header {
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  padding-bottom: 8px;
+  position: sticky;
+  top: 0;
+}
+.header-button-left {
+  color: skyblue;
+  float: left;
+  width: 50px;
+  padding-left: 20px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.header-button-right {
+  color: skyblue;
+  float: right;
+  width: 50px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.footer {
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  padding-bottom: 10px;
+  background-color: white;
+}
+.footer-button-plus {
+  width: 80px;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+  font-size: 24px;
+  padding-top: 12px;
+}
+.sample-box {
+  width: 100%;
+  height: 600px;
+  background-color: bisque;
+}
+.inputfile {
+  display: none;
+}
+.input-plus {
+  cursor: pointer;
+}
+#app {
+  box-sizing: border-box;
+  font-family: "consolas";
+  margin-top: 60px;
+  width: 100%;
+  max-width: 460px;
+  margin: auto;
+  position: relative;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
+}
+
+ⓒ Container.vue <template>안에 들어갈 내용 
+
+<div>
+  <Post/>
+  <Post/>
+  <Post/>
+</div>
+
+ⓓ Post.vue <template>안에 들어갈 내용 
+
+<div class="post">
+    <div class="post-header">
+      <div class="profile"></div>
+      <span class="profile-name">ChanKim</span>
+    </div>
+    <div class="post-body"></div>
+    <div class="post-content">
+      <p>43 Likes</p>
+      <p><strong>글쓴이아이디</strong> 임시내용</p>
+      <p class="date">May 15</p>
+    </div>
+</div> 
+
+ⓔ Post.vue <style>안에 들어갈 내용 
+
+.post {
+  width: 100%;
+}
+.profile {
+  background-image: url("https://picsum.photos/100?random=0");
+  width: 30px;
+  height: 30px;
+  background-size: 100%;
+  border-radius: 50%;
+  float: left;
+}
+.profile-name {
+  display: block;
+  float: left;
+  padding-left: 10px;
+  padding-top: 7px;
+  font-size: 14px;
+}
+.post-header {
+  height: 30px;
+  padding: 10px;
+}
+.post-body {
+  background-image: url("https://picsum.photos/600?random=0");
+  height: 450px;
+  background-position: center;
+  background-size: cover;
+}
+.post-content {
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 14px;
+}
+.date {
+  font-size: 11px;
+  color: grey;
+  margin-top: -8px;
+} 
+
+※ 외부 css 파일 만들어서 사용하기
+- style.css 파일 생성
+- App.vue에서 <style> 내부에 @import 'style.css'; 
+- 넣고 사용하기
+
+#3. <Container/>  <Post />  monstagramData.js --> data 로 처리하고
+    <Post/>에 props 이용해서 보이게 하기
+
+▷ /assets/monstagramData.js
+
+export default [
+    {
+      name: "Kim Hyun",
+      userImage: "https://picsum.photos/100?random=3",
+      postImage: "https://picsum.photos/600?random=3",
+      likes: 36,
+      date: "May 15",
+      liked: false,
+      content: "오늘 무엇을 했냐면요 아무것도 안했어요 ?",
+      filter: "perpetua"
+    },
+    {
+      name: "John Doe",
+      userImage: "https://picsum.photos/100?random=4",
+      postImage: "https://picsum.photos/600?random=4",
+      likes: 20,
+      date: "Apr 20",
+      liked: false,
+      content: "흔한 자랑스타그램",
+      filter: "clarendon"
+    },
+    {
+      name: "Minny",
+      userImage: "https://picsum.photos/100?random=5",
+      postImage: "https://picsum.photos/600?random=5",
+      likes: 49,
+      date: "Apr 4",
+      liked: false,
+      content: "우리집 개는 화장실 물도 내림",
+      filter: "lofi"
+    }
+  ]
+
+▷ App.vue
+
+<ContainerForm :postData = "postData"/>
+
+<script>
+import ContainerForm from './components/Container.vue';
+import postData from './assets/monstargramData.js';
+
+export default {
+  name: 'App',
+  components: {
+    ContainerForm,
+  },
+  data(){
+    return{
+      postData : postData,
+    }
+  }
+}
+</script>
+
+▷ Container.vue
+
+<template>
+    <div>
+        <PostForm :post="post" v-for="post in postData" :key="post"/>
+    </div>
+</template>
+
+<script>
+import PostForm from "./Post.vue";
+export default {
+    name : "ContainerForm",
+    components : {
+        PostForm,
+    },
+    props: {
+        postData: Array,
+    }
+}
+</script>
+
+▷ Post.vue
+
+<template>
+    <div class="post">
+        <div class="post-header">
+            <div class="profile"></div>
+            <span class="profile-name">{{ post.name }}</span>
+        </div>
+        <div class="post-body"></div>
+        <div class="post-content">
+            <p>{{ post.likes }} Likes</p>
+            <p><strong>{{ post.name }}</strong> {{ post.content }}</p>
+            <p class="date">{{ post.date }}</p>
+        </div>
+    </div>   
+</template>
+
+<script>
+export default {
+    name : "PostForm",
+    props: {
+        post: Object,
+    }
+}
+</script>
+
+#4. 이미지 바인딩 하기
+※ 이미지 위치에 style="background-image : url()" 로 처리
+
+<div class="profile" 
+      :style="{backgroundImage : `url(${post.userImage})`}"></div>
+
+<div class="post-body" 
+      :style="{backgroundImage : `url(${post.postImage})`}"></div>
+
+
+#5. 더보기 버튼 만들어서 서버로 ajax 요청하기 
+
+ⓐ 서버에서 더보기 게시물을 가져옴. 그 데이터를 HTML로 보여줄 것.
+- 강의에서 사용할 URL : http://52.78.221.76/api/more
+- 여기로 GET요청하면 더보기용 게시물을 두개 리스트로 줍니다. 
+
+[
+  {
+    "name": "David",
+    "userImage": "https://picsum.photos/100?random=1",
+    "postImage": "https://picsum.photos/600?random=1",
+    "likes": 5,
+    "date": "July 25",
+    "liked": false,
+    "content": "더보기로 요청한 게시물1입니다.",
+    "filter": "perpetua"
+  },
+  {
+    "name": "Son",
+    "userImage": "https://picsum.photos/100?random=1",
+    "postImage": "https://picsum.photos/600?random=1",
+    "likes": 5,
+    "date": "May 14",
+    "liked": false,
+    "content": "더보기로 요청한 게시물2입니다.",
+    "filter": "aden"
+  }
+]
+
+- 이렇게 되돌려 줌.
+
+ⓑ ajax 요청하려면 axios 라이브러리를 쓰던가, 기본 fetch 함수 사용
+- 기본 fetch는 호환성 문제 있음.
+
+ⓒ npm으로 axios 설치하기
+>  npm install axios  
+
+ⓓ yarn 설치하고 얘로 axios 설치하기(기본적으로 node.js설치 되어있어야 함.)
+> npm install -g yarn
+> yarn add axios
+> npm run serve
+
+ⓔ axios 사용
+
+▷ App.vue
+import axios from 'axios';
+
+axios.get()
+axios.post() 
+
+ⓕ 더보기 버튼 만들기
+▷ App.vue
+  <ContainerForm :postData = "postData"/>
+  <button @click="more">더보기</button>
+
+
+▷ methods 에 만들기
+  data(){
+    return{
+      postData : postData,
+    }
+  },
+  methods : {
+    more(){
+      axios.get('http://52.78.221.76/api/more')
+      .then((result)=>{
+        console.log(result.data);
+        this.postData.push(result.data);
+      })
+    }
+  }
+
+ⓖ axios.post() 문법
+axios.post('URL', {name: 'kim'})
+        .then()
+        .catch((err)=>{
+          alert(err);
+        });
+
+#6. 탭 만들기와 탭으로 사진 업로드 페이지 만들기
+▷ App.vue
+ⓐ 탭 만들기 위한 구도 잡기
+ <div>내용0</div>
+ <div>내용1</div>
+ <div>내용2</div>
+ <button>버튼0</button>
+ <button>버튼1</button>
+ <button>버튼2</button>
+</template>
+
+ⓑ 처리 내용 : 버튼n을 누르면 div 내용n 만 보여지게 함.
+- 모달 만드는 방식과 동일함 
+-- UI 현재 상태를 데이터로 만들기
+-- 상태에 따라 HTML이 어떻게 보일지 결정
+
+  data(){
+    return{
+      postData : postData,
+      step : 0,
+    }
+  }
+
+ <div v-if="step == 0">내용0</div>
+ <div v-if="step == 1">내용1</div>
+ <div v-if="step == 2">내용2</div>
+ <button @click="step = 0">버튼0</button>
+ <button @click="step = 1">버튼1</button>
+ <button @click="step = 2">버튼2</button>
+
+ⓒ 페이지 두개를 만듦.
+
+첫째, 
+------------------------
+| App.vue     상단메뉴  |
+------------------------
+| Container.vue        |
+|                      |
+| -------------------  |
+| |                 |  |
+| |  업로드한페이지  |  |
+| |                 |  |
+| -------------------  |
+| -------------------  |
+| |       |       |    |
+| | 필터1 |  필터2 |    |
+| |       |       |    |
+| -------------------  |
+|              하단메뉴 |
+------------------------
+
+둘째, 
+------------------------
+| App.vue     상단메뉴  |
+------------------------
+| Container.vue        |
+|                      |
+| -------------------  |
+| |                 |  |
+| |  업로드한페이지  |  |
+| |                 |  |
+| -------------------  |
+| -------------------  |
+|                      |
+|      글 입력란        |    
+|                      |
+| -------------------  |
+|              하단메뉴 |
+------------------------
+ⓓ 라우터를 사용해도 되지만 v-if를 이동해서 선택적 div를 보여주는 것으로 구현
+
+▷ Container.vue
+== <template> 안에 들어갈 내용 
+<Post :게시물="게시물[i]" v-for="(a, i) in 게시물" :key="i" />
+
+<!-- 필터선택페이지 -->
+  <div class="upload-image"></div>
+  <div class="filters">
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+  </div>
+
+<!-- 글작성페이지 -->
+  <div class="upload-image"></div>
+  <div class="write">
+    <textarea class="write-box">write!</textarea>
+  </div>
+
+== <style> 안에 들어갈 내용 
+
+.upload-image{
+width: 100%;
+height: 450px;
+background: cornflowerblue;
+background-size : cover;
+}
+.filters{
+overflow-x:scroll;
+white-space: nowrap;
+}
+.filter-1 {
+width: 100px;
+height: 100px;
+background-color: cornflowerblue;
+margin: 10px 10px 10px auto;
+padding: 8px;
+display: inline-block;
+color : white;
+background-size: cover;
+}
+.filters::-webkit-scrollbar {
+height: 5px;
+}
+.filters::-webkit-scrollbar-track {
+background: #f1f1f1; 
+}
+.filters::-webkit-scrollbar-thumb {
+background: #888; 
+border-radius: 5px;
+}
+.filters::-webkit-scrollbar-thumb:hover {
+background: #555; 
+}
+.write-box {
+border: none;
+width: 90%;
+height: 100px;
+padding: 15px;
+margin: auto;
+display: block;
+outline: none;
+}
+
+ⓔ App.vue 데이터에 step 만들고 탭 작업하기
+== step = 0 일때
+  <div>
+      <PostForm :post="post" v-for="post in postData" :key="post"/>
+  </div>
+
+== step = 1 일때  
+    <!-- 필터선택페이지 -->
+  <div class="upload-image"></div>
+  <div class="filters">
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+    <div class="filter-1"></div>
+  </div>
+
+== step = 2 일때
+<!-- 글작성페이지 -->
+  <div class="upload-image"></div>
+  <div class="write">
+    <textarea class="write-box">write!</textarea>
+  </div>
+
+
+▷ App.vue
+<ContainerForm :postData = "postData" :step = "step" />
+
+▷ Container.vue
+props: {
+            postData: Array,
+            step : Number,
+        }
+
+<template>
+    <div v-if="step == 0">
+        <PostForm :post="post" v-for="post in postData" :key="post"/>
+    </div>
+    <!-- 필터선택페이지 -->
+    <div v-if="step == 1">
+        <div class="upload-image"></div>
+        <div class="filters">
+            <div class="filter-1"></div>
+            <div class="filter-1"></div>
+            <div class="filter-1"></div>
+            <div class="filter-1"></div>
+            <div class="filter-1"></div>
+        </div>
+    </div>
+  
+
+    <!-- 글작성페이지 -->
+    <div v-if="step == 2">
+        <div class="upload-image"></div>
+        <div class="write">
+            <textarea class="write-box">write!</textarea>
+        </div>
+    </div>
+    
+</template>
+
+
+#7. 서버없이 업로드한 이미지 다루기
+▷ 기능 : 이미지를 업로드 하면 두번째 페이지를 보여줌(필터)
+------------------------
+| App.vue     상단메뉴  |
+------------------------
+| Container.vue        |
+|                      |
+| -------------------  |
+| |                 |  |
+| |  업로드한이미지  |  |
+| |                 |  |
+| -------------------  |
+| -------------------  |
+| |       |       |    |
+| | 필터1 |  필터2 |    |
+| |       |       |    |
+| -------------------  |
+|              하단메뉴 |
+------------------------
+
+ⓐ App.vue 하단에 파일선택 단추가 있음
+<div class="footer">
+    <ul class="footer-button-plus">
+      <input type="file" id="file" class="inputfile" />
+      <label for="file" class="input-plus">+</label>
+    </ul>
+</div>
+
+※ input 안에 multiple을 넣으면 여러개의 파일을 선택할 수 있다
+
+ⓑ 최근에는 internet explorer 11 이상부터는 파일을 서버에 보내지 않고도
+  조작할 수 있는 다양한 API를 제공하고 있다. 
+-- FileReader() : 이미지를 텍스트로 변환해서 src에 꽂아줌.
+-- URL.createObjectURL() : 가상의 hosting을 통해 보여줌.(imgsrc 사용)
+
+※ 파일 타입을 필터링하려면 
+let url = URL.createObjectURL(imgFile[0].type); 으로 찾아서 필터링을 해야한다.
+
+image/png 등 이렇게 표시된다.(console로 찍어보믄)
+
+ⓒ 이미지가 input에 의해 선택되고 변경되었을때 이벤트 받아 처리하기
+<div class="footer">
+    <ul class="footer-button-plus">
+      <input @change="upload" type="file" id="file" class="inputfile" />
+      <label for="file" class="input-plus">+</label>
+    </ul>
+</div>
+
+▷ methods의 upload() 함수
+
+upload(e){
+    let imgFile = e.target.files;
+    this.strUrl = URL.createObjectURL(imgFile[0]);
+    console.log("strUrl = " + this.strUrl);
+    this.step = 1;
+  }
+
+
+ⓓ 선택된 파일을 Container.vue에 띄우기
+<div v-if="step == 1">
+    <div class="upload-image" style="{backgroundImge : '어쩌구'}"></div>
+처리해야 한다. 그러려먼? props로 처리하
+
+- data(){
+  return{
+    postData : postData,
+    step : 0,
+    strUrl : '',
+  }},
+- <ContainerForm :postData = "postData" :step = "step" :strUrl="strUrl"/>
+
+▷ Container.vue
+
+  props: {
+      postData: Array,
+      step : Number,
+      strUrl : String,
+  }
+
+
+  <!-- 필터선택페이지 -->
+  <div v-if="step == 1">
+      <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+      <div class="filters">
+          <div class="filter-1"></div>
+          <div class="filter-1"></div>
+          <div class="filter-1"></div>
+          <div class="filter-1"></div>
+          <div class="filter-1"></div>
+      </div>
+  </div>
+
+
+ⓔ 이미지 상단 Next 버튼과 Cancel 버튼 기능 넣기
+ -- Cancel 버튼과 Next 버튼은 이미지를 추가한 경우만 보임
+ -- 이미지 추가 후 Next 눌렀을 때 step=2 이면 Next 사라지고 발행 단추가 보임 
+
+▷ App.vue - 수정하기
+
+  <ul class="header-button-left">
+    <li @click="step = 0" v-if="step > 0">Cancel</li>
+  </ul>
+  <ul class="header-button-right">
+    <li v-if="step == 1"  @click="plusStep">Next</li>
+    <li v-if="step == 2" @click="publish">발행</li>
+  </ul>
+
+methods : {
+  plusStep(){
+    if(this.step >= 2){
+      this.step = 0;
+    } else {
+      this.step++;
+    }
+  },
+
+
+#8. 글 발행기능 만들기
+
+▷ 글 발행이란 : 메인페이지에 항목(Post.vue)을 하나 추가해 주는 것.
+   즉, 내 사진과 글이 담긴 Post.vue를 App.vue 맨 위에 위치 시키는 것.
+
+▷ data에 있는 PostData에 추가하는 것으로 기능을 구현 [{}, {}, {},....]
+   즉, 위 데이터 맨 앞에 내가 추가한 자료를 추가한다.
+
+ⓐ 발행버튼 만들기
+※ 순서 : + 단추를 눌러서 이미지 추가 -> Next 버튼 -> 글쓰기 -> 발행
+
+-- 조건 : step이 2일때만 보이는 발행버튼 만들기
+
+<ul class="header-button-right">
+  <li v-if="step < 2"  @click="plusStep">Next</li>
+  <li v-if="step == 2">발행</li>
+</ul>
+
+ⓑ 글쓰기(Container.vue) 했을 때 위 부모컨테이너(App.vue)로 전달하기 
+※ Custom Event
+▷ Container.vue
+
+<!-- 글작성페이지 -->
+<div v-if="step == 2">
+    <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+    <div class="write">
+        <textarea @change="$emit('write', $event.target.value)" class="write-box">write!</textarea>
+    </div>
+</div>
+
+▷ App.vue
+<ContainerForm @write="strWrite = $event" :postData = "postData" 
+                  :step = "step" :strUrl="strUrl"/>
+
+ⓒ 발행단추에 function 달기
+
+  <ul class="header-button-right">
+    <li v-if="step == 1"  @click="plusStep">Next</li>
+    <li v-if="step == 2" @click="publish">발행</li>
+  </ul>
+
+ⓓ methods/public 함수 만들기
+
+methods : {
+  publish(){
+    let today = new Date().toDateString();
+
+    let myPosting = {
+      name: "zzzMini",
+      userImage: "https://picsum.photos/600?random=3",
+      postImage: this.strUrl,
+      likes: 0,
+      date: today,
+      liked: false,
+      content: this.strWrite,
+      filter: "perpetua"
+    };
+    this.postData.unshift(myPosting);
+    this.step = 0;
+  },
+}
+
+#9. 업로드한 이미지 인스타그램 필터 기능 만들기
+▷ Container.vue
+
+<!-- 필터선택페이지 -->
+<div v-if="step == 1">
+    <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+    <div class="filters">
+        <div class="filter-1"></div>
+        <div class="filter-1"></div>
+        <div class="filter-1"></div>
+        <div class="filter-1"></div>
+        <div class="filter-1"></div>
+    </div>
+</div>
+
+ⓐ 위 Container.vue 안 filter-1 얘들을 <FilterBox/> 컨테이너로 작업
+
+<!-- 필터선택페이지 -->
+<div v-if="step == 1">
+    <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+    <div class="filters">
+        <FilterBox></FilterBox>
+    </div>
+</div>
+
+ 
+
+ⓑ 내용넣고 연결하기
+
+▷ FilterBox.vue
+<template>
+  <div class="filter-item"></div> 
+</template>
+
+<script>
+export default {
+    name : 'FilterBox',
+}
+</script>
+
+<style>
+    .filter-item {
+    width: 100px;
+    height: 100px;
+    margin: 10px 10px 10px auto;
+    padding: 8px;
+    display: inline-block;
+    color : white;
+    background-size: cover;
+    background-position : center;
+    }
+</style>
+
+▷ Container.vue
+<script>
+  import PostForm from "./Post.vue";
+  import FilterBox from "./FilterBox.vue";
+  export default {
+      name : "ContainerForm",
+      components : {
+          PostForm,
+          FilterBox,
+      },
+
+ⓒ 현재 선택한 이미지를 하단 필터박스 모두에 보이게 하기
+
+▷ Container.vue
+
+<!-- 필터선택페이지 -->
+<div v-if="step == 1">
+    <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+    <div class="filters">
+        <FilterBox :strUrl="strUrl"></FilterBox>
+        <FilterBox :strUrl="strUrl"></FilterBox>
+        <FilterBox :strUrl="strUrl"></FilterBox>
+        <FilterBox :strUrl="strUrl"></FilterBox>
+    </div>
+</div>
+
+▷ FilterBox.vue
+
+<script>
+export default {
+    name : 'FilterBox',
+    props : {
+        strUrl : String,
+    }
+}
+</script>
+
+<template>
+  <div class="filter-item" :style="{backgroundImage : `url(${strUrl})`}"></div> 
+</template>
+
+ⓓ 실제 인스타그램 필터만큼 만들기(대략 26개....)
+
+== /src/assets/fiter.js 생성
+export default
+[ "aden", "_1977", "brannan", "brooklyn", "clarendon", 
+"earlybird", "gingham", "hudson", "inkwell", "kelvin", 
+"lark", "lofi", "maven", "mayfair", "moon", "nashville", 
+"perpetua", "reyes", "rise", "slumber", "stinson", 
+"toaster", "valencia", "walden", "willow", "xpro2"]
+
+ⓔ filter.js import하고 filter data로 만들고 개수만큼 FilterBox에 적용시키기
+   
+  import FilterList from "../assets/filter.js";
+
+  export default {
+    name : "ContainerForm",
+    data(){
+        return{
+            FilterList : FilterList,
+        }
+    }
+
+    <!-- 필터선택페이지 -->
+    <div v-if="step == 1">
+        <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+        <div class="filters">
+            <FilterBox :strUrl="strUrl" v-for="filter in FilterList" :key="filter"></FilterBox>
+        </div>
+    </div>
+
+ⓕ 인스타 필터를 구현한 CSSgram API를 설치하여 인스타그램 필터기능 완성하기
+-- 클래스 딸랑 하나구요.... <img class="인스타필터명"> 이래 하면 끝임.
+
+-----------------------------------------------------------------------------------------
+첫번째,
+https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.12/cssgram.min.css 
+
+이거 직접 다운받아서 index.html에 집어넣거나
+
+
+두번째,
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.12/cssgram.min.css" integrity="sha512-kr3JaEexN5V5Br47Lbg4B548Db46ulHRGGwvyZMVjnghW1BKmqIjgEgVHV8D7V+Cbqm/VBgo3Rcbtv+mGLoWXA==" crossorigin="anonymous" /> 
+
+cdn 방식으로 첨부된 link 태그를 직접 index.html에 넣으십시오 
+
+-----------------------------------------------------------------------------------------
+
+ⓖ FilterBox.vue에 적용하기
+▷ Container.vue
+    <div v-if="step == 1">
+        <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+        <div class="filters">
+            <FilterBox :strUrl="strUrl" v-for="filter in FilterList" 
+                :key="filter" :filter="filter"></FilterBox>
+        </div>
+    </div>
+
+▷ FilterBox.vue
+<template>
+  <div :class="`${filter} filter-item`" :style="{backgroundImage : `url(${strUrl})`}"></div> 
+</template>
+
+#10. props ? slot
+▷ 필터 적용된 사진 위에다 필터이름 붙이기
+※ 부모컨테이너에서 자식컨테이너에게 props말고 더 쉽게 데이터를 전달하는 방법
+※ slot은 HTML 바인드 할 때만 사용가능하다.
+
+ⓐ slot 적용하기
+▷ FilterBox.vue(필요한 곳에 빵꾸 뚫고)
+<template>
+    <div :class="`${filter} filter-item`" :style="{backgroundImage : `url(${strUrl})`}">
+        <slot></slot>
+    </div> 
+</template>
+
+▷ Container.vue
+  <!-- 필터선택페이지 -->
+    <div v-if="step == 1">
+        <div class="upload-image" :style="{backgroundImage : `url(${strUrl})`}"></div>
+        <div class="filters">
+            <FilterBox :strUrl="strUrl" v-for="filter in FilterList" 
+                :key="filter" :filter="filter">
+                <span>{{filter}}</span>
+            </FilterBox>
+        </div>
+    </div>
+
+ⓑ 한 컨테이너에서 슬롯을 여럿 사용할 경우
+== 자식
+  <slot name="a"></slot>
+  <slot name="b"></slot>
+
+== 부모
+  <template v-slot:a>데이터1</template>
+  <template v-slot:b>데이터2</template>
+
+== HTML 태그도 함께 보낼 수 있다.
+  <template v-slot:a><span>데이터1</span></template>
+  <template v-slot:b><span>데이터2</span></template>
+
+
+#11. 필터이미지를 선택하면 메인 이미지에 적용되도록 처리하기
+ -- 멀리있는 컴포넌트 간 데이터 전송 : mitt
+▷ 필터 박스 클릭 시 App.vue까지 필터명을 전달
+    FilterBox.vue -> Container.vue -> App.vue
+
+※ 상위로 데이터를 보낼때는 CustomEvent 를 사용해야하는데 상위의
+   상위로 보낼때는 다른 라이브러리를 설치해서 사용한다.(mitt 사용)
+
+ⓐ 설치하기 npm install mitt or yarn add mitt
+
+ⓑ 셋팅하기
+▷ main.js에 사용할 라이브러리 등록하기
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import mitt from 'mitt'
+let emitter = mitt();
+let app = createApp(App);
+app.config.globalProperties.emitter = emitter;
+
+app.mount('#app')
+
+== 모든 곳에서 사용할 라이브러리를 적재하는 곳.
+※ axios 같은 것도 여기에 등록해서 사용
+-- 사용할 때는 this.axios 로 ...
+
+ⓒ FilterBox.vue 에서 App.vue로 보내기
+
+첫째, 필터된 이미지에 버튼하나 얹고
+<template>
+    <div :class="`${filter} filter-item`" :style="{backgroundImage : `url(${strUrl})`}">
+        <slot></slot>
+        <button @click="fire">발사</button>
+    </div> 
+</template>
+
+둘째, 만들고....
+  methods :
+  {
+    fire(){
+        this.emitter.emit('fire', '총');
+    }
+  }
+
+ⓓ App.vue 에서 mounted() 함수로 받기
+
+    mounted(){
+      this.emitter.on('fire', (msg)=>{
+        console.log(msg)
+      })
+    },
+
+ⓔ 구현하기
+첫째, 필터박스를 클릭하면 위에 있는 큰 그림에 필터 적용하기
+
+▷ FilterBox.vue --> 버튼에 이벤트 달기
+
+<template>
+    <div @click="filterChange" :class="`${filter} filter-item`" :style="{backgroundImage : `url(${strUrl})`}">
+        <slot></slot>
+    </div> 
+</template>
+
+--> 이벤트 구성하기
+
+  methods :
+    {
+      filterChange(){
+          console.log('FilterBox : ' + this.filter );
+          this.emitter.emit('changeFilter', this.filter);
+      },
+    }
+
+▷ FilterBox 상위의 Container.vue에서 받고 적용시키기
+
+  data(){
+      return{
+          FilterList : FilterList,
+          newFilter : '',
+      }
+  },
+
+--> 마운트하기
+  mounted(){
+      this.emitter.on('changeFilter', (filter)=>{
+          this.newFilter = filter;
+          console.log('Container : ' + this.newFilter );
+      })
+  },
+
+
+--> 던져진 필터 적용시키기(두군데 모두 적용시키기)
+
+  <!-- 필터선택페이지 -->
+  <div v-if="step == 1">
+      <div :class="`${newFilter} upload-image`" :style="{backgroundImage : `url(${strUrl})`}"></div>
+      <div class="filters">
+          <FilterBox :strUrl="strUrl" v-for="filter in FilterList" 
+              :key="filter" :filter="filter">
+              <span>{{filter}}</span>
+          </FilterBox>
+      </div>
+  </div>
+
+
+  <!-- 글작성페이지 -->
+  <div v-if="step == 2">
+      <div :class="`${newFilter} upload-image`" :style="{backgroundImage : `url(${strUrl})`}"></div>
+      <div class="write">
+          <textarea @change="$emit('write', $event.target.value)" class="write-box">write!</textarea>
+      </div>
+  </div>
+
+
+ⓕ App.vue에 변경된 필터 던져서 저장하기
+
+▷ FilterBox 상위의 App.vue에서도 받고 저장하기
+
+  data(){
+    return{
+      postData : postData,
+      step : 0,
+      strUrl : '',
+      strWrite : '',
+      newFilter : '',
+    }
+  },
+  mounted(){
+    this.emitter.on('changeFilter', (filter)=>{
+      this.newFilter = filter;
+      console.log('App : ' + this.newFilter );
+    })
+  },
+
+▷ 저장하기
+
+  methods : {
+    publish(){
+      let today = new Date().toDateString();
+
+      let myPosting = {
+        name: "zzzMini",
+        userImage: "https://picsum.photos/600?random=3",
+        postImage: this.strUrl,
+        likes: 0,
+        date: today,
+        liked: false,
+        content: this.strWrite,
+        filter: this.newFilter
+      };
+      this.postData.unshift(myPosting);
+      this.step = 0;
+    },
+
+ⓖ 다시 읽어들일때부터 저장된 필터효과도 읽어오기
+
+▷ Post.vue
+
+<template>
+  <div class="post">
+    <div class="post-header">
+      <div class="profile" 
+          :style="{backgroundImage : `url(${post.userImage})`}"></div>
+      <span :clsss="post.filter" class="profile-name">{{ post.name }}</span>
+    </div>
+    <div :class="`${post.filter} post-body`"
+        :style="{backgroundImage : `url(${post.postImage})`}"></div>
+
+
+#12. Vuex 1 : 사용이유
+
+▷ Vuex는 모든 컴포넌트들이 데이터를 공유할 수 있는 자바스크립트 파일이다.
+▷ 간단한 건이라도 수정 코딩라인 수가 많아지는 단점이 있다.
+
+ⓐ 설치하기(https://vuex.vuejs.org/)
+> npm install vuex@next --save
+> yarn add vuex@next --save
+> npm run serve
+
+ⓑ 셋팅하기
+
+-- /src/store.js 파일만들기
+
+import { createStore } from 'vuex'
+
+const store = createStore({
+  state(){
+    return {
+      name : 'kim',
+    }
+  },
+})
+
+export default store
+
+※ 관습적 셋팅방법
+
+ⓒ main.js에 등록하기
+
+import store from "./store.js"
+app.use(store).mount('#app')
+
+-- 모든 컴포넌트들이 store의 내부를 접근할 수 있다.
+
+ⓓ App.vue에서 테스트
+
+먼저, 데이터 가져오기
+
+  <h4>안녕 {{ $store.state.name }}</h4>
+
+그리고, 데이터 수정해 보내기(버튼 누르면 이름 Park으로 바꾸기)
+
+  <button @click="$store.state.name = 'Park'">버튼</button>
+
+※ Vuex 국룰 : 컴포넌트 안에서 store 변수 직접수정 금지
+=====> Setter 만들어서 사용
+
+#13. Vuex 2 : store에 있는 state 데이터 바꾸기
+
+▷ 값을 바꾸기 위해서는 store.js 안에 있는 함수를 이용해서
+   바꾸도록 구성한다.
+ 
+ⓐ mutations 내에 변경방법 정의해 놓고 타 컴포에서 쓴다.
+
+▷ store.js
+
+const store = createStore({
+  state(){
+    return {
+      name : 'kim',
+      age : 20,
+    }
+  },
+  mutations : {
+    setName(state){
+      state.name = 'Kang';
+    }
+  }
+})
+
+▷ App.vue
+
+  <button @click="$store.commit('setName')">버튼</button>
+
+ⓑ 문제
+
+첫번째, App.vue에 age 바인딩하기
+
+
+두번째, 버튼만들고 누르면 age + 1 되게 하기
+
+== 한방에 끝냄
+
+▷ store.js
+const store = createStore({
+  state(){
+    return {
+      name : 'kim',
+      age : 20,
+    }
+  },
+  mutations : {
+    setName(state){
+      state.name = 'Kang';
+    },
+    addAge(state){
+      state.age ++;
+    }
+  }
+})
+
+▷ App.vue
+
+<h4>안녕 {{ $store.state.name }} 내 나이는 {{ $store.state.age }} 야</h4>
+<button @click="$store.commit('setName')">버튼</button>
+<button @click="$store.commit('addAge')">떡국먹기</button>
+
+
+ⓒ 보낼 때 데이터 함께 보내기(나이 증분값 보내서 증가시키기)
+
+<button @click="$store.commit('addAge', 10)">떡국먹기</button>
+
+addAge(state, payload){
+  state.age = state.age + payload;
+}
+
+ⓓ 문제... 사진을 누르면 해당 사진의 좋아요! 숫자가 1씩 늘어나도록...
+   == 기본 좋아요는 30!!
+   == 한 번 더 누르면 1 감소!!!
+
+▷ store.js
+
+const store = createStore({
+  state(){
+    return {
+      name : 'kim',
+      age : 20,
+      likes : 30,
+      likeState : false,
+    }
+  },
+  mutations : {
+    setName(state){
+      state.name = 'Kang';
+    },
+    addAge(state, payload){
+      state.age = state.age + payload;
+    },
+    addLikes(state){
+      if(state.likeState == false){
+        state.likes ++;
+        state.likeState = true;
+      } else {
+        state.likes --;
+        state.likeState = false;
+      }
+    }
+
+▷ Post.js
+
+<div @click="$store.commit('addLikes')" :class="`${post.filter} post-body`"
+                :style="{backgroundImage : `url(${post.postImage})`}"></div>
+  <div class="post-content">
+      <p>{{ $store.state.likes }} Likes</p>
+      <p><strong>{{ post.name }}</strong> {{ post.content }}</p>
+      <p class="date">{{ post.date }}</p>
+</div>
+
+
+#14. Vuex 3 : actions 항목(ajax 사용할 때)
+▷ mutation에서 처리해도 되지만 시간이 오래걸려 비동기 방식이 
+필요한 경우 vue에서는 actions에다 처리하라고 권고함.
+
+▷ 처리 순서
+첫째, actions에서 ajax로 데이터 가져 옴.
+둘재, mutations에서 데이터로 저장함.
+
+ⓐ ajax로 가져올 클래스 변수 선언하기
+
+▷ store.vue
+import axios from 'axios';
+
+  state(){
+    return {
+      ...
+      more : {},
+    }
+
+▷ App.vue
+
+<p>{{ $store.state.more }} </p>
+<button>ajax(action)더보기</button>
+
+ⓑ store.js에 actions 만들어서 데이터 요청 후
+
+== 먼저 ajax로 만들고..
+
+  actions : {
+    getData(){
+      axios
+      .get('https://codingapple1.github.io/vue/more0.json')
+      .then((result)=>{
+        console.log(result.data);
+      })
+    }
+
+ⓒ dispatch로 호출 처리 하고...
+
+== App.vue에서 버튼 만든거에 호출 처리하
+<button @click="$store.dispatch('getData')">ajax(action)더보기</button>
+
+※ actions는 반드시 dispatch로 호출해야 함.(일치 좀 시키지...)
+
+ⓓ mutations로 state에 있는 more 변수에 연결 함.
+
+  mutations : {
+    setMore(state, data){
+      state.more = data;
+    },
+
+ⓔ actions에서 mutation에 있는 setMore 호출해서 저장함.
+  actions : {
+    getData(store){
+      axios
+      .get('https://codingapple1.github.io/vue/more0.json')
+      .then((result)=>{
+        console.log(result.data);
+        store.commit('setMore', result.data);
+      })
+    }
+  }
+
+#15. Vuex 4 : mapState
+
+▷ 함수는 methods에도 만들고, computed 에도 만들 수 있다.
+
+ⓐ 두 영역의 차이 이해하기
+
+▷ App.vue
+  methods : {   =====> 호출할 때마다 실행 됨.
+      now(){
+        return new Date();
+      },
+
+  computed : {   =====> 처음 페이지 로드될 때 읽어놓고 요청하면 줌.(바뀔때는 재호출 됨.)
+      now2(){
+        return new Date();
+      },
+    },
+
+ⓑ 테스트
+
+▷ App.vue == footer 바로위에 버튼 만들고
+  카운터 변수를 하나 만들어서 버튼 누르면 p 태그 안에 시간과 카운터가 표시되는 것 확인
+
+첫째, now() 테스트
+  <p> {{ now() }}  {{ 카운터 }}</p>
+  <button @click="카운터++">카운터버튼</button> 
+
+
+둘째, now2 테스트 : 얘는 store의 state 개념이라 () 붙이면 안된다.
+
+<p> {{ now2 }}  {{ 카운터 }}</p>
+
+======> 시간은 변하지 않음.
+======> 시간이 오래걸리는 연산을 한번 실행해서 저장해 놓고 사용하기 위해 씀.
+
+ⓒ 그러면, state에 있는 변수를 꺼내 쓸때에도 computed 안에 선언해 놓고
+   사용하면 편함. 코드가 짧아짐.
+ 
+  computed 안에 name, age 가져오는 name(), age() 함수 만들어 놓으면 ->
+     실제로 쓸 때 name / age이라고 쓰니까 기존에 사용하던 방식과 동일해 진다.
+
+
+    computed : {
+      now2(){
+        return new Date();
+      },
+      name() {
+        return this.$store.state.name;
+      },
+      age() {
+        return this.$store.state.age;
+      }
+    },
+
+
+아까, 
+<h4>안녕 {{ $store.state.name }} 내 나이는 {{ $store.state.age }} 야</h4>
+
+지금, 
+<h4>안녕 {{ name }} 내 나이는 {{ $store.state.age }} 야</h4>
+
+※ computed는 항상 return 해 줘야 한다.
+
+ⓓ 위의 기능이 불편하고 장황하다면 mapState를 사용
+
+▷ App.vue
+
+  import { mapState } from 'vuex';
+
+  하고,,
+
+  computed : {
+    now2(){
+      return new Date();
+    },
+    ...mapState(['name','age']),
+  },
+
+ⓔ mapState를 이용할 때 클래스 타입으로 저장해서 불러올 수도 있다.
+
+  ...mapState({
+    myname : 'name',
+    myage : 'age'
+    }),
+
+  사용할 때는 {{ myname }}으로 써야겠지요?
+
+ⓕ mutations안에 정의한 거 편히 가져다 쓰기
+
+methods : {
+      ...mapMutations(['setMore', 'setName', 'setAge', 'addLikes'])
+      ,
+
+import { mapMutations, mapState } from 'vuex';
+
+자동으로 되어 있음.
+
+#16. Progressive Web App(PWA) & 셋팅
+
+▷ Vue로 만든 사이트는 webApp이나 모바일 App과 같이 유사하게 배포가 가능함.
+-- 사용자는 구분이 어려움.
+
+▷ 이것을 처리해 주는 것이 PWA이다.
+
+ⓐ 두개의 파일이 필요하다.
+첫째, manifest.json
+둘째, service-worker.js
+이 두가지가 있으면 자동으로 PWA로 자동으로 인식해서 설치하겠습니까? 이렇게 
+뜬다.
+
+
+ⓑ 설치하기
+> vue add pwa
+
+ⓒ 설치가 종료되면..
+
+registerServiceWorker.js 파일이 생김.
+
+ⓓ 만든 프로젝트를 빌드하게 되면 위의 두개 파일을 자동으로 생성해 준다.
+
+ⓔ 빌드하기(.vue -> html 로 컨버팅)
+> npm run build
+
+ⓕ root 폴더 밑에 dist 폴더 생성되고 그 아래에
+ css, img, js 등 필요한 파일이 만들어 짐.
+
+ⓖ 실 배포할 때는 위의 dist 폴더 내부의 내용 전체를 올려주면 된다.
+-- manifest.json, service-worker.js를 자동으로 생성해 주었다.
+
+두 파일의 용도
+첫째, manifest.json : 앱의 이름, 색상설정, 아이콘 설정 파일
+
+둘째, service-worker.js 파일이 더 중요하다.
+
+- 구글의 workbox 라이브러리를 그대로 이용
+- 앱은 오프라인에도 사용할 수 있다.(비행기모드 등에서...)
+- 일반 웹앱은 비행기모드 등 네트워크가 지원이 안되면 불러올수 없다. 이를 불러오게 해 주는 기능
+- 그러므로 html, css, img 를 내 컴에 미리 저장해 두는 역할 - 그럼 오프라인에서도 사용 가능함.
+- 이 안에 precache-manifest 를 보면 어떤 내용을 내 하드에 저장아는지 알 수 있다.
+
+ⓗ vue 공식 싸이트에서 Hybrid-App Development 찾아보면 실제
+ apk 파일로 변환 가능한 내용을 찾을 수 있다.
+
+ⓘ PWA 설정바꾸기
+예> index.html은 하드저장하고 싶지 않은 경우
+
+- root 아래에 vue.config.js
+
+module.exports = {
+  pwa: {
+    name: '님 앱이름',
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
+    workboxOptions: {
+      exclude: [/\.map$/, /manifest\.json$/, 'index.html']
+    }
+  }
+}
+
+※ 모바일 앱 보다는 웹앱의 이점
+
+신규 서비스 출시는 모바일 앱보다 웹이 더 나을 수 있습니다. 
+
+- 요즘 사람들은 게임 아니면 신규 앱 설치 안하는 경향이 있고 
+- 그렇다보니 앱설치유도는 웹방문유도에 비해 마케팅비용이 3배 이상인 점 
+- 인앱결제 수수료 30% 
+- 귀찮은 앱 개발자 등록비용
+- 버전업데이트할 때마다 플랫폼 2개를 관리해야함 
+이런것도 생각해야하지 않을까요 
+
+#17. 디버깅 Vue devtools
+
+▷ 간혹 코드짜다보면 props를 분명 전해줬는데 에러나고 멈추고 하는 경우가 있습니다.
+- 그 경우 터미널이나 크롬 개발자도구 console 탭으로 들어가면 대부분의 에러는 해결가능한데
+조용하게 에러나는 경우도 많습니다.
+- 예를 들어 라우터 이런 것들은 뭔가 틀려도 에러로 알려주지 않습니다.
+- 그래서 크롬 확장프로그램 중에 Vue-devtools 라고 설치하시면 좀 더 자세히 버그나는 부분을 파악가능합니다.
+
+- https://chrome.google.com/webstore/category/extensions 여기 들어가서 
+       Vue.js devtools 라고 찾아서 설치합니다.
+
+※ Vue.js devtools 나중에 나온 것으로 설치 ... 이전 것은 Vue2 만을 위한 것임.
+
+ⓐ 사용 법
+- 설치 하면 localhost:8080 에서 F12 누르면 Vue 라는 메뉴가 생김.
+
+- 왼쪽은 무슨 컴포넌트 안에 무슨 컴포넌트가 있는지 DOM 트리처럼 구조화해서 보여주고
+
+오른쪽은 컴포넌트를 택했을 때 거기 안에 들어있는 data, vuex state, props 목록을 쭉 보여줍니다.
+
+그래서 state가 잘 변하고 있는지 확인하고 싶으면 여기서 확인하면 되는 겁니다.
+
+props도 잘 보냈는지 확인해볼 수 있고요. 
+
+
+ⓑ 기능
+
+- 과녁버튼 누르고 브라우저 내에 원하는 요소를 찍으면 그 컴포넌트를 검사해줍니다.
+
+- <> 버튼 누르면 그 컴포넌트에 해당하는 요소를 element 탭에서 보여주고 
+
+- 네모난 버튼 누르면 VScode에서 해당 컴포넌트 열어줍니다.
+
+#18. Composition API 사용법 1 (팔로워 페이지 만들기)
+▷ Container.vue 에 step = 3 일 때 볼 수 있는 MyPage.vue를 만듦. 
+
+ⓐ MyPage.vue 컴포넌트 만들기
+
+▷ MyPage.vue
+
+  <template>
+    <h1>Mypage</h1>
+  </template>
+
+  <script>
+  export default {
+      name : 'MyPage',
+  }
+  </script> 
+
+ⓑ Container.vue
+
+<!-- MyPage -->
+    <div v-if="step == 3">
+        <MyPage />
+    </div>
+
+import MyPage from "./MyPage.vue";
+
+        components : {
+            PostForm,
+            FilterBox,
+            MyPage,
+        
+▷ App.vue
+
+ step 값을 3으로 강제 변경 후 확인.
+
+
+ⓒ MyPage 개발 - 팔로워 목록 보이기
+
+<div style="padding : 10px">
+  <h4>팔로워</h4>
+  <input placeholder="?" />
+  <div class="post-header">
+    <div class="profile"></div>
+    <span class="profile-name">사용자명</span>
+  </div>
+</div>
+
+ⓓ follower.json에서 읽어서 리스트 만들기와
+
+> root > public > follower.json 파일 생성
+
+[
+    { "id" : 0, "name" : "_Limvely", "image" : "https://picsum.photos/200?r=0" },
+    { "id" : 1, "name" : "salmon_X", "image" : "https://picsum.photos/200?r=1" },
+    { "id" : 2, "name" : "360noscope", "image" : "https://picsum.photos/200?r=2" },
+    { "id" : 3, "name" : "Jeony_1", "image" : "https://picsum.photos/200?r=3" },
+    { "id" : 4, "name" : "mihyeon", "image" : "https://picsum.photos/200?r=4" }   
+]
+
+※ public 폴더는 build 해도 변하지 않는다. 그랟서 여기있는 파일도 가끔
+   GET 요청해서 사용한다.
+
+※ json 데이터를 axios로 가져오면 json -> object 변환을 자동으로 해준다.
+
+ⓔ Composition.api 를 이용해 개발하기
+
+  export default {
+      name : 'MyPage',
+      setup(){
+
+      },
+  }
+
+※ created라는 라이프사이클 훅과 유사하다. 컴포넌트 만들기 전에 이것부터 실행 됨.
+- 이 안에 데이터 생성 및 조작, methods, hook, compute, watch 등을 모두 넣어
+  코드를 분리하지 않고 관리할 수 있다.
+
+첫번째, 데이터 저장하려면, 먼저 ref import 후에 
+
+<script>
+import { ref } from 'vue';
+
+export default {
+    name : 'MyPage',
+    setup(){
+      let follower = ref([]);
+      let count = ref(0);
+
+      return {follower};
+    },
+}
+
+※ 특정 값이 바뀌면 실시간 렌더링이 가능한 이유는 모든 변수의 값이 ref 타입으로
+묶여 있어서 가능한 것이다. 
+
+사용해 보자... 위에서
+
+<div class="post-header">
+  <div class="profile"></div>
+  <span class="profile-name">{{ follower }}</span>
+</div>
+
+※ 데이터 타입에 따른 변수의 선언
+    setup(){
+      let follower = ref([]);
+      let count = ref(0);
+      ------------------------------- 위에꺼 primitive type
+
+      let test = reactive({name : 'kim'});
+
+      ------------------------------- 위에꺼 object type
+
+
+      return {follower};
+    },
+
+※ props 전달받아 사용할 때
+  setup(props{
+    let { one, two, f } = toRefs(props);   ---> 위에 import 되어야 함.
+    console.log(one.value);
+  })
+
+※ props가 변경될 때 처리하기
+
+  watch(one, ()=>{
+    실행할 코드
+  })
+
+  let result = computed( () => {
+    return follower.value.length;   });
+    console.log(reslut.value);
+
+  얘는 먼저 실행되기 때문에 결과는 0 이 나온다.
+
+ⓕ follower.json에 있는 것을 ajax로 가져와서 위 자리에 진열해 보자.
+
+<script>
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+export default {
+    name : 'MyPage',
+    setup(){
+      let follower = ref([]);
+
+      onMounted(()=>{
+        axios
+        .get('./follower.json')
+        .then((result)=> {
+          follower.value = result.data;
+        })
+      })
+      return {follower};
+    },
+}
+</script>
+
+
+<template>
+  <div style="padding : 10px">
+    <h4>팔로워</h4>
+    <input />
+    <div v-for="f in follower" :key="f" class="post-header">
+      <div class="profile" style="{backgroundImage : `url(${f.image})`}"></div>
+      <span class="profile-name">{{ f.name }}</span>
+    </div>
+  </div>
+</template>
+
+#19. Component API 사용법 2 & 간단한 검색기능
+
+ⓐ 현재의 컴포넌트에만 적용되는 css 를 만들려면
+  <style scoped>
+  </style>
+  와 같이 적용됨.
+
+  현재는 얘가 빌드 되면서 Post.vue의 style이 적용된 것임. 
+
+ⓑ veux에 있는 자료 가져다 쓰기
+
+  import { useStore } from 'vuex';
+
+  let store = useStore();
+  console.log(store.state.name)
+
+ⓒ Composition API에서는 mapState 사용 불가함.
+
+ⓓ 검색 창에 입력 시 검색 결과 보이기
+
+  첫째, 함수 만들기
+
+  setup(){
+    function doThis(){
+
+    }
+
+    return {follower, dothis}
+  }
+
+  둘째, 데이터를 조작한 후 json 만 가져와서 처리하면 된다.
+
+    setup(){
+    let follower = ref([]);
+    function doSearch(e){
+      if(e.target.value == ''){
+        axios
+          .get('./follower.json')
+          .then((result)=> {
+            follower.value = result.data;
+          });
+      } else {
+        let newFollower = follower.value.filter((result)=>{
+          return result.name.indexOf(e.target.value) != -1
+        });
+        follower.value = [...newFollower];
+      }
+    }
+
+
+create table blog (
+  name varchar(50) primary key,
+  user_image varchar(100),
+  post_image varchar(100),
+  likes int,
+  date varchar(20),
+  liked tinyint,
+  content varchar(500),
+  filter varchar(100)
+)
+
+
+insert into blog(name, user_image, post_image, likes, date, liked, content, filter)
+values ('David','https://picsum.photos/100?random=1',
+'https://picsum.photos/600?random=1',5,'July 25',false,'더보기로 요청한 게시물1입니다.','perpetua')
+
+insert into blog(name, user_image, post_image, likes, date, liked, content, filter)
+values ('Son','https://picsum.photos/100?random=1',
+'https://picsum.photos/600?random=1',5,'May 14',false,'더보기로 요청한 게시물2입니다.','aden')
