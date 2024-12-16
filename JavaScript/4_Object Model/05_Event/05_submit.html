@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <form id="target" action="result.html" name="form">
+    <label for="name">name</label> 
+    <input id="name" type="name" name="name" />
+    <br>
+    <label for="name">Addr</label>
+    <input id="addr" type="addr" name="addr" />
+    <br>
+    <input type="submit" />
+</form>
+<script>
+  var t = document.getElementById('target');
+  t.addEventListener('submit', function(event){
+      if(document.getElementById('name').value.length === 0){
+        alert('Name 필드의 값이 누락 되었습니다');
+        form.name.focus();
+        event.preventDefault();
+        return;
+      } 
+      if(document.getElementById('addr').value.length === 0){
+        alert('Addr 필드의 값이 누락 되었습니다');
+        form.addr.focus();
+        event.preventDefault();
+        return;
+      }          
+  });
+</script>
+</body>
+</html>

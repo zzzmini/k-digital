@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <input type="button" id="target" value="클릭이벤트" />
+ 
+<script>
+    var t = document.getElementById('target');
+    t.addEventListener('click', function(event){
+        alert(1);
+    });
+    t.addEventListener('click', function(event){
+        alert(2);
+    });
+</script>
+</body>
+</html>

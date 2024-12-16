@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <input type="button" id="target" value="클릭이벤트" />
+ 
+<script>
+    let t = document.getElementById('target');
+    t.addEventListener('click', function(event){
+        alert('Hello world, '+ event.target.value);
+    });
+</script>
+</body>
+</html>

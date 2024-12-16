@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+<ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+</ul>
+<ol>
+    <li>HTML</li>
+    <li class="active">CSS</li>
+    <li>JavaScript</li>
+</ol>
+<input type="button" class="btn" value="확인">
+<script>
+  const btn = document.querySelector('.btn');
+  btn.addEventListener('click', () =>{
+    var liEl = document.querySelector('li');
+    liEl.style.color='red';
+    let liClass = document.querySelector('.active');
+    liClass.style.color='blue';
+  })    
+</script>
+</body>
+</html>

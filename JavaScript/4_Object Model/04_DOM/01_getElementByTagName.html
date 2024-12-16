@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+</ul>
+<input type="button" class="btn" value="눌러주세요"></input>
+<script>
+  const btn = document.querySelector('.btn')
+  const lis = document.getElementsByTagName('li');
+  const lis_0 = document.getElementsByTagName('li')[0];
+
+  btn.addEventListener('click', function(){    
+    for(var i=0; i < lis.length; i++){
+        lis[i].style.color='red';   
+    }
+    lis_0.style.color='blue';
+  });
+</script>
+</body>
+</html>
