@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    html { border : 1px solid gray;}
+    #other, #grandpa, #parent { 
+        border : 5px solid tomato;
+        }
+    #grandpa {
+        position : relative;
+    }
+    #me {
+        position: absolute;
+        background-color: black;
+        color : white;
+        left : 0;
+        top : 0;
+    }
+</style>
+</head>
+<body>
+    <div id="other">other</div>
+    <div id="grandpa">
+        grandpa
+        <div id="parent">
+            parent
+            <div id="me">me</div>
+        </div>
+    </div>
+</body>
+</html>
