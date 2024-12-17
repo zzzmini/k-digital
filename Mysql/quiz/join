@@ -1,0 +1,157 @@
+=세탁기(세탁물, 물, 세제, [섬유유연제])
+=timestampdiff(year, '2023-3-14', now())
+
+ select concat(timestampdiff(month, '2004-8-31', now())) as 우리만난지;
+
+ select  last_day(now()) - interval 2 month + interval 1 day as '첫날'
+          ,last_day(now()) - interval 1 month as '마지막날';
+
+최근 1개월 ( 2024-2-14 ~ 2024-3-13)
+select curdate() - interval 1 month + interval 1 day as '첫날',
+         curdate() as '오늘';
+
+
+select member_id, member_name, gender, 
+         date_format(date_of_birth,'%Y-%m-%d') as date_of_birth
+from member_profile
+where month(date_of_birth) = month(now()) and tlno is not null
+order by member_id;
+
+일 - 1
+월 - 2
+화 - 3
+수 - 4
+
+
+
+일월화수목금토
+
+select curdate() as '오늘은', case dayofweek(now()) 
+   when 1 then '일'
+   when 2 then '월'
+   when 3 then '화'
+   when 4 then '수'
+   when 5 then '목'
+   when 6 then '금'
+   when 7 then '토' end as '무슨요일?';
+
+select concat(mid('일월화수목금토', dayofweek(now()), 1), '요일');
+
+mid(어디서, 시작은, 몇개를)
+
+table name : song  as s, girl_group as g
+
+select g._id, g.name, s.title 
+from girl_group as g inner join song as s
+on g.hit_song_id = s._id;
+
+select g._id, g.name, s.title 
+from girl_group as g inner join song as s
+where g.hit_song_id = s._id;
+
+select g._id, g.name, s.title, s.lyrics 
+from song as s inner join girl_group as g
+on g.hit_song_id = s._id;
+
+girl_group_id  걸그룹이름   대표곡
+
+
+join 방식
+inner join
+left join
+right join
+
+
+select g._id, g.name, s.title 
+from girl_group as g left join song as s
+on g.hit_song_id = s._id
+where g.hit_song_id is null;
+
+select g._id, g.name, s.title 
+from girl_group as g right join song as s
+on g.hit_song_id = s._id;
+
+문제1> 가사 중에 'me'를 포함하는 자료의
+     id, 그룹이름, 가사를 출력하세요.
+
+select g._id, g.name, s.lyrics
+from girl_group g inner join song s
+on g.hit_song_id = s._id
+where s.lyrics like '%me%';
+
+
+문제2> 데뷔해가 2011년인 그룹의 이름과 히트송을 출력.
+select g.name, s.title
+from girl_group g inner join song s
+on g.hit_song_id = s._id
+where year(g.debut) = 2011;
+
+문제3> 데뷔해를 기준으로 각 해 당 데뷔한 걸그룹 수를 
+출력하세요.
+2007    1
+2009    6
+2010    1
+
+select year(g.debut) as year, count(s._id) as '걸그룹수'
+from girl_group g inner join song s
+on g.hit_song_id = s._id
+group by year
+order by year;
+
+
+
+테이블별칭 : girl_group  g , song s
+
+select g._id, g.name, g.debut, s.title, s.lyrics
+from girl_group g inner join song s
+on g.hit_song_id = s._id
+where  필드명 between   /   in   /  like  / and / or
+group by
+having
+order by
+
+
+-- 3개 테이블 조인
+
+- student 테이블 : p_id   , name       as st
+- girl_group : _id, name,debut, hit_song_id   gg
+- song :  _id, title, lyrics    ss
+- teacher : id, name, belong, phone  tt
+
+select gg.name, st.name, gg.debut, ss.title, tt.name, tt.phone
+from girl_group gg inner join song ss
+on gg.hit_song_id = ss._id
+inner join student st
+on st.p_id = gg._id
+inner join teacher tt
+on tt.id = st.p_id
+where year(gg.debut) = 2009 and char_length(st.name) = 2;
+
+
+where year(gg.debut) = 2009 and st.name like '__';
+;
+
+걸그룹이름, 학생이름, 데뷔일, 노래제목, teacher.name, teacher.phone
+조건.....   데뷔해가 2009년인 자료중에서 학생이름이 두글자인 자료만 검색 합니다.
+
+select _id from song where lyrics like '%give%';
+select * from girl_group where hit_song_id=105;
+
+ select * from girl_group where hit_song_id= 
+         (select _id from song where lyrics like '%give%');
+
+
+select * from girl_group
+where hit_song_id in (select _id from song where lyrics like '%e%');
+
+alter table test2
+add constraint fk_pid
+foreign key (p_id)
+references test1 (p_id);
+
+
+
+
+
+
+
