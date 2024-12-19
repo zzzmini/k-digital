@@ -215,7 +215,7 @@ px vs em vs rem
 - box가 padding 또는 border속성을 갖고 있는 경우 width, height값을
   조정하는 경우 우리가 생각하는 사이즈와 다를 수 있다.
 
-※ width : border, padding 값이 빠져있는 영역을 width로 함.
+※ width : border, padding 값이 빠져있는 실 데이터 영역을 width로 함.
    처음에 width를 입력안 한 상태와 입력한 후의 상태를 비교하면
    width 값을 주었을 때 두 하얀영역이 길이는 같으나
    border와 padding값 때문에 전체 div 크기는 달라지게 된다.
