@@ -89,6 +89,9 @@ public class TelBookView implements ViewInterface{
         // 원본이름 출력
         System.out.println("수정 전 이름 : " + originalDto.getName());
         boolean check = true;
+        // 수정 대상 ID를 updateDTO.id 저장
+        updateDto.setId(originalDto.getId());
+
         // 수정할 이름 입력 받고 Validation 체크
         while (check) {
             try {
@@ -125,6 +128,7 @@ public class TelBookView implements ViewInterface{
         while (check) {
             try {
                 System.out.println("수정 전 전화번호 : ");
+                System.out.println(originalDto.getPhone());
                 String phone = sc.next();
                 check = validation.phoneCheck(phone);
                 updateDto.setPhone(phone);

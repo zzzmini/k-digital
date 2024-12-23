@@ -49,6 +49,23 @@ public class PhoneBookRepository implements RepositoryInterface{
         sql = sql + "created_at = ?, ";
         sql = sql + "updated_at = ? ";
         sql = sql + "WHERE id = ?";
+
+        try {
+            psmt = dbConn.prepareStatement(sql);
+            psmt.setString(1, dto.getName());
+            psmt.setInt(2, dto.getAge());
+            psmt.setString(3, dto.getAddress());
+            psmt.setString(4, dto.getPhone());
+            psmt.setTimestamp(5,
+                    Timestamp.valueOf(dto.getCreatedAt()));
+            psmt.setTimestamp(6,
+                    Timestamp.valueOf(dto.getUpdateAt()));
+            psmt.setLong(7, dto.getId());
+            result = psmt.executeUpdate();
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
