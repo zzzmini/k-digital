@@ -1,11 +1,13 @@
 package view;
 
+import dto.SearchResultDTO;
 import dto.TelBookDTO;
 import exception.InputValidation;
 import exception.MyException;
 import service.PhoneBookService;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +19,7 @@ public class TelBookView implements ViewInterface{
 
     @Override
     public void insertView() {
-        System.out.println("[TelBookView]-insertView");
+//        System.out.println("[TelBookView]-insertView");
         System.out.println("=== 전화번호 등록 ===");
 
         boolean check = true;
@@ -77,7 +79,7 @@ public class TelBookView implements ViewInterface{
 
     @Override
     public void updateView() {
-        System.out.println("[TelBookView]-updateView");
+//        System.out.println("[TelBookView]-updateView");
         System.out.println("수정할 전화번호부의 ID를 입력하세요");
         Long updateNum = sc.nextLong();
         // 수정할 ID의 레코드를 찾아온다. 찾아온 데이터
@@ -154,7 +156,7 @@ public class TelBookView implements ViewInterface{
 
     @Override
     public void deleteView() {
-        System.out.println("[TelBookView]-deleteView");
+//        System.out.println("[TelBookView]-deleteView");
         System.out.println("삭제할 전화번호부의 ID를 입력하세요.");
         Long deleteId = sc.nextLong();
 
@@ -167,7 +169,7 @@ public class TelBookView implements ViewInterface{
 
     @Override
     public void searchAllView() {
-        System.out.println("[TelBookView]-searchAllView");
+//        System.out.println("[TelBookView]-searchAllView");
         List<TelBookDTO> dtoList = bookService.getAllListService();
         // 출력해 보기
         linePrint();
@@ -183,17 +185,49 @@ public class TelBookView implements ViewInterface{
         System.out.println("ID \t  이름 \t  나이 \t 주소 \t \t 전화번호 \t \t \t  입력 \t \t 수정");
     }
 
+    public void printSearchTitle() {
+        System.out.println("이름 \t  나이 \t 주소 \t \t 전화번호");
+    }
+
     public void linePrint() {
         System.out.println("================================================");
     }
 
     @Override
     public void searchNameView() {
-        System.out.println("[TelBookView]-searchNameView");
+//        System.out.println("[TelBookView]-searchNameView");
+        System.out.println("이름으로 검색하는 화면입니다.");
+        System.out.println("검색할 이름의 일부나 전체를 입력하세요");
+        String keyword = sc.next();
+        List<SearchResultDTO> result = bookService.findByNameService(keyword);
+        linePrint();
+        printSearchTitle();
+        linePrint();
+        // 내용 출력
+        if (result.isEmpty()) {
+            System.out.println("검색 결과가 없습니다.");
+        } else {
+            result.forEach(x -> System.out.println(x));
+        }
+        linePrint();
     }
 
     @Override
     public void searchPhoneView() {
-        System.out.println("[TelBookView]-searchPhoneView");
+//        System.out.println("[TelBookView]-searchPhoneView");
+        System.out.println("전화번호로 검색하는 화면입니다.");
+        System.out.println("검색할 전화번호의 일부나 전체를 입력하세요");
+        String keyword = sc.next();
+        List<SearchResultDTO> result = bookService
+                .findByPhoneService(keyword);
+        linePrint();
+        printSearchTitle();
+        linePrint();
+        if (result.isEmpty()) {
+            System.out.println("검색 결과가 없습니다.");
+        } else {
+            result.forEach(x -> System.out.println(x));
+        }
+        linePrint();
     }
 }

@@ -1,10 +1,12 @@
 package repository;
 
 import db.DBConn;
+import dto.SearchResultDTO;
 import dto.TelBookDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PhoneBookRepository implements RepositoryInterface{
@@ -16,7 +18,7 @@ public class PhoneBookRepository implements RepositoryInterface{
 
     @Override
     public int insertData(TelBookDTO dto) {
-        System.out.println("[PhoneBookRepository]-insertData");
+//        System.out.println("[PhoneBookRepository]-insertData");
         // DB에 저장하기
         try {
             sql = "INSERT INTO phone_book (name, age, address, phone, created_at) ";
@@ -39,7 +41,7 @@ public class PhoneBookRepository implements RepositoryInterface{
 
     @Override
     public int updateData(TelBookDTO dto) {
-        System.out.println("[PhoneBookRepository]-updateData");
+//        System.out.println("[PhoneBookRepository]-updateData");
         // 수정작업 처리
         sql = "UPDATE phone_book SET ";
         sql = sql + "name = ?, ";
@@ -71,7 +73,7 @@ public class PhoneBookRepository implements RepositoryInterface{
 
     @Override
     public int deleteData(Long id) {
-        System.out.println("[PhoneBookRepository]-deleteData");
+//        System.out.println("[PhoneBookRepository]-deleteData");
         sql = "DELETE FROM phone_book WHERE id=?";
         try {
             psmt = dbConn.prepareStatement(sql);
@@ -85,7 +87,7 @@ public class PhoneBookRepository implements RepositoryInterface{
 
     @Override
     public List<TelBookDTO> getAllList() {
-        System.out.println("[PhoneBookRepository]-getAllList");
+//        System.out.println("[PhoneBookRepository]-getAllList");
         List<TelBookDTO> dtoList = new ArrayList<>();
 
         ResultSet rs = null;
@@ -127,7 +129,7 @@ public class PhoneBookRepository implements RepositoryInterface{
 
     @Override
     public TelBookDTO findById(Long id) {
-        System.out.println("[PhoneBookRepository]-findById");
+//        System.out.println("[PhoneBookRepository]-findById");
         TelBookDTO dto = new TelBookDTO();
         ResultSet rs = null;
 
@@ -160,14 +162,77 @@ public class PhoneBookRepository implements RepositoryInterface{
     }
 
     @Override
-    public List<TelBookDTO> findByName(String name) {
-        System.out.println("[PhoneBookRepository]-findByName");
-        return List.of();
+    public List<SearchResultDTO> findByName(String name) {
+//        System.out.println("[PhoneBookRepository]-findByName");
+        List<SearchResultDTO> dtoList = new ArrayList<>();
+
+        sql = "SELECT name, age, address, phone FROM phone_book WHERE ";
+        sql = sql + "name LIKE CONCAT('%', ?, '%') ";
+        sql = sql + "ORDER BY name ASC";
+        ResultSet rs = null;
+        String searchName = "";
+        int searchAge = 0;
+        String searchAddress = "";
+        String searchPhone = "";
+
+        try {
+            psmt = dbConn.prepareStatement(sql);
+            psmt.setString(1, name);
+            rs = psmt.executeQuery();
+            // 읽어온 ResultSet을 하나씩 읽어서 리스트에 담기
+            while (rs.next()) {
+                searchName = rs.getString("name");
+                searchAge = rs.getInt("age");
+                searchAddress = rs.getString("address");
+                searchPhone = rs.getString("phone");
+                // 생성자를 이용해서 DTO 생성 후
+                // 리스트에 추가
+                dtoList.add(new SearchResultDTO(
+                        searchName,
+                        searchAge,
+                        searchAddress,
+                        searchPhone
+                ));
+            }
+            rs.close();
+            psmt.close();
+            return dtoList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
     @Override
-    public List<TelBookDTO> findByPhone(String phone) {
-        System.out.println("[PhoneBookRepository]-findByPhone");
-        return List.of();
+    public List<SearchResultDTO> findByPhone(String phone) {
+//        System.out.println("[PhoneBookRepository]-findByPhone");
+        List<SearchResultDTO> list = new ArrayList<>();
+
+        sql = "SELECT name, age, address, phone FROM phone_book ";
+        sql = sql + "WHERE phone LIKE CONCAT('%', ?, '%') ";
+        sql = sql + "ORDER BY phone";
+        try {
+            psmt = dbConn.prepareStatement(sql);
+            psmt.setString(1, phone);
+            ResultSet rs = psmt.executeQuery();
+            while (rs.next()) {
+                String searchName = rs.getString("name");
+                int searchAge = rs.getInt("age");
+                String searchAddress = rs.getString("address");
+                String searchPhone = rs.getString("phone");
+                list.add(new SearchResultDTO(
+                        searchName,
+                        searchAge,
+                        searchAddress,
+                        searchPhone
+                ));
+            }
+            rs.close();
+            psmt.close();
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 }

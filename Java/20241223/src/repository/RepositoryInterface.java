@@ -1,5 +1,6 @@
 package repository;
 
+import dto.SearchResultDTO;
 import dto.TelBookDTO;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public interface RepositoryInterface {
     TelBookDTO findById(Long id);
 
     // 이름으로 검색
-    List<TelBookDTO> findByName(String name);
+    List<SearchResultDTO> findByName(String name);
 
     // 전화번호로 검색
-    List<TelBookDTO> findByPhone(String phone);
+    List<SearchResultDTO> findByPhone(String phone);
 }
