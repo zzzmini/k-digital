@@ -10,6 +10,11 @@
 ▶ git 초기화 하기
 >> git init
 
+   작업폴더 ------------>  스테이징   ---------------> 저장소
+   working   git add       Staging      git commit  Repository
+    Area                    Area  
+
+
 ▶ git 저장하고 커밋하기
 >> git add 파일명1 파일명2
 >> git add .
@@ -47,8 +52,23 @@
 >> git branch -d 브랜치이름 (병합완료브랜치)
 >> git branch -D 브랜치이름 (병합하지 않은 브랜치)
 
+▶ 3-way merge
+- 브랜치와 메인브랜치 각각 신규 커밋이 존재할 경우 새로운 커밋 생성 후 합침
+
+        ------ ○ ----- 
+        |             |
+○ ----- ○ ----- ○ ----○ ------
+
+▶ fast-forward merge
+- 기준 브랜치에 신규 commit이 없는 경우 
+- 신규 브랜치가 메인이 되도록 처리.
+        ------ ○ ----- ○
+        |             
+○ ----- ○ 
+
+
 ▶ rebase 하기
--- 브랜치의 시작점을 다른 commit으로 옮겨주는 것
+-- 브랜치의 시작점을 최종 commit으로 옮겨주는 것
 1. rebase를 이용해서 신규브랜치의 시작점을 main 브랜치 최근 commit으로 옮긴 다음 
 2. fast-forward merge
 
