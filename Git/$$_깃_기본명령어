@@ -7,6 +7,9 @@
 >> git config --global user.email "zzzmini@~~~"
 >> git config --global user.name "zzzmini"
 
+▶ git 초기화 하기
+>> git init
+
 ▶ git 저장하고 커밋하기
 >> git add 파일명1 파일명2
 >> git add .
