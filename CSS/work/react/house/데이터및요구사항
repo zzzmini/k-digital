@@ -24,8 +24,8 @@ content = [
 4-0. house 앱이 처음 실행되면,
    로그인 또는 회원가입 화면을 보여줍니다.
 
-4-1. 회원가입은 
-  id, password, nickname, email, telNumber 를 받아 
+4-1. 회원가입은 /signup
+  id, password, nickname, email, telNumber 를 받아 users
   배열에 저장합니다.
 
 4-2. 로그인은 id와 password 가 일치하면 됩니다.
