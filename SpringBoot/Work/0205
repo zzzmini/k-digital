@@ -2,7 +2,7 @@
 - com.my.testApp
 - dependency : 
   spring web, dev tools, thymeleaf
--- package name : userController  
+-- package name : myController  
 -- class name : UserController
 
 -- port : 9000
