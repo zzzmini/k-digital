@@ -4,6 +4,9 @@
   spring web, dev tools, thymeleaf
 -- package name : userController  
 -- class name : UserController
+
+-- port : 9000
+
 - /user/logout === 
        로그아웃페이지
        김형민님 로그아웃 됨. 
