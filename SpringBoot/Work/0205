@@ -1,0 +1,16 @@
+- 새로운 프로젝트 생성
+- com.my.testApp
+- dependency : 
+  spring web, dev tools, thymeleaf
+-- package name : userController  
+-- class name : UserController
+- /user/logout === 
+       로그아웃페이지
+       김형민님 로그아웃 됨. 
+- /user/login === 
+       로그인 페이지 
+       김형민님 로그인 됨.
+-- class name : MainController
+- /main == 메인페이지
+    00님 어서오세요.
+    로그인   로그아웃
