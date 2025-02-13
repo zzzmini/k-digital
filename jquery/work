@@ -1,0 +1,28 @@
+1. 데이터가져오기
+
+- ajax
+https://jsonplaceholder.typicode.com/posts?_limit=10
+
+2. posts.html 파일을 생성
+3. 해당 파일이 읽혀지면
+- ajax로 위 위치에서 10개를 읽어온다.
+- 테이블로 뿌려준다.
+- title 은 15자만 보여준다.
+- body는 20자만 보여주고, 뒤에 ...을 붙인다.(단, 20자 이상만...)
+
+PlaceHolder Posts Data
+---------------------------------------------------------------
+|                                                                            |
+|         div = detail    
+|                                                닫기                      | 
+---------------------------------------------------------------
+
+userID |  id  |   Title              |    body                         |  자세히
+-----------------------------------------------------------------------------
+       1 |    1 | sunt aut facere | quia et suscipit nsusci ...  |   자세히 버튼
+
+4. 자세히 버튼은 클릭하면... body의 정보를
+   ajax로 읽어서 뿌려준다.
+
+  GET 
+  https://jsonplaceholder.typicode.com/posts/2 --> 2 : id 바뀐다.
