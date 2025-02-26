@@ -9,5 +9,17 @@ name : 아이브, 블핑
 IdolMember 
 id : 안유진 , 장원영, 제니, 지수
 name : 유진, 원영, 째니, 지수다
+※ 요구사항
+1. 위 데이터를 기반으로 클래스를 생성
+2. 한번에 기초데이터가 입력되도록
+    initData() 서비스를 생성
+3. 테스트 코드 작성해서 initData 실행
+4. DB에 저장되는지 확인
+※ 문제
+1. 지수가 속한 걸그룹 이름과 엔터테인트 회사 이름 출력하기.
+2. blackPink 멤버 리스트 출력하기.
 
-지수가 속한 걸그룹 이름과 엔터테인트 회사 이름 출력하기.
+※ 생성 조건
+- 연관관계 매핑은 자료를 보고 결정
+- Cascade Persist : Entertainment
+- Cascade Remove : GirlGroup
