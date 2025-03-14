@@ -10,3 +10,14 @@ CREATE TABLE public.board_table (
 	fileattached int4 DEFAULT 0 NULL,
 	CONSTRAINT board_table_pkey PRIMARY KEY (id)
 );
+
+CREATE TABLE board_table (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    boardtitle VARCHAR(50) NULL,
+    boardwriter VARCHAR(20) NULL,
+    boardpass VARCHAR(20) NULL,
+    boardcontents VARCHAR(500) NULL,
+    boardhits INT DEFAULT 0 NULL,
+    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+    fileattached INT DEFAULT 0 NULL
+);
