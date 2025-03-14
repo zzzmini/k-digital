@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table, tr, td, th {
+            border : 1px solid;
+        }
+        th, td {
+            padding : 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/save">글쓰기</a>
+    <table>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>조회수</th>
+        </tr>
+        <tr th:each="list : ${lists}" th:object="${list}">
+            <td>[[ *{id} ]]</td>
+            <td>
+                <a th:href="@{|/detail/*{id}|}">
+                    [[ *{boardTitle} ]]
+                </a>
+            </td>
+            <td>[[ *{boardWriter} ]]</td>
+            <td>[[ *{createdAt} ]]</td>
+            <td>[[ *{boardHits} ]]</td>
+        </tr>
+    </table>
+    <form action="/search" method="get">
+        <select name="search">
+            <option value = "" selected>===선택===</option>
+            <option value = "title">제목</option>
+            <option value="name">작성자</option>
+        </select>
+        <input type="text" name="keyword">
+        <input type="submit" value="검색">
+    </form>
+</body>
+</html>
