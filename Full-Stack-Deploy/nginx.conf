@@ -1,0 +1,33 @@
+worker_processes 1; # 1개의 워커 프로세스를 사용
+
+events {
+    worker_connections 1024; # 각 워커 프로세스가 동시에 처리할 수 있는 최대 연결 수를 1024로 설정
+}
+
+http {
+
+    include /etc/nginx/mime.types;
+
+    upstream backend {
+        server backend:8080; # backend : 도커컴포즈 서비스명
+    }
+
+    server {
+        listen 80; # 클라이언트의 요청을 받을 포트 설정
+
+        # 기본 루트 경로와 인덱스 파일을 설정
+        location / {
+            root /usr/share/nginx/html;
+            index index.html index.htm;
+            try_files $uri $uri/ /index.html;
+        }
+
+        # '/api/'로 시작하는 모든 요청에 대해 백엔드 서버로 프록시하도록 설정
+        location /api/ {
+            proxy_pass http://backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
+}
