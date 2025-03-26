@@ -1,0 +1,33 @@
+name: 배포
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # 작업이 실행될 환경
+    steps:
+    - name: 체크아웃
+      uses: actions/checkout@v3
+    - name: 도커허브에 로그인
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USER_NAME }}
+        password: ${{ secrets.DOCKER_USER_PW }}
+    - name: 이미지 빌드
+      run: docker build -t ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-front .
+    - name: 도커허브에 이미지 푸시
+      run: docker push ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-front
+    - name: AWS EC2에 ssh 접속 후 배포
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AWS_IP }}
+        port: 22
+        username: ubuntu
+        key: ${{ secrets.AWS_KEY }}
+        script: |
+          sudo timedatectl set-timezone Asia/Seoul
+          echo "AWS 연결"
+          docker pull ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-front
+          docker-compose up -d
