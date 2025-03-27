@@ -1,0 +1,20 @@
+version: '3'
+services:
+  backend:
+    image: zzzmini/full-stack-back
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+  
+  frontend:
+    image: zzzmini/full-stack-front
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
