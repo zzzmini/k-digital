@@ -1,0 +1,4 @@
+- name: application.yml 덮어쓰기
+        run: |
+          echo "${{ secrets.PROPERTIES }}" > src/main/resources/application.yml
+        shell: bash
