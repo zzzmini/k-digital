@@ -25,9 +25,9 @@ jobs:
           username: ${{ secrets.DOCKER_USER_NAME }}
           password: ${{ secrets.DOCKER_USER_PW }}
       - name: 이미지 빌드
-        run: docker build -t ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-be .
+        run: docker build -t ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-back .
       - name: 도커허브에 이미지 푸시
-        run: docker push ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-be
+        run: docker push ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-back
       - name: AWS EC2에 ssh 접속 후 배포
         uses: appleboy/ssh-action@master
         with:
@@ -37,5 +37,5 @@ jobs:
           key: ${{ secrets.AWS_KEY }}
           script: |
             sudo timedatectl set-timezone Asia/Seoul
-            docker pull ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-be
+            docker pull ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_IMAGE_NAME }}-back
             docker-compose up -d
