@@ -1,0 +1,32 @@
+name: 배포
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # 작업이 실행될 환경
+    steps:
+    - name: 체크아웃
+      uses: actions/checkout@v3
+    - name: Node.js 설정
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: 프로젝트 의존성 설치
+      run: npm install # 또는 yarn install
+
+    - name: React 빌드
+      run: npm run build # 또는 yarn build
+
+    - name: AWS CLI 설정
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2 # 서울 리전 (필요시 변경)
+
+    - name: S3에 빌드 파일 업로드
+      run: aws s3 sync build/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}
