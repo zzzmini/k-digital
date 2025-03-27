@@ -1,0 +1,53 @@
+도커 이미지 만들기  ---> docker-compose
+
+docker build -t zzzmini/nodeserver .  
+(docker hub id/이미지, . 은 현재 폴더에 있는 Dockerfile)
+
+docker build -t zzzmini/my-nginx:v2 .
+
+docker run -d -p 8081:8080 zzzmin/nodeserver:v1
+docker ps
+docker image ls
+docker logs 컨테이너이름
+docker stop 컨테이너이름 -v (생성한 이미지도 삭제)
+docker rm -f 컨테이너이름
+부트 : docker exec -it 컨테이너이름 sh(bash)
+mysql : docker exec -it 컨테이너이름 mysql -u root -p
+
+docker push zzzmini/nodeserver:latest
+
+docker pull zzzmini/nodeserver:latest
+
+docker network create 네트워크이름
+docker network create my-net-01
+docker network ls
+
+docker run -d -p 80:80 --network my-net-01 --name nginx-container zzzmini/my-nginx:v2
+docker run -d -p 8080:8080 --network my-net-01 --name node-container zzzmini/nodeserver:latest
+
+node
+	"Gateway": "172.18.0.1",
+	"IPAddress": "172.18.0.3",
+nginx
+	"Gateway": "172.18.0.1",
+	"IPAddress": "172.18.0.2",
+
+db_container
+
+psql -U admin -W
+POSTGRES_USER   admin	
+POSTGRES_PASSWORD  1111
+
+\c postgres
+CREATE TABLE product(title varchar(100));
+
+INSERT INTO product values ('test-1');
+SELECT * FROM product;
+
+docker volume create postgre_data
+docker volume ls
+
+docker run -d --name db-container -p 5432:5432 -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=1111 -v c:/postgre_data:/var/lib/postgresql/data postgres:17.4
+
+
+docker-compose down --remove-orphans && docker-compose pull && docker-compose up -d --build
