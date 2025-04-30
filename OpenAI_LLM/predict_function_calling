@@ -1,0 +1,57 @@
+def predict_function_calling(review):
+    prompt = prompt_template_calling_function.format(review=review)
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "extract_positive_and_negative_keywords",
+                "description": "Extract positive keywords and negative keywords",
+                "parameters": {
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "type": "object",
+                    "properties": {
+                        "positive_keywords": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "negative_keywords": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": ["positive_keywords", "negative_keywords"]
+                }
+
+            }
+        }
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role":"system", "content":"You are a helpful assistant"},
+            {"role":"user", "content": prompt}
+        ],
+        temperature=0,
+        response_format={"type":"json_object"},
+        tools=tools,
+        tool_choice={"type":"function",
+            "function":{
+                "name":"extract_positive_and_negative_keywords"
+            }
+         }
+    )
+
+    output = response.choices[0].message.tool_calls[0].function.arguments
+
+    output_json = json.loads(output)
+    return output_json
+
+
+if __name__ == '__main__':
+    print(predict_function_calling("보는 내낸 시간 가는 줄 모르고 정말 재밌게 봤습니다."))
+    print(predict_function_calling("정말 쓰레기 같은 영화 절대 비추"))
