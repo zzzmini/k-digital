@@ -1,0 +1,63 @@
+/* 기본 스타일 */
+.chatbot {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.chat-window {
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #d1f7d1;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 8px;
+}
+
+.bot {
+  align-self: flex-start;
+  background-color: #f0f0f0;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 8px;
+}
+
+.input-area {
+  display: flex;
+  justify-content: space-between;
+}
+
+input {
+  width: 80%;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
