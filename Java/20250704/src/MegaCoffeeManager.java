@@ -46,8 +46,17 @@ public class MegaCoffeeManager {
                     order();
                     break;
                 case 2:
-                    admin();
-                    break;
+                    // 관리자 비밀번호를 체크 : 1004
+                    String password = "";
+                    System.out.println("관리자 비밀번호를 입력하세요");
+                    password = sc.next();
+                    if (password.equals("1004")) {
+                        admin();
+                        continue;
+                    } else {
+                        System.out.println("비밀번호가 틀립니다.");
+                        continue;
+                    }
                 case 3:
                     // main 함수로 돌아가기
                     return;
@@ -65,12 +74,15 @@ public class MegaCoffeeManager {
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:
+                    // 메뉴 가격만 수정
                     menuUpdate();
                     break;
                 case 2:
+                    // 새로운 메뉴 추가(단, 총 5개까지만...현재 3개 있음)
                     menuInsert();
                     break;
                 case 3:
+                    // 제품별 총 판매액 출력
                     adminResult();
                     break;
                 case 4:
@@ -83,29 +95,72 @@ public class MegaCoffeeManager {
 
     private static void adminResult() {
         System.out.println("정산하기 화면");
+        // sales 배열에 있는 값들을 출력
+        // 맨 아래에 총 판매 금액을 출력
+        // 총 판매 누적금액을 저장하는 변수
+        int total = 0;
+        for (int i = 0; i < MENU_COUNT; i++) {
+            if (products[i] != null) {
+                String strMenu = (i+1) + " / " + products[i] + " / " + sales[i];
+                System.out.println(strMenu);
+                total = total + sales[i];
+            }
+        }
+        // 총 판매금액
+        System.out.println("-------------------------------------");
+        System.out.println("누적 총 판매금액 : " + total);
     }
 
     private static void menuInsert() {
-        System.out.println("메뉴 추가하기 화면");
+        // 메뉴 추가 화면
+        // 추가 가능한 제품의 갯수 출력해 주기
+        int ableCount = 0;
+        // 제품 배열을 순회하면서 비어있지 않은 제품 수를 구한다.
+        for (int i = 0; i < MENU_COUNT; i++) {
+            if (products[i] != null) {
+                ableCount++;
+            }
+        }
+        // 전체 배열의 크기에서 뺀다. -> 추가할 수 있는 제품 수
+        System.out.println("현재 추가할 수 있는 제품의 수 : " + (MENU_COUNT - ableCount));
+
     }
 
     private static void menuUpdate() {
-        System.out.println("메뉴 가격 수정화면");
+        while (true) {
+            viewMenu();
+            System.out.println("수정할 메뉴 번호를 입력하세요.");
+            int updateMenuNumber = sc.nextInt();
+            // 현재의 아이스아메리카노 가격은 2000 입니다.  -> 출력
+            if (updateMenuNumber == 0) return;
+            if (updateMenuNumber >= 1 && updateMenuNumber <= MENU_COUNT) {
+                if (products[updateMenuNumber - 1] != null) {
+                    // 존재하는 메뉴를 선택한 경우
+                    System.out.println("현재의 " + products[updateMenuNumber - 1] +
+                            "가격은 " + price[updateMenuNumber - 1] + "입니다.");
+                    // 변경한 단가를 요구한다.
+                    System.out.println("수정할 가격을 입력하세요.");
+                    int updatePrice = sc.nextInt();
+                    price[updateMenuNumber - 1] = updatePrice;
+                    System.out.println("정상적으로 수정되었습니다.");
+                    viewMenu();
+                    continue;
+                } else {
+                    System.out.println("없는 메뉴입니다.");
+                    continue;
+                }
+            } else {
+                System.out.println("없는 메뉴입니다.");
+                continue;
+            }
+        }
     }
 
     // 사용자 메뉴 보이기
     private static void order() {
         while (true) {
-            System.out.println("메가 커피 메뉴");
-            // 배열을 읽어서 메뉴와 가격을 출력
-            for (int i = 0; i < MENU_COUNT; i++) {
-                if (products[i] != null) {
-                    String strMenu = (i+1) + " / " + products[i] + " / " + price[i];
-                    System.out.println(strMenu);
-                }
-            }
+            viewMenu();
 
-            System.out.println("0. 돌아가기");
             System.out.println("주문할 번호를 입력하세요");
             int orderNumber = sc.nextInt();
 
@@ -132,5 +187,19 @@ public class MegaCoffeeManager {
                 continue;
             }
         }
+    }
+
+    private static void viewMenu() {
+        System.out.println("메가 커피 메뉴");
+        System.out.println("---------------------------------");
+        // 배열을 읽어서 메뉴와 가격을 출력
+        for (int i = 0; i < MENU_COUNT; i++) {
+            if (products[i] != null) {
+                String strMenu = (i+1) + " / " + products[i] + " / " + price[i];
+                System.out.println(strMenu);
+            }
+        }
+        System.out.println("---------------------------------");
+        System.out.println("0. 돌아가기");
     }
 }
