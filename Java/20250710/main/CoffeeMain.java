@@ -29,7 +29,11 @@ public class CoffeeMain {
                     userView.userScreen();
                     break;
                 case 2:
-                    adminView.adminScreen();
+                    System.out.println("관리자 비밀번호 입력 : ");
+                    String password = sc.next();
+                    if (password.equals("1004")) {
+                        adminView.adminScreen();
+                    }
                     break;
                 case 3:
                     return;
