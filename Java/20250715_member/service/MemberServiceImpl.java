@@ -23,8 +23,13 @@ public class MemberServiceImpl implements Service{
 
     @Override
     public Member findById(int id) {
-        System.out.println("멤버 1개 검색 서비스");
-        return null;
+        if (MemberRepository.store.containsKey(id)) {
+            Member member = new Member();
+            member = MemberRepository.store.get(id);
+            return member;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -42,7 +47,7 @@ public class MemberServiceImpl implements Service{
 
     @Override
     public boolean removeStore(int id) {
-        System.out.println("삭제 서비스");
-        return false;
+        MemberRepository.store.remove(id);
+        return true;
     }
 }

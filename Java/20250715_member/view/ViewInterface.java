@@ -1,7 +1,5 @@
 package view;
 
-import javax.swing.plaf.PanelUI;
-
 public interface ViewInterface {
     public void addView();
 
@@ -9,5 +7,5 @@ public interface ViewInterface {
 
     public void removeView();
 
-    public void ListView();
+    public void listView();
 }

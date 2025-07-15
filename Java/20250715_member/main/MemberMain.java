@@ -25,7 +25,7 @@ public class MemberMain {
                     view.removeView();
                     break;
                 case 4:
-                    view.ListView();
+                    view.listView();
                     break;
                 case 5:
                     return;
