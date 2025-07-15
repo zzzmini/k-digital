@@ -41,8 +41,8 @@ public class MemberServiceImpl implements Service{
 
     @Override
     public boolean updateStore(int id, Member member) {
-        System.out.println("수정 서비스");
-        return false;
+        MemberRepository.store.put(id, member);
+        return true;
     }
 
     @Override

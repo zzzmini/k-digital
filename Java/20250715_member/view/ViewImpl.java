@@ -34,6 +34,34 @@ public class ViewImpl implements ViewInterface{
     @Override
     public void updateView() {
         System.out.println("멤버 수정 화면");
+        listView();
+
+        System.out.println("수정할 아이디를 입력하세요");
+        int updateId = sc.nextInt();
+
+        // 수정할 아이디에 해당하는 멤버가 존재하는지 확인
+        Member member = memberService.findById(updateId);
+        if (member != null) {
+            // 수정작업 진행
+            System.out.println(member.getName() + "정보를 수정할까요(Y/N)?");
+            String confirm = sc.next();
+            if (confirm.toUpperCase().equals("Y")) {
+                System.out.println("수정할 이름(" + member.getName() + ") : ");
+                String updateName = sc.next();
+                System.out.println("수정할 나이(" + member.getAge() + ") : ");
+                int updateAge = sc.nextInt();
+                member.setName(updateName);
+                member.setAge(updateAge);
+                // 수정 서비스를 호출
+                memberService.updateStore(updateId, member);
+                System.out.println("수정처리가 완료되었습니다.");
+                listView();
+                return;
+            }
+        } else {
+            System.out.println("수정할 데이터가 존재하지 않습니다.");
+            return;
+        }
     }
 
     @Override
