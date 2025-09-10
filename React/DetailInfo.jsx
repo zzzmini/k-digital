@@ -1,6 +1,6 @@
 import { productFeatures } from "../../data/productFeatures";
 
-export default function DetailInfo({ product }) {
+export default function DetailInfo() {
   const features = productFeatures[product?.id] ?? productFeatures.default;
 
   return (
@@ -15,3 +15,4 @@ export default function DetailInfo({ product }) {
   );
 
 }
+
